@@ -3,6 +3,8 @@ package com.mode.assit.mq;
 import com.result.NettyGoConstant;
 import com.result.base.tools.CastUtil;
 import com.result.base.tools.ConfigUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.ResourceBundle;
 
@@ -11,18 +13,23 @@ import java.util.ResourceBundle;
  * @Date 2018/5/11 下午4:13
  * @Description TODO
  **/
+@Configuration
 public class MqInit {
 
-    public static void initMQ(){
-        ResourceBundle bundle = ConfigUtil.getBundle("/backStageConf/rinzz.properties");
-        if (bundle == null) {
-            throw new IllegalArgumentException(
-                    "[rinzz.properties] is not found!");
-        }
-        boolean mqOpen = CastUtil.castBoolean(bundle.getString("mqOpen"));
-        String mqHost = CastUtil.castString(bundle.getString("mqHost"));
-        String mqUserName = CastUtil.castString(bundle.getString("mqUserName"));
-        String mqPassWord = CastUtil.castString(bundle.getString("mqPassWord"));
+    @Value("${mq.open}")
+    private boolean open;
+    @Value("${mq.host}")
+    private String host;
+    @Value("${mq.userName}")
+    private String userName;
+    @Value("${mq.passWord}")
+    private String passWord;
+
+    public void initMQ(){
+        boolean mqOpen = CastUtil.castBoolean(open);
+        String mqHost = CastUtil.castString(host);
+        String mqUserName = CastUtil.castString(userName);
+        String mqPassWord = CastUtil.castString(passWord);
         NettyGoConstant.setMqMode(mqOpen,mqHost,mqUserName,mqPassWord);
     }
 }

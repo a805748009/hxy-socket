@@ -52,4 +52,14 @@ public class BackStageController {
         res.put("session",sessionId);
         return res;
     }
+
+    @Nuri(uri = "/getSession1",method = "GET",type = "JSON")
+    public Object getSession1(Map map){
+        System.out.println(map);
+        Map<String,String> res = new HashMap<>();
+        res.put("session","2121");
+        return map;
+    }
+
+
 }

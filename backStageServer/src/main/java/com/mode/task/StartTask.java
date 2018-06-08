@@ -3,6 +3,7 @@ package com.mode.task;
 import com.mode.assit.mq.MqInit;
 import com.mode.mqListener.MyQueueMessageListener;
 import com.result.base.task.StartAppTask;
+import com.result.base.tools.SpringApplicationContextHolder;
 import org.springframework.stereotype.Component;
 
 /** 
@@ -21,7 +22,7 @@ public class StartTask implements StartAppTask {
 		//3)
 //		new Assit().setAssit();
 
-		MqInit.initMQ();
+		SpringApplicationContextHolder.getContext().getBean(MqInit.class).initMQ();
 
 		// 1)开启mq消息队列监听
 		MyQueueMessageListener.startListener();

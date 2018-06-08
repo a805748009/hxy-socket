@@ -31,7 +31,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
 			NettyUtil.sendError(ctx, BAD_REQUEST);
 			return;
 		}
-		
+
 		FullHttpRequest request = (FullHttpRequest) msg;
 		if (!request.decoderResult().isSuccess()) {
 			NettyUtil.sendError(ctx, BAD_REQUEST);
