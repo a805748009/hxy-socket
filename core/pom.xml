@@ -23,28 +23,13 @@
         </dependency>
         <!-- springboot cloud全家桶 -->
         <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-        </dependency>
-        <!-- druid数据库连接池包 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.2</version>
         </dependency>
         <!-- redis  -->
         <dependency>
@@ -156,93 +141,110 @@
 
 
 
+    <!--<build>-->
+        <!--<resources>-->
+            <!--&lt;!&ndash; 控制资源文件的拷贝 &ndash;&gt;-->
+            <!--<resource>-->
+                <!--<directory>src/main/resources</directory>-->
+                <!--<targetPath>${project.build.directory}/classes</targetPath>-->
+            <!--</resource>-->
+        <!--</resources>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+               <!--<groupId>org.springframework.boot</groupId>-->
+                 <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+                <!--</plugin>-->
+            <!--&lt;!&ndash; 设置源文件编码方式 &ndash;&gt;-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-compiler-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<source>1.8</source>-->
+                    <!--<target>1.8</target>-->
+                    <!--<encoding>UTF-8</encoding>-->
+                    <!--<compilerArguments>-->
+                        <!--&lt;!&ndash; <extdirs>${basedir}/WebRoot/WEB-INF/lib</extdirs> &ndash;&gt;-->
+                        <!--<extdirs>${basedir}/src/main/webapp/WEB-INF/lib</extdirs>-->
+                    <!--</compilerArguments>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+            <!--&lt;!&ndash; The configuration of maven-jar-plugin &ndash;&gt;-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-jar-plugin</artifactId>-->
+                <!--<version>2.4</version>-->
+                <!--&lt;!&ndash; The configuration of the plugin &ndash;&gt;-->
+                <!--<configuration>-->
+                    <!--&lt;!&ndash; Configuration of the archiver &ndash;&gt;-->
+                    <!--<archive>-->
+
+                        <!--&lt;!&ndash;-->
+                            <!--生成的jar中，不要包含pom.xml和pom.properties这两个文件-->
+                        <!--&ndash;&gt;-->
+                        <!--<addMavenDescriptor>false</addMavenDescriptor>-->
+
+                        <!--&lt;!&ndash; Manifest specific configuration &ndash;&gt;-->
+                        <!--<manifest>-->
+                            <!--&lt;!&ndash;-->
+                                <!--是否要把第三方jar放到manifest的classpath中-->
+                            <!--&ndash;&gt;-->
+                            <!--<addClasspath>true</addClasspath>-->
+                            <!--&lt;!&ndash;-->
+                               <!--生成的manifest中classpath的前缀，因为要把第三方jar放到lib目录下，所以classpath的前缀是lib/-->
+                           <!--&ndash;&gt;-->
+                            <!--<classpathPrefix>lib/</classpathPrefix>-->
+                        <!--</manifest>-->
+                    <!--</archive>-->
+                    <!--&lt;!&ndash;-->
+                        <!--过滤掉不希望包含在jar中的文件-->
+                    <!--&ndash;&gt;-->
+                    <!--&lt;!&ndash;<excludes>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<exclude>${project.basedir}/xml/*</exclude>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</excludes>&ndash;&gt;-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+
+            <!--&lt;!&ndash; The configuration of maven-assembly-plugin &ndash;&gt;-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-assembly-plugin</artifactId>-->
+                <!--<version>2.4</version>-->
+                <!--&lt;!&ndash; The configuration of the plugin &ndash;&gt;-->
+                <!--<configuration>-->
+                    <!--&lt;!&ndash; Specifies the configuration file of the assembly plugin &ndash;&gt;-->
+                    <!--<descriptors>-->
+                        <!--<descriptor>assembly.xml</descriptor>-->
+                    <!--</descriptors>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>make-assembly</id>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>single</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
+
+
     <build>
-        <resources>
-            <!-- 控制资源文件的拷贝 -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <targetPath>${project.build.directory}/classes</targetPath>
-            </resource>
-        </resources>
         <plugins>
-            <plugin>
-               <groupId>org.springframework.boot</groupId>
-                 <artifactId>spring-boot-maven-plugin</artifactId>
-                </plugin>
-            <!-- 设置源文件编码方式 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                    <compilerArguments>
-                        <!-- <extdirs>${basedir}/WebRoot/WEB-INF/lib</extdirs> -->
-                        <extdirs>${basedir}/src/main/webapp/WEB-INF/lib</extdirs>
-                    </compilerArguments>
-                </configuration>
-            </plugin>
-            <!-- The configuration of maven-jar-plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <!-- The configuration of the plugin -->
-                <configuration>
-                    <!-- Configuration of the archiver -->
-                    <archive>
-
-                        <!--
-                            生成的jar中，不要包含pom.xml和pom.properties这两个文件
-                        -->
-                        <addMavenDescriptor>false</addMavenDescriptor>
-
-                        <!-- Manifest specific configuration -->
-                        <manifest>
-                            <!--
-                                是否要把第三方jar放到manifest的classpath中
-                            -->
-                            <addClasspath>true</addClasspath>
-                            <!--
-                               生成的manifest中classpath的前缀，因为要把第三方jar放到lib目录下，所以classpath的前缀是lib/
-                           -->
-                            <classpathPrefix>lib/</classpathPrefix>
-                        </manifest>
-                    </archive>
-                    <!--
-                        过滤掉不希望包含在jar中的文件
-                    -->
-                    <!--<excludes>-->
-                    <!--<exclude>${project.basedir}/xml/*</exclude>-->
-                    <!--</excludes>-->
                 </configuration>
             </plugin>
 
-            <!-- The configuration of maven-assembly-plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
-                <!-- The configuration of the plugin -->
-                <configuration>
-                    <!-- Specifies the configuration file of the assembly plugin -->
-                    <descriptors>
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
+
 
 
 </project>

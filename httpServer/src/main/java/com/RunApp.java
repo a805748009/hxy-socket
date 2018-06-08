@@ -1,6 +1,6 @@
 package com;
 
-import com.initMode.NettyModeInit;
+import com.mode.init.NettyModeInit;
 import com.result.base.inits.InitMothods;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
