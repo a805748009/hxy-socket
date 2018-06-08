@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/httpServer/pom.xml" />
         <option value="$PROJECT_DIR$/eurekaServer/pom.xml" />
         <option value="$PROJECT_DIR$/socketServer/pom.xml" />
+        <option value="$PROJECT_DIR$/backStageServer/pom.xml" />
       </list>
     </option>
   </component>

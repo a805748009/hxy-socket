@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.business.dao.UserDao">
+    <!-- 所有字段 -->
+    <sql id="Base_User" >
+        user_id,user_name,back_type,user_pass,create_time
+    </sql>
+    <sql id="Base_User_Count" >
+        id,user_count,game_name,update_time
+    </sql>
+    <!--END -->
+
+    <select id="loginById" resultType="com.result.base.entry.backStageBean.Admin">
+        select <include refid="Base_User"/> from user
+    </select>
+
+    <insert id="updateGameUserCount" parameterType="com.result.base.entry.backStageBean.UserCount">
+        INSERT INTO user_count(
+        <include refid="Base_User_Count" />
+        )
+        values ( #{id},#{userCount},#{gameName},#{updateTime})
+    </insert>
+
+
+    <select id="selectNowUserCount" resultType="java.util.Map">
+        select user_count as count from user_count
+        <where>
+            <if test='gameName!=null and gameName!=""'>
+                AND game_name = #{gameName}
+            </if>
+        </where>
+        order by update_time desc
+        limit 0,1;
+    </select>
+</mapper>

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BC-NETTYGO.iml" filepath="$PROJECT_DIR$/BC-NETTYGO.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backStageServer/backStageServer.iml" filepath="$PROJECT_DIR$/backStageServer/backStageServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
       <module fileurl="file://$PROJECT_DIR$/eurekaServer/eurekaServer.iml" filepath="$PROJECT_DIR$/eurekaServer/eurekaServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/httpServer/httpServer.iml" filepath="$PROJECT_DIR$/httpServer/httpServer.iml" />

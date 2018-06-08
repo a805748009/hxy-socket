@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.business.dao.LoginTimeDao">
+    <sql id="Base_LoginTime">
+        login_id,login_user_id,login_time,game_name
+    </sql>
+
+    <insert id="addLoginTime" parameterType="com.result.base.entry.backStageBean.LoginTime">
+        INSERT INTO login_time(
+        <include refid="Base_LoginTime"/>
+        )
+        values ( #{loginId},#{loginUserId},#{loginTime},#{gameName})
+    </insert>
+
+    <select id="selectSevenDayLoginTime" resultType="java.util.Map">
+        select DATE_FORMAT(total.login_time,'%m-%d') as countKey,ifnull(total.login_user_id, 0) as countValue from
+        (
+        SELECT
+        COUNT(DISTINCT login_user_id) AS login_user_id,
+        login_time,
+        login_id
+        FROM login_time
+        <where>
+            DATE_FORMAT(login_time, '%Y-%m-%d') = #{time}
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+        </where>
+        UNION ALL
+        SELECT
+        COUNT(DISTINCT login_user_id) AS login_user_id,
+        login_time,
+        login_id
+        FROM login_time
+        <where>
+            DATE_FORMAT(login_time, '%Y-%m-%d') = date_sub(#{time}, INTERVAL 1 DAY)
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+        </where>
+        UNION ALL
+        SELECT
+        COUNT(DISTINCT login_user_id) AS login_user_id,
+        login_time,
+        login_id
+        FROM login_time
+        <where>
+            DATE_FORMAT(login_time, '%Y-%m-%d') = date_sub(#{time}, INTERVAL 2 DAY)
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+        </where>
+        UNION ALL
+        SELECT
+        COUNT(DISTINCT login_user_id) AS login_user_id,
+        login_time,
+        login_id
+        FROM login_time
+        <where>
+            DATE_FORMAT(login_time, '%Y-%m-%d') = date_sub(#{time}, INTERVAL 3 DAY)
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+        </where>
+        UNION ALL
+        SELECT
+        COUNT(DISTINCT login_user_id) AS login_user_id,
+        login_time,
+        login_id
+        FROM login_time
+        <where>
+            DATE_FORMAT(login_time, '%Y-%m-%d') = date_sub(#{time}, INTERVAL 4 DAY)
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+        </where>
+        UNION ALL
+        SELECT
+        COUNT(DISTINCT login_user_id) AS login_user_id,
+        login_time,
+        login_id
+        FROM login_time
+        <where>
+            DATE_FORMAT(login_time, '%Y-%m-%d') = date_sub(#{time}, INTERVAL 5 DAY)
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+        </where>
+        UNION ALL
+        SELECT
+        COUNT(DISTINCT login_user_id) AS login_user_id,
+        login_time,
+        login_id
+        FROM login_time
+        <where>
+            DATE_FORMAT(login_time, '%Y-%m-%d') = date_sub(#{time}, INTERVAL 6 DAY)
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+        </where>
+        )total
+        ORDER BY countKey ASC
+    </select>
+
+
+    <select id="selectOnlineMaxCountByDay" resultType="java.lang.Integer">
+        select count(DISTINCT login_user_id)from login_time
+        where game_name = #{gameName}
+        and (login_time &gt; concat(#{day},' 00:00:00') or login_time &lt; concat(#{day},' 00:00:00'))
+    </select>
+
+
+    <select id="selectLoginTimenInterval" resultType="java.util.Map">
+        select count(login_id)as value,'06:00-13:00'as name from login_time
+        <where>
+            DATE_FORMAT(login_time,'%H:%i') &gt; '06:00' and DATE_FORMAT(login_time,'%H:%i') &lt;= '13:00'
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+            <if test="time!=null and time!=''">
+                and DATE_FORMAT(login_time,'%Y-%m-%d') = #{time}
+            </if>
+        </where>
+        union all
+        select count(login_id),'13:00-18:00'as ltime from login_time
+        <where>
+            DATE_FORMAT(login_time,'%H:%i') &gt; '13:00' and DATE_FORMAT(login_time,'%H:%i') &lt;= '18:00'
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+            <if test="time!=null and time!=''">
+                and DATE_FORMAT(login_time,'%Y-%m-%d') = #{time}
+            </if>
+        </where>
+        union all
+        select count(login_id),'18:00-24:00'as ltime from login_time
+        <where>
+            DATE_FORMAT(login_time,'%H:%i') &gt; '18:00' and DATE_FORMAT(login_time,'%H:%i') &lt;= '24:00'
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+            <if test="time!=null and time!=''">
+                and DATE_FORMAT(login_time,'%Y-%m-%d') = #{time}
+            </if>
+        </where>
+        union all
+        select count(login_id),'24:00-06:00'as ltime from login_time
+        <where>
+            DATE_FORMAT(login_time,'%H:%i') &gt; '24:00' and DATE_FORMAT(login_time,'%H:%i') &lt;= '06:00'
+            <if test="gameName!=null and gameName!=''">
+                and game_name = #{gameName}
+            </if>
+            <if test="time!=null and time!=''">
+                and DATE_FORMAT(login_time,'%Y-%m-%d') = #{time}
+            </if>
+        </where>
+    </select>
+</mapper>
