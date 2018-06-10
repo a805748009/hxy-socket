@@ -4,6 +4,8 @@ import com.mode.init.NettyModeInit;
 import com.result.base.inits.InitMothods;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -12,14 +14,16 @@ import org.springframework.context.ApplicationContext;
  */
 
 @SpringBootApplication
+@EnableFeignClients
+@EnableDiscoveryClient
 public class RunApp {
 
 
 	public static void main(String[] args) {
 		// 启动spring容器
 		ApplicationContext ac = SpringApplication.run(RunApp.class, args);
-		ac.getBean(NettyModeInit.class).configurtaion();
 		new InitMothods().initApplicationContext(ac);
+		ac.getBean(NettyModeInit.class).configurtaion();
 	}
 
 

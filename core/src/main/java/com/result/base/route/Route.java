@@ -1,6 +1,7 @@
 package com.result.base.route;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
+import com.result.base.annotation.BCRemoteCall;
 import com.result.base.annotation.Nuri;
 import com.result.base.annotation.On;
 import com.result.base.config.ConfigForSystemMode;
@@ -99,13 +100,18 @@ public class Route {
             if (methodNuri != null) {
                 //检查方法所属的类有没有@Nuri注解
                 Nuri classNuri = AnnotationUtils.findAnnotation(handlerType,Nuri.class);
+                BCRemoteCall classBCRemoteCall = AnnotationUtils.findAnnotation(handlerType,BCRemoteCall.class);
                 String methodType = methodNuri.method()+":";
                 if (classNuri != null) {
                     //有类层次的@Nuri注解,就对方法和类的url进行拼接
-                    uri = methodType+classNuri.uri()+methodNuri.uri();
+                    uri = classNuri.uri()+methodNuri.uri();
                 }else{
-                    uri = methodType+methodNuri.uri();
+                    uri = methodNuri.uri();
                 }
+                if (classBCRemoteCall != null) {
+                    uri = ConfigForSystemMode.REMOTE_CALL_URI+uri;
+                }
+                uri = methodType+uri;
             }
             METHODHANDLEMAP.put(uri,new HttpRouteClassAndMethod(handlerType, ma,
                     ma.getIndex(method.getName()),method.getParameterTypes()[0],methodNuri.type(),method.getParameterTypes().length==1?false:true));

@@ -2,6 +2,8 @@ package com.business.controller;
 
 import com.business.entry.User;
 import com.business.entry.UserMsg;
+import com.result.base.annotation.BCRemoteCall;
+import com.result.base.annotation.Nuri;
 import com.result.base.annotation.On;
 import com.result.base.annotation.Route;
 import com.result.base.cache.Client;
@@ -36,5 +38,12 @@ public class Test {
     @On("number")
     public void number(Client client, String text, String id) {
         client.sendMsg(new TextWebSocketFrame(String.valueOf(IoCache.spaceClientMap.get("websocket").size())));
+    }
+
+    @BCRemoteCall
+    @Nuri(uri="test",type="JSON")
+    public Object test(String id) {
+        System.out.println("=============收到消息"+id);
+        return null;
     }
 }

@@ -1,17 +1,23 @@
 
 package com.result.base.handle;
 
+import com.result.base.config.ConfigForSystemMode;
 import com.result.base.entry.SocketRouteClassAndMethod;
 import com.result.base.inits.InitMothods;
 import com.result.base.pool.ExecutorPool;
+import com.result.base.pool.MyHttpRunnable;
 import com.result.base.pool.MySocketRunnable;
+import com.result.base.tools.NettyUtil;
 import com.result.base.tools.ObjectUtil;
 import com.result.base.tools.SpringApplicationContextHolder;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static io.netty.handler.codec.http.HttpResponseStatus.FORBIDDEN;
 
 /**
  * ClassName:MyWebSocketServerHandler Function: TODO ADD FUNCTION. Date:
@@ -74,6 +80,18 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 	 */
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+		if (msg instanceof FullHttpRequest){
+			FullHttpRequest request = (FullHttpRequest) msg;
+			String uri = request.uri();
+			System.out.println(uri);
+			if (uri.substring(0,12).equals(ConfigForSystemMode.REMOTE_CALL_URI)) {
+				// springcloud远程调用
+				MyHttpRunnable runnable = new MyHttpRunnable(ctx, request);
+				ExecutorPool.getInstance().execute(runnable);
+				return;
+			}
+		}
+
 		// 4)一切就绪，准备抛给线程池,这里将线程池交给spring管理，可以共享spring容器
 		MySocketRunnable runnable = new MySocketRunnable(ctx, msg);
 		ExecutorPool.getInstance().execute(runnable);

@@ -25,4 +25,7 @@ public class ConfigForSystemMode {
 
 		public static String FLUSHMESSAGETRANSFORMATION = FlushMessageTransformation.BYTE.getType();
 
+		//远程调用开头第一节uri
+		public static String REMOTE_CALL_URI = "/bcRemoteCall";
+
 }

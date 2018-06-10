@@ -39,7 +39,7 @@ public class InitMothods extends ApplicationObjectSupport {
 
 	
 	@Override
-	public void initApplicationContext(ApplicationContext applicationContext) throws BeansException {	
+	public void initApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		context = applicationContext;
 		//0.获取通信前置filter
 		messageFilter = new FilterInit(context).getFilter();
