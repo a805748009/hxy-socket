@@ -10,6 +10,8 @@ import com.result.base.cache.Client;
 import com.result.base.cache.IoCache;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
+import java.util.Map;
+
 /**
  * @Author 黄新宇
  * @Date 2018/5/2 下午7:24
@@ -40,10 +42,4 @@ public class Test {
         client.sendMsg(new TextWebSocketFrame(String.valueOf(IoCache.spaceClientMap.get("websocket").size())));
     }
 
-    @BCRemoteCall
-    @Nuri(uri="test",type="JSON")
-    public Object test(String id) {
-        System.out.println("=============收到消息"+id);
-        return null;
-    }
 }

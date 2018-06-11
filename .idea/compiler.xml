@@ -16,7 +16,7 @@
     <bytecodeTargetLevel>
       <module name="backStageServer" target="1.8" />
       <module name="core" target="1.8" />
-      <module name="eurekaServer" target="1.8" />
+      <module name="eurekaServer" target="1.5" />
       <module name="httpServer" target="1.8" />
       <module name="socketServer" target="1.8" />
     </bytecodeTargetLevel>

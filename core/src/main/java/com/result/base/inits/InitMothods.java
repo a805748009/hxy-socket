@@ -2,7 +2,8 @@ package com.result.base.inits;
 
 import com.result.base.entry.Base.BaseUser;
 import com.result.base.entry.RouteClassAndMethod;
-import com.result.base.fitle.FilterInit;
+import com.result.base.fitle.MessageFilterInit;
+import com.result.base.fitle.RemoteCallFilterInit;
 import com.result.base.route.Route;
 import com.result.base.security.SessionTimeUpdateHandleInit;
 import com.result.serverbootstrap.assist.rabbitMq.init.QueueMessageListenerInit;
@@ -28,6 +29,8 @@ public class InitMothods extends ApplicationObjectSupport {
 	private static Map<String, Object> METHODHANDLEMAP ;
 	//filter
 	private static RouteClassAndMethod messageFilter = null;
+	//filter
+	private static RouteClassAndMethod remoteCallFilter = null;
 	//user类
 	private static Class<?> userClazz ;
 	//MQ消息监听处理类
@@ -42,12 +45,12 @@ public class InitMothods extends ApplicationObjectSupport {
 	public void initApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		context = applicationContext;
 		//0.获取通信前置filter
-		messageFilter = new FilterInit(context).getFilter();
+		messageFilter = new MessageFilterInit(context).getFilter();
 
 		//1.获取user类型class
 		String[] s = context.getBeanNamesForType(BaseUser.class);
 		userClazz = s.length>0?context.getType(context.getBeanNamesForType(BaseUser.class)[0]):null;
-		if(userClazz == null)logger.error("-------->>>>>>>由于user类未实现BaseUser接口，Room类中操作可能存在报错");
+		if(userClazz == null)logger.warn("-------->>>>>>>由于user类未实现BaseUser接口，Room类中操作可能存在报错");
 		
 		//2.遍获取实现Route的类
 		METHODHANDLEMAP = new Route(context).getMETHODHANDLEMAP();
@@ -60,6 +63,9 @@ public class InitMothods extends ApplicationObjectSupport {
 
 		//5.读取session更新时附带的操作
 		sessionUpdateHandle = new SessionTimeUpdateHandleInit(context).getHandle();
+
+		//6.获取远程前置filter
+		remoteCallFilter = new RemoteCallFilterInit(context).getFilter();
 	}
 	
 
@@ -77,8 +83,12 @@ public class InitMothods extends ApplicationObjectSupport {
 		return  (T) METHODHANDLEMAP.get(taskType);
 	}
 
-	public static RouteClassAndMethod getFilter(){
+	public static RouteClassAndMethod getMessageFilter(){
 		return messageFilter;
+	}
+
+	public static RouteClassAndMethod getRemoteCallFilter(){
+		return remoteCallFilter;
 	}
 
 	public static RouteClassAndMethod getMqQueueMessageLitener(){

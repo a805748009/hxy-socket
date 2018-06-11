@@ -1,5 +1,6 @@
 package com.result.base.pool;
 
+import com.result.base.config.ConfigForSystemMode;
 import com.result.base.entry.*;
 import com.result.base.inits.InitMothods;
 import com.result.base.security.SecurityUtil;
@@ -41,7 +42,12 @@ public class MyHttpRunnable implements Runnable {
 	
 		logger.debug( "uri---" + uri + " length:" + uri.length());
 		//  0)前置filter
-		RouteClassAndMethod filter = InitMothods.getFilter();
+		RouteClassAndMethod filter;
+		if(request.uri().substring(0,13).equals(ConfigForSystemMode.REMOTE_CALL_URI)){
+			filter = InitMothods.getRemoteCallFilter();
+		}else{
+			filter = InitMothods.getMessageFilter();
+		}
 		if(ObjectUtil.isNotNull(filter)){
 			ResultStatus resultStatus =  (ResultStatus) filter.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()),filter.getIndex(),this.context,this.request);
 			if(!resultStatus.isSuccess()){
@@ -57,8 +63,8 @@ public class MyHttpRunnable implements Runnable {
 		}
 		//	1.1)更新session存活时间
 		SecurityUtil.updateSessionTime(cookieId);
-		// 2)寻找路由失败
 		HttpRouteClassAndMethod route = InitMothods.getTaskHandler(uri);
+		// 2)寻找路由失败
 		if(route==null){
 			NettyUtil.sendError(context, HttpResponseStatus.NOT_FOUND);
 			return;

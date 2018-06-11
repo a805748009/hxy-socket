@@ -162,7 +162,7 @@ public class MySocketRunnable implements Runnable {
         QueryStringDecoder queryStringDecoder = new QueryStringDecoder(req.uri());
         Map<String, List<String>> parameters = queryStringDecoder.parameters();
         // 1.1)前置filter事件
-        RouteClassAndMethod filter = InitMothods.getFilter();
+        RouteClassAndMethod filter = InitMothods.getMessageFilter();
         if (ObjectUtil.isNotNull(filter)) {
             ResultStatus resultStatus = (ResultStatus) filter.getMethod().invoke(
                     SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),
