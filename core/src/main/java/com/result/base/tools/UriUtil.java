@@ -8,12 +8,16 @@ import java.util.Map;
 import com.alibaba.fastjson.util.Base64;
 import com.result.base.config.ConfigForNettyMode;
 
+import com.result.base.config.ConfigForSystemMode;
+import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.Attribute;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import io.netty.util.CharsetUtil;
+import net.sf.json.JSONObject;
 
 
 public class UriUtil {
@@ -42,15 +46,25 @@ public class UriUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Map<String, String> getRequestParamsMap(FullHttpRequest req) throws IOException{
+	public static Map<String, ?> getRequestParamsMap(FullHttpRequest req) throws IOException{
+		if (req.uri().substring(0,13).equals(ConfigForSystemMode.REMOTE_CALL_URI)) {
+			//远程调用的restful-json处理
+			ByteBuf jsonBuf = req.content();
+			String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
+			return JsonUtil.jsonToMap(jsonStr);
+		}
+
         Map<String, String>requestParams=new HashMap<>();
         // 处理get请求  
         if (req.method() == HttpMethod.GET) {
-            QueryStringDecoder decoder = new QueryStringDecoder(req.uri());  
-            decoder.parameters().entrySet().forEach( entry -> {
-                // entry.getValue()是一个List, 只取第一个元素
-            	requestParams.put(entry.getKey(), entry.getValue().get(0));
-            });
+            QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
+            for(Map.Entry<String, List<String>> entry:decoder.parameters().entrySet()){
+				requestParams.put(entry.getKey(), entry.getValue().get(0));
+			}
+//            decoder.parameters().entrySet().forEach( entry -> {
+//                // entry.getValue()是一个List, 只取第一个元素
+//            	requestParams.put(entry.getKey(), entry.getValue().get(0));
+//            });
         }
          // 处理POST请求  
         if (req.method() == HttpMethod.POST) {

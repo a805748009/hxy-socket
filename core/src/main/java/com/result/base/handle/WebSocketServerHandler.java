@@ -80,11 +80,11 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 	 */
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+		// 1)如果是bc-remote调用，走http
 		if (msg instanceof FullHttpRequest){
 			FullHttpRequest request = (FullHttpRequest) msg;
 			String uri = request.uri();
-			System.out.println(uri);
-			if (uri.substring(0,12).equals(ConfigForSystemMode.REMOTE_CALL_URI)) {
+			if (uri.substring(0,13).equals(ConfigForSystemMode.REMOTE_CALL_URI)) {
 				// springcloud远程调用
 				MyHttpRunnable runnable = new MyHttpRunnable(ctx, request);
 				ExecutorPool.getInstance().execute(runnable);
@@ -92,7 +92,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 			}
 		}
 
-		// 4)一切就绪，准备抛给线程池,这里将线程池交给spring管理，可以共享spring容器
+		// 2)一切就绪，准备抛给线程池,这里将线程池交给spring管理，可以共享spring容器
 		MySocketRunnable runnable = new MySocketRunnable(ctx, msg);
 		ExecutorPool.getInstance().execute(runnable);
 	}

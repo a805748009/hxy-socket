@@ -13,7 +13,7 @@ public class ShowLogo {
 		System.out.println("( ( )\t|  \\  | | |__    |  |  \t  |  |     \\  \\/  /\t  / _` |/    \\");
 		System.out.println("( ( )\t|   \\ | | .__|   |  |     |  |   \t\\    /\t | (_| | ._.  |");
 		System.out.println(" \\\\/ \t| |\\ \\| | |____  |  |     |  |   \t |  |\t  \\__, | '_'  |");
-		System.out.println("  '  \t|_| \\_ _|______| |__|     |__|    \t |__|\t  |___/ \\____/    v 1.0.0");
+		System.out.println("  '  \t|_| \\_ _|______| |__|     |__|    \t |__|\t  |___/ \\____/    v 1.1.0");
 		System.out.println(" ===========================================================================");
 		System.out.println("                           ");
 

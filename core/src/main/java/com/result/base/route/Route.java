@@ -100,7 +100,7 @@ public class Route {
             if (methodNuri != null) {
                 //检查方法所属的类有没有@Nuri注解
                 Nuri classNuri = AnnotationUtils.findAnnotation(handlerType,Nuri.class);
-                BCRemoteCall classBCRemoteCall = AnnotationUtils.findAnnotation(handlerType,BCRemoteCall.class);
+                BCRemoteCall classBCRemoteCall = AnnotationUtils.findAnnotation(method,BCRemoteCall.class);
                 String methodType = methodNuri.method()+":";
                 if (classNuri != null) {
                     //有类层次的@Nuri注解,就对方法和类的url进行拼接
