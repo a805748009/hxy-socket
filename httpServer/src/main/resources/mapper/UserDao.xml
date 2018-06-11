@@ -12,7 +12,7 @@
 
 	
 	
-	<insert id="addUser" parameterType="User">
+	<insert id="addUser" parameterType="com.business.bean.User">
 		INSERT INTO user(
 		<include refid="Base_User" />
 		)
@@ -20,7 +20,7 @@
 	</insert>
 
 	<!-- 根据openId寻找user -->
-	<select id="findUserByOpenId" parameterType="java.lang.String" resultType="User">
+	<select id="findUserByOpenId" parameterType="java.lang.String" resultType="com.business.bean.User">
 		select
 		<include refid="Base_User"/>
 		from user where open_id =#{openId}
