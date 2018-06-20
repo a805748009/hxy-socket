@@ -167,7 +167,6 @@ public class MySocketRunnable implements Runnable {
             ResultStatus resultStatus = (ResultStatus) filter.getMethod().invoke(
                     SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),
                     new Object[]{ctx, req});
-            System.out.println(resultStatus.toString());
             if (!resultStatus.isSuccess()) {
                 NettyUtil.sendError(ctx, resultStatus.getResponseStatus());
                 return;

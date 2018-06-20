@@ -59,7 +59,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.netflix.ribbon:ribbon-transport:2.2.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: io.reactivex:rxnetty-contexts:0.4.9" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: io.reactivex:rxnetty-servo:0.4.9" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: io.reactivex:rxnetty:0.4.9" level="project" />
     <orderEntry type="library" name="Maven: com.netflix.ribbon:ribbon-core:2.2.2" level="project" />
     <orderEntry type="library" name="Maven: com.netflix.ribbon:ribbon-httpclient:2.2.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.netflix.netflix-commons:netflix-commons-util:0.1.1" level="project" />

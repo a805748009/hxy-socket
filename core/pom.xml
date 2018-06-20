@@ -30,6 +30,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka-server</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>rxnetty</artifactId>
+                    <groupId>io.reactivex</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -50,10 +56,6 @@
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.netty</groupId>
-                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

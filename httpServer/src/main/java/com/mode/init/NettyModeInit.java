@@ -54,8 +54,10 @@ public class NettyModeInit {
         list.add("/notice/getnotice");
         list.add("/login/getOpenId");
         // 4.配置安全相关配置
-        NettyGoConstant.setSecurityMode("ALLVALIDATE", list, 18000,false);
-        // 5.启动netty
+        NettyGoConstant.setSecurityMode("ALLVALIDATE", list, 18000,true);
+    }
+
+    public void runNetty(){
         Server.run(port, httpMaxSize);
     }
 }

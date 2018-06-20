@@ -37,7 +37,7 @@ public class Route {
         //2.2 遍历判断，合格的注册到map
         taskBeanMap.keySet().forEach(beanName -> {
             detectHandlerMethods(context.getType((String) beanName));
-            logger.info("====================正在注册类："+beanName);
+            logger.info("====================路由注册找到类："+beanName);
         });
     }
 
@@ -70,7 +70,7 @@ public class Route {
                     return method.isAnnotationPresent(Nuri.class);
                 }else{
                     //采用websocket协议，只选择被@on标记的方法
-                    return method.isAnnotationPresent(On.class);
+                    return method.isAnnotationPresent(On.class)||method.isAnnotationPresent(BCRemoteCall.class);
                 }
 
             }
@@ -121,8 +121,27 @@ public class Route {
             //方法被注解了
             if (methodOn != null) {
                 uri = methodOn.value();
+                METHODHANDLEMAP.put(uri,new SocketRouteClassAndMethod(handlerType,ma,ma.getIndex(method.getName()),method.getParameterTypes().length>1?method.getParameterTypes()[1]:null));
             }
-            METHODHANDLEMAP.put(uri,new SocketRouteClassAndMethod(handlerType,ma,ma.getIndex(method.getName()),method.getParameterTypes().length>1?method.getParameterTypes()[1]:null));
+            //加載RPC路由
+            BCRemoteCall classBCRemoteCall = AnnotationUtils.findAnnotation(method,BCRemoteCall.class);
+            if (classBCRemoteCall != null) {
+                Nuri methodNuri = AnnotationUtils.findAnnotation(method, Nuri.class);
+                if (methodNuri != null) {
+                    String methodType = methodNuri.method()+":";
+                    Nuri classNuri = AnnotationUtils.findAnnotation(handlerType,Nuri.class);
+                    if (classNuri != null) {
+                        //有类层次的@Nuri注解,就对方法和类的url进行拼接
+                        uri = classNuri.uri()+methodNuri.uri();
+                    }else{
+                        uri = methodNuri.uri();
+                    }
+                    uri = ConfigForSystemMode.REMOTE_CALL_URI+uri;
+                    uri = methodType+uri;
+                }
+                METHODHANDLEMAP.put(uri,new HttpRouteClassAndMethod(handlerType, ma,
+                        ma.getIndex(method.getName()),method.getParameterTypes()[0],methodNuri.type(),method.getParameterTypes().length==1?false:true));
+            }
         }
         logger.info("================注册uri："+uri+"方法："+method);
     }

@@ -53,10 +53,12 @@ public class NettyModeInit {
         }
         // 4.设置nettygo模型参数
         NettyGoConstant.setNettyMode(executorPoolMinSize,executorPoolMaxSize, "BYTE");
-        NettyGoConstant.setRedisSecurityMode(18000, false);
+        NettyGoConstant.setRedisSecurityMode(18000, true);
         NettyGoConstant.setBinaryType(SocketBinaryType.PARENTFORBASESOCKETMESSAGE.getType());
         new RouteMapInit();//byteId对应的路由。INTBEFORE模式下需要加载
-        // 5.启动netty
+    }
+
+    public void runNetty(){
         Server.run(port, httpMaxSize);
     }
 }

@@ -21,8 +21,10 @@ public class RunApp {
 	public static void main(String[] args) {
 		// 启动spring容器
 		ApplicationContext ac = SpringApplication.run(RunApp.class, args);
-		new InitMothods().initApplicationContext(ac);
 		ac.getBean(NettyModeInit.class).configurtaion();
+		new InitMothods().initApplicationContext(ac);
+		// 5.启动netty
+		ac.getBean(NettyModeInit.class).runNetty();
 	}
 
 

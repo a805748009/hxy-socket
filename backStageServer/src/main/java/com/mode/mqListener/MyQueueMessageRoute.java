@@ -33,7 +33,7 @@ public class MyQueueMessageRoute implements  Runnable{
     private void routeMethod(String uri,byte[] content) {
         SocketRouteClassAndMethod route = InitMothods.getMqRouteHandle(uri);
         if (ObjectUtil.isNull(route)) {
-            logger.error("================>>>>MQ消息监听路由方法未找到:" + uri);
+            logger.info("================>>>>MQ消息监听路由方法未找到:" + uri);
             return;
         }
         logger.error("收到MQ发来的消息================>>>>:" + uri);

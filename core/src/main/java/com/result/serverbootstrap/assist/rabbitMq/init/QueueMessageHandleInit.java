@@ -32,7 +32,7 @@ public class QueueMessageHandleInit {
         //2.2 遍历判断，合格的注册到map
         taskBeanMap.keySet().forEach(beanName -> {
             detectHandlerMethods(context.getType((String) beanName));
-            logger.info("====================正在注册类："+beanName);
+            logger.info("====================MQ方法注册找到bean："+beanName);
         });
     }
 
