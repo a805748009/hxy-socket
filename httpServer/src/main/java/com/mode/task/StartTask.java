@@ -20,8 +20,6 @@ public class StartTask implements StartAppTask {
 //		setNotice();
 		//2）redis初始化
 		SpringApplicationContextHolder.getContext().getBean(RedisInit.class).initRedisPool();
-		//3) 初始化集群/分布式机器信息
-//		new Assit().setAssit();
 		//4) 初始化MQ
 		SpringApplicationContextHolder.getContext().getBean(MqInit.class).initMQ();
 		//5) 初始化对druid的监控，用于发送至自己后台
