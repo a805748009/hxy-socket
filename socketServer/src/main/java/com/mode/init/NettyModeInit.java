@@ -39,6 +39,12 @@ public class NettyModeInit {
     private int port;
     @Value("${netty.http_maxSize}")
     private int httpMaxSize;
+    @Value("${zlib.compress.in}")
+    private boolean zlibCompressIn;
+    @Value("${zlib.compress.out}")
+    private boolean zlibCompressOut;
+    @Value("${zlib.compress.out.length}")
+    private int zlibCompressOutLength;
 
 
     // 配置系统相关参数
@@ -56,6 +62,9 @@ public class NettyModeInit {
         NettyGoConstant.setRedisSecurityMode(18000, true);
         NettyGoConstant.setBinaryType(SocketBinaryType.PARENTFORBASESOCKETMESSAGE.getType());
         new RouteMapInit();//byteId对应的路由。INTBEFORE模式下需要加载
+
+        // 5.配置zlib压缩相关
+        NettyGoConstant.setZlibConfig(zlibCompressIn,zlibCompressOut,zlibCompressOutLength);
     }
 
     public void runNetty(){
