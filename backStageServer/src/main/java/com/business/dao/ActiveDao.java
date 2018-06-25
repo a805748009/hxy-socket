@@ -2,10 +2,11 @@ package com.business.dao;
 
 import com.result.base.entry.backStageBean.ActiveCount;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-@Repository
+
+@Component
 public interface ActiveDao {
     void addActive(ActiveCount activeCount);
 

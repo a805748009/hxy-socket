@@ -1,8 +1,8 @@
 package com.business.service.impl;
 
+import Entry.User;
 import com.business.dao.UserDao;
 import com.business.service.UserService;
-import com.result.base.entry.backStageBean.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +12,12 @@ public class UserServiceImpl implements UserService {
     UserDao userDao;
 
     @Override
-    public Admin selectUserById(String userId) {
+    public User selectUserById(String userId) {
         return userDao.loginById(userId);
     }
 
     @Override
-    public void AddUser(Admin user) {
+    public void AddUser(User user) {
 
     }
 }

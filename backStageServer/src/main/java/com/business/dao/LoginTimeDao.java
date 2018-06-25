@@ -2,11 +2,13 @@ package com.business.dao;
 
 import com.result.base.entry.backStageBean.LoginTime;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-@Repository
+
+
+@Component
 public interface LoginTimeDao {
 
     void addLoginTime(LoginTime loginTime);
@@ -16,4 +18,6 @@ public interface LoginTimeDao {
     List<Map> selectLoginTimenInterval(@Param("gameName") String gameName, @Param("time") String time);
 
     int selectOnlineMaxCountByDay(@Param("day") String day, @Param("gameName") String gameName);
+
+    void addLoginTimeList(@Param("paramString") String paramString);
 }

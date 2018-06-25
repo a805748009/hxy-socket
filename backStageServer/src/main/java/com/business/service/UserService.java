@@ -1,9 +1,9 @@
 package com.business.service;
 
-import com.result.base.entry.backStageBean.Admin;
+import Entry.User;
 
 public interface UserService {
-    Admin selectUserById(String userId);
+    User selectUserById(String userId);
 
-    void AddUser(Admin user);
+    void AddUser(User user);
 }

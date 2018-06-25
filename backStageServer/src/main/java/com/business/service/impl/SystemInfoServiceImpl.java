@@ -1,8 +1,8 @@
 package com.business.service.impl;
 
+import Entry.ActiveCount;
 import com.business.dao.*;
 import com.business.service.SystemInfoService;
-import com.result.base.entry.backStageBean.ActiveCount;
 import com.result.base.tools.CastUtil;
 import com.result.base.tools.ObjectUtil;
 import com.result.base.tools.SnowflakeIdWorker;
@@ -56,7 +56,7 @@ public class SystemInfoServiceImpl implements SystemInfoService{
      * @return
      */
     @Override
-    public List<ActiveCount> selectSevenDayActiveCount(String gameName, String time) {
+    public List<ActiveCount> selectSevenDayActiveCount(String gameName,String time) {
         return activeDao.selectSevenDayActiveCount(gameName,time);
     }
 

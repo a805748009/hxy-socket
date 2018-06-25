@@ -1,11 +1,12 @@
 package com.business.dao;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-@Repository
+
+@Component
 public interface DruidDao {
     List<Map> selectDruidInfoList();
 

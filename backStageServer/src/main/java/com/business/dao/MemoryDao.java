@@ -2,11 +2,13 @@ package com.business.dao;
 
 import com.result.base.entry.backStageBean.JVMmemory;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-@Repository
+
+
+@Component
 public interface MemoryDao {
 
     void addMemory(JVMmemory jvMmemory);
