@@ -2,11 +2,6 @@ package com.result.base.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.result.serverbootstrap.assist.proxy.socket.entry.ProxyHttpToSocketContact;
-import com.result.serverbootstrap.assist.proxy.socket.entry.ServerData;
 
 /** 
 * @author 作者 huangxinyu 
@@ -29,7 +24,4 @@ public class ConfigForServerData {
 	
 	public static boolean isSocketProxy = false;//是否开启负载均衡
 	
-	public static Map<String,List<ServerData>> SERVERLIST = new HashMap<>();//服务相关信息
-	
-	public static List<ProxyHttpToSocketContact> PROXYHTTPTOSOCKETCONTACTLIST = new ArrayList<>();//HTTP中连接Socket服务的负载
 }
