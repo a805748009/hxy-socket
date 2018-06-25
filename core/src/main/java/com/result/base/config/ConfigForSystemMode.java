@@ -28,4 +28,10 @@ public class ConfigForSystemMode {
 		//远程调用开头第一节uri
 		public static String REMOTE_CALL_URI = "/bcRemoteCall";
 
+		public static boolean IS_ZLIB_COMPRESS_IN = false;
+
+		public static boolean IS_ZLIB_COMPRESS_OUT = false;
+
+		public static int IS_ZLIB_COMPRESS_OUT_LENGTH = 50;
+
 }

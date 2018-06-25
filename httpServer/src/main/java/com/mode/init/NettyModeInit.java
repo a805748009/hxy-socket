@@ -34,6 +34,12 @@ public class NettyModeInit {
     private int port;
     @Value("${netty.http_maxSize}")
     private int httpMaxSize;
+    @Value("${zlib.compress.in}")
+    private boolean zlibCompressIn;
+    @Value("${zlib.compress.out}")
+    private boolean zlibCompressOut;
+    @Value("${zlib.compress.out.length}")
+    private int zlibCompressOutLength;
 
 
     // 配置系统相关参数
@@ -55,6 +61,8 @@ public class NettyModeInit {
         list.add("/login/getOpenId");
         // 4.配置安全相关配置
         NettyGoConstant.setSecurityMode("ALLVALIDATE", list, 18000,true);
+        // 5.配置zlib压缩相关
+        NettyGoConstant.setZlibConfig(zlibCompressIn,zlibCompressOut,zlibCompressOutLength);
     }
 
     public void runNetty(){

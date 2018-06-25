@@ -2,6 +2,7 @@ package com.result.base.pool;
 
 import com.result.base.config.ConfigForSystemMode;
 import com.result.base.entry.*;
+import com.result.base.handle.ZlibMessageHandle;
 import com.result.base.inits.InitMothods;
 import com.result.base.security.SecurityUtil;
 import com.result.base.tools.*;
@@ -106,11 +107,11 @@ public class MyHttpRunnable implements Runnable {
 			}
 			//如果传回的是byte[]，直接返回(和js以及其他语言传输，采用原生的prorobuf，这里直接返回btye)
 			if(object instanceof  byte[]){
-				send(context,object,HttpResponseStatus.OK);
+				send(context,ZlibMessageHandle.zlibByteMessage((byte[])object),HttpResponseStatus.OK);
 				return;
 			}
 			//发送protostuff转码后的[]数组
-			send(context,SerializationUtil.serializeToByte(object),HttpResponseStatus.OK);
+			send(context, ZlibMessageHandle.zlibByteMessage(SerializationUtil.serializeToByte(object)),HttpResponseStatus.OK);
 		}
 		} catch (IllegalArgumentException | IOException e) {
 			NettyUtil.sendError(context, HttpResponseStatus.SERVICE_UNAVAILABLE);

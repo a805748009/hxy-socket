@@ -9,6 +9,7 @@ import com.alibaba.fastjson.util.Base64;
 import com.result.base.config.ConfigForNettyMode;
 
 import com.result.base.config.ConfigForSystemMode;
+import com.result.base.handle.ZlibMessageHandle;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
@@ -53,7 +54,6 @@ public class UriUtil {
 			String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
 			return JsonUtil.jsonToMap(jsonStr);
 		}
-
         Map<String, String>requestParams=new HashMap<>();
         // 处理get请求  
         if (req.method() == HttpMethod.GET) {
@@ -61,10 +61,6 @@ public class UriUtil {
             for(Map.Entry<String, List<String>> entry:decoder.parameters().entrySet()){
 				requestParams.put(entry.getKey(), entry.getValue().get(0));
 			}
-//            decoder.parameters().entrySet().forEach( entry -> {
-//                // entry.getValue()是一个List, 只取第一个元素
-//            	requestParams.put(entry.getKey(), entry.getValue().get(0));
-//            });
         }
          // 处理POST请求  
         if (req.method() == HttpMethod.POST) {
@@ -104,6 +100,9 @@ public class UriUtil {
             	//获取http中body的字节数组
             	byte[] payloadBytes = new byte[req.content().readableBytes()];
             	req.content().readBytes(payloadBytes);
+            	//解压
+				payloadBytes = ZlibMessageHandle.unZlibByteMessage(payloadBytes);
+				//转码
             	basemessage = SerializationUtil.deserializeFromByte(payloadBytes,clazz);
             }
             //如果前端采用BASE64

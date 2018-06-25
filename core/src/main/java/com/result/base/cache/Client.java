@@ -3,6 +3,7 @@ package com.result.base.cache;
 import com.result.base.config.ConfigForSystemMode;
 import com.result.base.entry.Base.BaseUser;
 import com.result.base.enums.FlushMessageTransformation;
+import com.result.base.handle.ZlibMessageHandle;
 import com.result.base.security.SecurityUtil;
 import com.result.base.tools.JsonUtil;
 import com.result.base.tools.ObjectUtil;
@@ -212,7 +213,7 @@ public class Client {
             return;
         }
         if (obj instanceof byte[]) {
-            BinaryWebSocketFrame binary = new BinaryWebSocketFrame(Unpooled.wrappedBuffer((byte[]) obj));
+            BinaryWebSocketFrame binary = new BinaryWebSocketFrame(Unpooled.wrappedBuffer(ZlibMessageHandle.zlibByteMessage((byte[]) obj)));
             channel.writeAndFlush(binary);
         } else if (obj instanceof String) {
             TextWebSocketFrame text = new TextWebSocketFrame((String) obj);
@@ -221,7 +222,7 @@ public class Client {
             channel.writeAndFlush(obj);
         } else {
             if (ConfigForSystemMode.FLUSHMESSAGETRANSFORMATION.equals(FlushMessageTransformation.BYTE.getType())) {
-                BinaryWebSocketFrame binary = new BinaryWebSocketFrame(Unpooled.wrappedBuffer(SerializationUtil.serializeToByte(obj)));
+                BinaryWebSocketFrame binary = new BinaryWebSocketFrame(Unpooled.wrappedBuffer(ZlibMessageHandle.zlibByteMessage(SerializationUtil.serializeToByte(obj))));
                 channel.writeAndFlush(binary);
             } else {
                 TextWebSocketFrame text = new TextWebSocketFrame(JsonUtil.toJson(obj));

@@ -8,6 +8,7 @@ import com.result.base.entry.ResultStatus;
 import com.result.base.entry.RouteClassAndMethod;
 import com.result.base.entry.SocketRouteClassAndMethod;
 import com.result.base.enums.SocketBinaryType;
+import com.result.base.handle.ZlibMessageHandle;
 import com.result.base.inits.InitMothods;
 import com.result.base.tools.*;
 import io.netty.channel.Channel;
@@ -82,21 +83,23 @@ public class MySocketRunnable implements Runnable {
 
         // 4.如果是proto消息
         if (frame instanceof BinaryWebSocketFrame) {
+            //获取压缩后的bytes
+            byte[] contentBytes = new byte[frame.content().readableBytes()];
+            frame.content().readBytes(contentBytes);
+            contentBytes = ZlibMessageHandle.unZlibByteMessage(contentBytes);
             if (ConfigForSystemMode.BINARYTYPE.equals(SocketBinaryType.INTBEFORE.getType())) {
                 byte[] idByte = new byte[4];//前端传过来的ID，原样返回
-                frame.content().readBytes(idByte);
+                System.arraycopy(contentBytes, 0, idByte, 0, 4);
                 byte[] uriByte = new byte[4];//解析路由的uri
-                frame.content().readBytes(uriByte);
+                System.arraycopy(contentBytes, 4, uriByte, 0, 4);
                 int uri = ArrayUtil.byteArrayToInt(uriByte);
                 byte[] contentByte = new byte[frame.content().readableBytes()];
-                frame.content().readBytes(contentByte);
+                System.arraycopy(contentBytes, 8, uriByte, 0, contentBytes.length-8);
                 routeMethod(ConfigForSystemMode.SOCKETROUTEMAP.get(uri), ctx.channel(), contentByte, idByte);
             } else if (ConfigForSystemMode.BINARYTYPE.equals(SocketBinaryType.PARENTFORBASESOCKETMESSAGE.getType())) {
-                byte[] payloadBytes = new byte[frame.content().readableBytes()];
-                frame.content().readBytes(payloadBytes);
-                BaseSocketMessage baseSocketMessage = SerializationUtil.deserializeFromByte(payloadBytes,
+                BaseSocketMessage baseSocketMessage = SerializationUtil.deserializeFromByte(contentBytes,
                         BaseSocketMessage.class);
-                routeMethod(baseSocketMessage.getServerUri(), ctx.channel(), payloadBytes, baseSocketMessage.getClientUri());
+                routeMethod(baseSocketMessage.getServerUri(), ctx.channel(), contentBytes, baseSocketMessage.getClientUri());
             } else {
                 logger.error("================>>>>编码方式暂未开放，请使用parentForBaseSocketMessage或者intBefore");
             }

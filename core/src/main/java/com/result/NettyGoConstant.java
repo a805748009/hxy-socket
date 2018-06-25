@@ -120,6 +120,25 @@ public class NettyGoConstant {
 		ConfigForMQConnect.MQ_USERNAME = mqUserName;
 		ConfigForMQConnect.MQ_PASSWORD = mqPassword;
 	}
+
+
+	/**
+	* @Author 黄新宇
+	* @date 2018/6/25 上午11:34
+	* @Description(通信压缩的参数设置
+	*  compressIn，读取是否检测压缩   compressOut 发送消息是否压缩   compressOutLength 压缩的长度。)
+	* @param [compressIn, compressOut, compressOutLength]
+	* @return void
+	*/
+	public static void setZlibConfig(boolean compressIn,boolean compressOut,int compressOutLength){
+		ConfigForSystemMode.IS_ZLIB_COMPRESS_OUT = compressOut;
+		ConfigForSystemMode.IS_ZLIB_COMPRESS_IN = compressIn;
+		ConfigForSystemMode.IS_ZLIB_COMPRESS_OUT_LENGTH = compressOutLength;
+	}
+
+	public static void setZlibConfig(boolean compressIn,boolean compressOut){
+		setZlibConfig(compressIn,compressOut,50);
+	}
 	
 
 	
