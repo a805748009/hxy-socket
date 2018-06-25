@@ -21,6 +21,8 @@ public class Room {
 
     protected String nameSpace;
 
+    protected int nowTime;
+
     protected final ConcurrentHashMap<String, ConcurrentHashMap<String, Object>> userData = new ConcurrentHashMap<>();//房间中用户信息
 
     protected final ConcurrentHashMap<String, Object> roomData = new ConcurrentHashMap<>();//房间配置
@@ -100,8 +102,12 @@ public class Room {
         for (Client client : clients) {
             client.sendMsg(obj);
         }
-        ;
     }
+
+    public void startCountTime() {
+        this.nowTime++;
+    }
+
 
     //用户掉线，不删除在房间中的信息
     public void offLineClient(Client client) {
@@ -111,11 +117,23 @@ public class Room {
             IoCache.roomMap.remove(id);
             NameSpace.removeRoom(client.getNameSpace(), id);
         }
+    }
+
+    //客户端离开房间但是不删除房间信息，让机器人删除
+    public void clientLeaveNotDelRoom(Client client) {
+        String userId = ((BaseUser) SecurityUtil.getLoginUser(client.getToken(), InitMothods.getUserClazz())).getBaseUserId();
+        clients.remove(client);
         for (BaseUser s : users) {
             if (s.getBaseUserId().equals(userId)) {
                 users.remove(s);
             }
         }
+    }
+
+    public void deleteRoomInCacheAndNameSpace() {
+        if (IoCache.roomMap.containsKey(id))
+            IoCache.roomMap.remove(id);
+        NameSpace.removeRoom(nameSpace, id);
     }
 
     //踢掉用户
@@ -157,8 +175,22 @@ public class Room {
         }
     }
 
+    public boolean userContainsInUsers(String user) {
+        boolean isContain = false;
+        for (BaseUser s : users) {
+            if (s.getBaseUserId().equals(user)) {
+                isContain = true;
+            }
+        }
+        return isContain;
+    }
+
+    public boolean userContainsInUserDatas(String user) {
+        return userData.contains(user);
+    }
+
     public void addUserWithoutClient(BaseUser user) {
-        if (!users.contains(user)) {
+        if (!userContainsInUsers(user.getUserId())) {
             users.add(user);
         }
     }
@@ -247,5 +279,17 @@ public class Room {
 
     public CopyOnWriteArrayList<BaseUser> getUsers() {
         return users;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getNowTime() {
+        return nowTime;
+    }
+
+    public void setNowTime(int nowTime) {
+        this.nowTime = nowTime;
     }
 }

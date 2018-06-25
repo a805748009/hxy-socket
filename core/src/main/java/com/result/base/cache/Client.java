@@ -113,6 +113,14 @@ public class Client {
         channel.attr(AttributeKey.valueOf("room")).set(room);
     }
 
+    public void joinRoom(Room room) {
+        if (ObjectUtil.isNotNull(room)) {
+            room.addUser(this);
+            room.addUserWithoutClient(SecurityUtil.getLoginUser(this.getToken(), BaseUser.class));
+            channel.attr(AttributeKey.valueOf("room")).set(room);
+        }
+    }
+
     public Room getRoom() {
         return (Room) channel.attr(AttributeKey.valueOf("room")).get();
     }
@@ -140,6 +148,13 @@ public class Client {
         if (ObjectUtil.isNull(room))
             return;
         room.offLineClient(this);
+    }
+
+    public void leaveRoomNotDelRoom() {
+        Room room = getRoom();
+        if (ObjectUtil.isNull(room))
+            return;
+        room.clientLeaveNotDelRoom(this);
     }
 
 
