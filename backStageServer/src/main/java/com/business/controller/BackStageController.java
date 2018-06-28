@@ -1,10 +1,10 @@
 package com.business.controller;
 
+import Entry.User;
 import com.business.service.UserService;
 import com.business.tools.ResponseTool;
 import com.result.base.annotation.Nuri;
 import com.result.base.annotation.Route;
-import com.result.base.entry.backStageBean.Admin;
 import com.result.base.pool.ThreadLocalUtil;
 import com.result.base.security.SecurityUtil;
 import com.result.base.tools.ObjectUtil;
@@ -31,7 +31,7 @@ public class BackStageController {
     public Object getUserById(Map<String, Object> map) {
         String userId = map.get("userId").toString();
         String password = map.get("password").toString();
-        Admin user = userService.selectUserById(userId);
+        User user = userService.selectUserById(userId);
         String sessionId = ThreadLocalUtil.getRequest().getSecurityCookieId();
         if (ObjectUtil.isNotNull(user)) {
             if (password.equals(user.getUserPass())) {
@@ -52,14 +52,4 @@ public class BackStageController {
         res.put("session",sessionId);
         return res;
     }
-
-    @Nuri(uri = "/getSession1",method = "GET",type = "JSON")
-    public Object getSession1(Map map){
-        System.out.println(map);
-        Map<String,String> res = new HashMap<>();
-        res.put("session","2121");
-        return map;
-    }
-
-
 }

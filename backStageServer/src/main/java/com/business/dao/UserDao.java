@@ -1,15 +1,15 @@
 package com.business.dao;
 
-import com.result.base.entry.backStageBean.Admin;
+import com.business.entry.User;
 import com.result.base.entry.backStageBean.UserCount;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
-
+import org.springframework.stereotype.Component;
 import java.util.Map;
 
-@Repository
+
+@Component
 public interface UserDao {
-    Admin loginById(@Param("userId") String userId);
+    User loginById(@Param("userId") String userId);
 
     void updateGameUserCount(UserCount userCount);
 
