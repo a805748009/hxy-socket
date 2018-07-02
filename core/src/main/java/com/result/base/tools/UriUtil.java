@@ -48,7 +48,7 @@ public class UriUtil {
 	 * @throws IOException
 	 */
 	public static Map<String, ?> getRequestParamsMap(FullHttpRequest req) throws IOException{
-		if (req.uri().substring(0,13).equals(ConfigForSystemMode.REMOTE_CALL_URI)) {
+		if (req.uri().length()>13&&req.uri().substring(0, 13).equals(ConfigForSystemMode.REMOTE_CALL_URI)) {
 			//远程调用的restful-json处理
 			ByteBuf jsonBuf = req.content();
 			String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);

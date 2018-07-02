@@ -44,7 +44,7 @@ public class MyHttpRunnable implements Runnable {
 		logger.debug( "uri---" + uri + " length:" + uri.length());
 		//  0)前置filter
 		RouteClassAndMethod filter;
-		if(request.uri().substring(0,13).equals(ConfigForSystemMode.REMOTE_CALL_URI)){
+		if(request.uri().length()>13&&request.uri().substring(0,13).equals(ConfigForSystemMode.REMOTE_CALL_URI)){
 			filter = InitMothods.getRemoteCallFilter();
 		}else{
 			filter = InitMothods.getMessageFilter();

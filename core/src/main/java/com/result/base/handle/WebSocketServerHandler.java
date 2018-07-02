@@ -84,7 +84,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 		if (msg instanceof FullHttpRequest){
 			FullHttpRequest request = (FullHttpRequest) msg;
 			String uri = request.uri();
-			if (uri.substring(0,13).equals(ConfigForSystemMode.REMOTE_CALL_URI)) {
+			if (uri.length()>13&&uri.substring(0,13).equals(ConfigForSystemMode.REMOTE_CALL_URI)) {
 				// springcloud远程调用
 				MyHttpRunnable runnable = new MyHttpRunnable(ctx, request);
 				ExecutorPool.getInstance().execute(runnable);

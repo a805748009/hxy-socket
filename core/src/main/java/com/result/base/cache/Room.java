@@ -104,6 +104,18 @@ public class Room {
         }
     }
 
+    public void sendMsg(Object obj,byte[] id) {
+        for (Client client : clients) {
+            client.sendMsg(obj,id);
+        }
+    }
+
+    public void sendMsg(Object obj,String id) {
+        for (Client client : clients) {
+            client.sendMsg(obj,id);
+        }
+    }
+
     public void startCountTime() {
         this.nowTime++;
     }
