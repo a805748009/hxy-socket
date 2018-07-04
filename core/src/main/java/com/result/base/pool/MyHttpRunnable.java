@@ -2,6 +2,7 @@ package com.result.base.pool;
 
 import com.result.base.config.ConfigForSystemMode;
 import com.result.base.entry.*;
+import com.result.base.handle.Crc32MessageHandle;
 import com.result.base.handle.ZlibMessageHandle;
 import com.result.base.inits.InitMothods;
 import com.result.base.security.SecurityUtil;
@@ -71,49 +72,88 @@ public class MyHttpRunnable implements Runnable {
 			return;
 		}
 
-		// 3)寻找路由成功,返回结果
-		routeMethod(route);
+		// 3）消息入口处理
+		Object contentObj = null;
+		try {
+			contentObj = getMessageObjOnContent(route);
+			if(ObjectUtil.isNull(contentObj))
+				return;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// 4)寻找路由成功,返回结果
+		contentObj = routeMethod(route,contentObj);
+
+		// 5）发送处理
+		sendMethod(route,contentObj);
 	}
 	
 	
-	
-	
-	
 	/**
-	 * 获取到路由之后的处理方法
-	 * @param  route
-	 */
-	private void routeMethod (HttpRouteClassAndMethod route){
-		try {
+	* @Author 黄新宇
+	* @date 2018/7/4 下午4:12
+	* @Description(获取内容消息体)
+	* @param
+	* @return java.lang.Object
+	*/
+	private Object getMessageObjOnContent(HttpRouteClassAndMethod route) throws IOException {
 		if("JSON".equals(route.getType())){
-			//这里不用newInstance,这样的话在action中是无法使用spring注解的，所以采用容器获取
-			//Object object = route.getMethod().invoke(route.getClazz().newInstance(),new Object[]{UriUtil.getRequestParamsMap(request)});   
-			
-			Object object = route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
-					route.isRequest()?new Object[]{UriUtil.getRequestParamsMap(request),request,context}:new Object[]{UriUtil.getRequestParamsMap(request)});
-			//响应消息
+			return UriUtil.getRequestParamsMap(request); //json传输方式 不支持任何处理，基本难用到
+		}else{
+			byte[] content = UriUtil.getRequestParamsObj(request);
+			content = ZlibMessageHandle.unZlibByteMessage(content);//解压
+			content = Crc32MessageHandle.checkCrc32IntBefore(content);//CRC32校验
+			if(ObjectUtil.isNull(content))
+				return null;
+			return SerializationUtil.deserializeFromByte(content,route.getParamType());
+		}
+	}
+
+	/**
+	* @Author 黄新宇
+	* @date 2018/7/4 下午4:36
+	* @Description(路由)
+	* @param
+	* @return java.lang.Object
+	*/
+	private Object routeMethod (HttpRouteClassAndMethod route,Object object){
+		return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
+				route.isRequest()?new Object[]{object,request,context}:new Object[]{object});
+	}
+
+	/**
+	* @Author 黄新宇
+	* @date 2018/7/4 下午4:38
+	* @Description(发送后置处理器)
+	* @param
+	* @return void
+	*/
+	private void sendMethod (HttpRouteClassAndMethod route,Object object){
+		try {
+
+		if("JSON".equals(route.getType())){
 			send(context,JsonUtil.toJson(object),HttpResponseStatus.OK);
 		}else{
-			//采用protobuf编解码
-			Object object = route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
-					route.isRequest()?new Object[]{UriUtil.getRequestParamsObj(request,route.getParamType()),request,context}:new Object[]{UriUtil.getRequestParamsObj(request,route.getParamType())});
 			//error处理
 			if(object instanceof  HttpResponseStatus){
 				NettyUtil.sendError(context, (HttpResponseStatus) object);
+				return;
 			}
 			//如果回传为null，则直接返回
 			if(object==null){
 				send(context,null,HttpResponseStatus.OK);
 				return;
 			}
-			//如果传回的是byte[]，直接返回(和js以及其他语言传输，采用原生的prorobuf，这里直接返回btye)
-			if(object instanceof  byte[]){
-				send(context,ZlibMessageHandle.zlibByteMessage((byte[])object),HttpResponseStatus.OK);
-				return;
+			//如果传回的不是byte，那么必定是bean。
+			if(!(object instanceof  byte[])){
+				object = SerializationUtil.serializeToByte(object);
 			}
-			//发送protostuff转码后的[]数组
-			send(context, ZlibMessageHandle.zlibByteMessage(SerializationUtil.serializeToByte(object)),HttpResponseStatus.OK);
+			byte[] bytes = Crc32MessageHandle.addCrc32IntBefore((byte[])object);
+			bytes = ZlibMessageHandle.zlibByteMessage(bytes);
+			send(context,bytes,HttpResponseStatus.OK);
 		}
+
 		} catch (IllegalArgumentException | IOException e) {
 			NettyUtil.sendError(context, HttpResponseStatus.SERVICE_UNAVAILABLE);
 			logger.error(e.toString());
@@ -122,7 +162,6 @@ public class MyHttpRunnable implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	
 	/**

@@ -78,13 +78,14 @@ public class UriUtil {
 	
 	
 	/**
-	 * 获取参数 ->BaseMessage
+	 * 获取参数 ->BaseMessage  新版本已废弃,请使用 byte[] getRequestParamsObj(FullHttpRequest req);
 	 * @param <T>
 	 * @param <T>
 	 * @param req
 	 * @return
 	 * @throws IOException
 	 */
+	@Deprecated
 	public static <T> T getRequestParamsObj(FullHttpRequest req,Class<T> clazz) throws IOException{
 		 T basemessage = null;
         // 处理get请求  
@@ -113,15 +114,59 @@ public class UriUtil {
                	if(parmList.isEmpty())return null;
                	   Attribute data = (Attribute) parmList.get(0);
                	   String str = data.getValue();
-               	   str = str.replaceAll("-", "+");
-               	   str = str.replaceAll("_", "/");
-               	   byte[] bt = Base64.decodeFast(str);
-            	if(str!=null)
-            	basemessage = SerializationUtil.deserializeFromByte(bt,clazz);
+				if(ObjectUtil.isNotNull(str)) {
+					str = str.replaceAll("-", "+");
+					str = str.replaceAll("_", "/");
+					byte[] bt = Base64.decodeFast(str);
+					basemessage = SerializationUtil.deserializeFromByte(bt, clazz);
+				}
             }
         }
         return basemessage;
     }
+
+
+    /**
+    * @Author 黄新宇
+    * @date 2018/7/4 下午4:05
+    * @Description(获取request的参数，返回内容字节数组)
+    * @param [req]
+    * @return byte[]
+    */
+	public static byte[] getRequestParamsObj(FullHttpRequest req) throws IOException{
+		byte[] payloadBytes = null;
+		// 处理get请求
+		if (req.method() == HttpMethod.GET) {
+			QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
+			String params = (String)decoder.parameters().get("params").get(0);
+			payloadBytes = params.getBytes("ISO8859-1");
+		}
+		// 处理POST请求
+		if (req.method() == HttpMethod.POST) {
+			//采用byte数组
+			if("BYTE".equals(ConfigForNettyMode.ENCODEDTYPE)){
+				//获取http中body的字节数组
+				payloadBytes = new byte[req.content().readableBytes()];
+				req.content().readBytes(payloadBytes);
+
+			}
+			//如果前端采用BASE64
+			if("BASE64".equals(ConfigForNettyMode.ENCODEDTYPE)){
+				HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
+				decoder.offer(req);
+				List<InterfaceHttpData> parmList = decoder.getBodyHttpDatas();
+				if(parmList.isEmpty())return null;
+				Attribute data = (Attribute) parmList.get(0);
+				String str = data.getValue();
+				if(ObjectUtil.isNull(str))
+					return null;
+				str = str.replaceAll("-", "+");
+				str = str.replaceAll("_", "/");
+				payloadBytes = Base64.decodeFast(str);
+			}
+		}
+		return payloadBytes;
+	}
 	
 
 	
