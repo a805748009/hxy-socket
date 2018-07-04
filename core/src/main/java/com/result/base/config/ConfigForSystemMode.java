@@ -28,10 +28,18 @@ public class ConfigForSystemMode {
 		//远程调用开头第一节uri
 		public static String REMOTE_CALL_URI = "/bcRemoteCall";
 
+		//入口是否采用zlib压缩
 		public static boolean IS_ZLIB_COMPRESS_IN = false;
 
+		//出口是否采用zlib压缩
 		public static boolean IS_ZLIB_COMPRESS_OUT = false;
 
+		//出口超过多少长度开始压缩
 		public static int IS_ZLIB_COMPRESS_OUT_LENGTH = 50;
 
+		//入口是否采用crc32验证
+		public static boolean IS_CRC32_IN = false;
+
+		//出口是否采用crc32验证
+		public static boolean IS_CRC32_OUT = false;
 }

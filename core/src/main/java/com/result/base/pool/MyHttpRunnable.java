@@ -70,6 +70,7 @@ public class MyHttpRunnable implements Runnable {
 			NettyUtil.sendError(context, HttpResponseStatus.NOT_FOUND);
 			return;
 		}
+
 		// 3)寻找路由成功,返回结果
 		routeMethod(route);
 	}
@@ -134,8 +135,6 @@ public class MyHttpRunnable implements Runnable {
      */
     private <T> void send(ChannelHandlerContext ctx, T context,HttpResponseStatus status) throws UnsupportedEncodingException {
     	request.release();
-//    	ByteBuf buffer = Unpooled.buffer(oo);
-//    	byte[] req = new byte[buffer.readableBytes()];
     	FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status);
     	//设置允许跨域
     	response.headers().set("Access-Control-Allow-Origin", "*");
