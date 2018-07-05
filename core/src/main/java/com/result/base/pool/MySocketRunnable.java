@@ -8,6 +8,7 @@ import com.result.base.entry.ResultStatus;
 import com.result.base.entry.RouteClassAndMethod;
 import com.result.base.entry.SocketRouteClassAndMethod;
 import com.result.base.enums.SocketBinaryType;
+import com.result.base.handle.Crc32MessageHandle;
 import com.result.base.handle.ZlibMessageHandle;
 import com.result.base.inits.InitMothods;
 import com.result.base.tools.*;
@@ -86,7 +87,10 @@ public class MySocketRunnable implements Runnable {
             //获取压缩后的bytes
             byte[] contentBytes = new byte[frame.content().readableBytes()];
             frame.content().readBytes(contentBytes);
-            contentBytes = ZlibMessageHandle.unZlibByteMessage(contentBytes);
+            contentBytes = ZlibMessageHandle.unZlibByteMessage(contentBytes);//解压
+            contentBytes = Crc32MessageHandle.checkCrc32IntBefore(contentBytes);//CRC32校验
+            if(ObjectUtil.isNull(contentBytes))//验证不通过，放弃处理此次请求
+                return;
             if (ConfigForSystemMode.BINARYTYPE.equals(SocketBinaryType.INTBEFORE.getType())) {
                 byte[] idByte = new byte[4];//前端传过来的ID，原样返回
                 System.arraycopy(contentBytes, 0, idByte, 0, 4);
