@@ -4,6 +4,7 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 import com.result.base.annotation.BCRemoteCall;
 import com.result.base.annotation.Nuri;
 import com.result.base.annotation.On;
+import com.result.base.config.ConfigForSecurityMode;
 import com.result.base.config.ConfigForSystemMode;
 import com.result.base.entry.HttpRouteClassAndMethod;
 import com.result.base.entry.SocketRouteClassAndMethod;
@@ -90,7 +91,7 @@ public class Route {
      * @param handlerType
      */
     private void registerHandlerMethod(Method method, Class<?> handlerType) {
-
+        boolean isRemote = false;
         String uri = "";
         MethodAccess ma = MethodAccess.get(handlerType);
         if(ConnectType.HTTP.getType().equals(ConfigForSystemMode.CONNECTTYPE)){
@@ -110,8 +111,13 @@ public class Route {
                 }
                 if (classBCRemoteCall != null) {
                     uri = ConfigForSystemMode.REMOTE_CALL_URI+uri;
+                    isRemote = true;
                 }
                 uri = methodType+uri;
+                //如果是远程调用就直接加入免登录访问
+                if(isRemote){
+                    ConfigForSecurityMode.EXCEPTIONVALIDATE.add(uri);
+                }
             }
             METHODHANDLEMAP.put(uri,new HttpRouteClassAndMethod(handlerType, ma,
                     ma.getIndex(method.getName()),method.getParameterTypes()[0],methodNuri.type(),method.getParameterTypes().length==1?false:true));
@@ -139,6 +145,9 @@ public class Route {
                     uri = ConfigForSystemMode.REMOTE_CALL_URI+uri;
                     uri = methodType+uri;
                 }
+                //如果是远程调用就直接加入免登录访问
+                ConfigForSecurityMode.EXCEPTIONVALIDATE.add(uri);
+
                 METHODHANDLEMAP.put(uri,new HttpRouteClassAndMethod(handlerType, ma,
                         ma.getIndex(method.getName()),method.getParameterTypes()[0],methodNuri.type(),method.getParameterTypes().length==1?false:true));
             }

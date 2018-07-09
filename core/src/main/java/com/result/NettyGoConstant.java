@@ -4,7 +4,6 @@ import com.result.base.config.ConfigForMQConnect;
 import com.result.base.config.ConfigForNettyMode;
 import com.result.base.config.ConfigForSecurityMode;
 import com.result.base.config.ConfigForSystemMode;
-import com.result.base.enums.ServerUrl;
 
 import java.util.List;
 import java.util.Map;
@@ -82,10 +81,9 @@ public class NettyGoConstant {
 	 */
 	public static void setSecurityMode(String isValidate,List<String> exceptionValidate,int loginSessionTimeOut,boolean isSessionToRedis){
 		ConfigForSecurityMode.ISVALIDATE = isValidate;
-		ConfigForSecurityMode.EXCEPTIONVALIDATE = exceptionValidate;
+		ConfigForSecurityMode.EXCEPTIONVALIDATE.addAll(exceptionValidate);
 		ConfigForSecurityMode.LOGINSESSIONTIMEOUT = loginSessionTimeOut;
 		ConfigForSecurityMode.ISSETSESSIONTOREDIS = isSessionToRedis;
-		ConfigForSecurityMode.EXCEPTIONVALIDATE.add(ServerUrl.PROXY.getUrl());//负载均衡的链接
 	}
 
 	
