@@ -120,7 +120,7 @@ public class Route {
                 }
             }
             METHODHANDLEMAP.put(uri,new HttpRouteClassAndMethod(handlerType, ma,
-                    ma.getIndex(method.getName()),method.getParameterTypes()[0],methodNuri.type(),method.getParameterTypes().length==1?false:true));
+                    ma.getIndex(method.getName()),method.getParameterTypes().length>0?method.getParameterTypes()[0]:null,methodNuri.type(),method.getParameterTypes().length==1?false:true));
         }else{
             //获取方法method上的@On实例。
             On methodOn = AnnotationUtils.findAnnotation(method, On.class);
@@ -149,7 +149,7 @@ public class Route {
                 ConfigForSecurityMode.EXCEPTIONVALIDATE.add(uri);
 
                 METHODHANDLEMAP.put(uri,new HttpRouteClassAndMethod(handlerType, ma,
-                        ma.getIndex(method.getName()),method.getParameterTypes()[0],methodNuri.type(),method.getParameterTypes().length==1?false:true));
+                        ma.getIndex(method.getName()),method.getParameterTypes().length>0?method.getParameterTypes()[0]:null,methodNuri.type(),method.getParameterTypes().length==1?false:true));
             }
         }
         logger.info("================注册uri："+uri+"方法："+method);
