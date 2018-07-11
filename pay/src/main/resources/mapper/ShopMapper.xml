@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.business.dao.ShopMapper" >
+  <resultMap id="BaseResultMap" type="com.business.bean.Shop" >
+    <constructor >
+      <idArg column="shop_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="ios_pay_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="is_rmb" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="price" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="is_discount" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="discount_price" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="subject" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="body" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    shop_id, ios_pay_id, is_rmb, price, is_discount, discount_price, subject, body
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from shop
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from shop
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.business.bean.Shop" >
+    insert into shop (shop_id, ios_pay_id, is_rmb, 
+      price, is_discount, discount_price, 
+      subject, body)
+    values (#{shopId,jdbcType=INTEGER}, #{iosPayId,jdbcType=VARCHAR}, #{isRmb,jdbcType=BIT}, 
+      #{price,jdbcType=INTEGER}, #{isDiscount,jdbcType=BIT}, #{discountPrice,jdbcType=INTEGER}, 
+      #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.business.bean.Shop" >
+    insert into shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="iosPayId != null" >
+        ios_pay_id,
+      </if>
+      <if test="isRmb != null" >
+        is_rmb,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="isDiscount != null" >
+        is_discount,
+      </if>
+      <if test="discountPrice != null" >
+        discount_price,
+      </if>
+      <if test="subject != null" >
+        subject,
+      </if>
+      <if test="body != null" >
+        body,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="iosPayId != null" >
+        #{iosPayId,jdbcType=VARCHAR},
+      </if>
+      <if test="isRmb != null" >
+        #{isRmb,jdbcType=BIT},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=INTEGER},
+      </if>
+      <if test="isDiscount != null" >
+        #{isDiscount,jdbcType=BIT},
+      </if>
+      <if test="discountPrice != null" >
+        #{discountPrice,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null" >
+        #{body,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.business.bean.Shop" >
+    update shop
+    <set >
+      <if test="iosPayId != null" >
+        ios_pay_id = #{iosPayId,jdbcType=VARCHAR},
+      </if>
+      <if test="isRmb != null" >
+        is_rmb = #{isRmb,jdbcType=BIT},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="isDiscount != null" >
+        is_discount = #{isDiscount,jdbcType=BIT},
+      </if>
+      <if test="discountPrice != null" >
+        discount_price = #{discountPrice,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null" >
+        body = #{body,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.business.bean.Shop" >
+    update shop
+    set ios_pay_id = #{iosPayId,jdbcType=VARCHAR},
+      is_rmb = #{isRmb,jdbcType=BIT},
+      price = #{price,jdbcType=INTEGER},
+      is_discount = #{isDiscount,jdbcType=BIT},
+      discount_price = #{discountPrice,jdbcType=INTEGER},
+      subject = #{subject,jdbcType=VARCHAR},
+      body = #{body,jdbcType=VARCHAR}
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </update>
+</mapper>

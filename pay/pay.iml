@@ -173,7 +173,6 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.5" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.7.7" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.8.9" level="project" />
-    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.6" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.0" level="project" />
     <orderEntry type="library" name="Maven: javax.el:javax.el-api:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.web:javax.el:2.2.4" level="project" />
@@ -193,5 +192,14 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: com.sun.mail:javax.mail:1.5.0" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.egzosn:pay-java-common:2.10.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.5.4" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.41" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="Maven: com.google.zxing:core:3.3.1" level="project" />
+    <orderEntry type="library" name="Maven: com.egzosn:pay-java-wx:2.10.1" level="project" />
+    <orderEntry type="library" name="Maven: com.egzosn:pay-java-ali:2.10.1" level="project" />
   </component>
 </module>

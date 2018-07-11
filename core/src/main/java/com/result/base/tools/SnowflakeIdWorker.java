@@ -169,4 +169,13 @@ public class SnowflakeIdWorker {
     public static SnowflakeIdWorker getSnowflakeIdWorker(){
     	return snowflakeIdWorker;
     }
+
+
+    public static String getStringId(){
+        return CastUtil.castString(snowflakeIdWorker.nextId());
+    }
+
+    public static long getLongId(){
+        return snowflakeIdWorker.nextId();
+    }
 }
