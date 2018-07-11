@@ -4,7 +4,10 @@ public enum PayType {
 
     IOS("IOS","苹果支付"),
     WX("WX","微信支付"),
-    ALI("ALI","阿里支付");
+    ALI("ALI","阿里支付"),
+    HUAWEI("HUAWEI","华为支付"),
+    OPPO("OPPO","OPPO支付"),
+    XIAOMI("XIAOMI","小米支付");
 
     private String type;
 

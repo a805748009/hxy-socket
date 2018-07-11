@@ -2,6 +2,7 @@ package com.business.service.PayService;
 
 import com.alibaba.fastjson.JSONObject;
 import com.business.bean.Shop;
+import com.business.cache.PayInfoCache;
 import com.business.tools.EMailUtil;
 import com.egzosn.pay.common.api.PayConfigStorage;
 import com.egzosn.pay.common.bean.PayOrder;
@@ -32,14 +33,14 @@ public class MyWxPayService extends WxPayService  {
 
     static{
         WxPayConfigStorage wxPayConfigStorage = new WxPayConfigStorage();
-        wxPayConfigStorage.setMchId("1492043172");
-        wxPayConfigStorage.setAppid("wxcf3ab341f1a9e3d3");
-//        wxPayConfigStorage.setKeyPublic("转账公钥，转账时必填");
-        wxPayConfigStorage.setSecretKey("15ABA82FE51B3B6922B774F56685610E");
-        wxPayConfigStorage.setNotifyUrl("http://47.96.10.28:3001/pay/wxPay");
-        wxPayConfigStorage.setReturnUrl("http://47.96.10.28:3001/pay/wxPay");
+        wxPayConfigStorage.setMchId(PayInfoCache.jsonObject.getJSONObject("wx").get("mchId").toString());
+        wxPayConfigStorage.setAppid(PayInfoCache.jsonObject.getJSONObject("wx").get("appId").toString());
+        wxPayConfigStorage.setSecretKey(PayInfoCache.jsonObject.getJSONObject("wx").get("secretKey").toString());
+        wxPayConfigStorage.setNotifyUrl(PayInfoCache.jsonObject.getJSONObject("wx").get("notifyUrl").toString());
         wxPayConfigStorage.setSignType("MD5");
         wxPayConfigStorage.setInputCharset("utf-8");
+//      wxPayConfigStorage.setReturnUrl("http://47.96.10.28:3001/pay/wxPay");
+//      wxPayConfigStorage.setKeyPublic("转账公钥，转账时必填");
         payService = new MyWxPayService(wxPayConfigStorage);
     }
 
@@ -59,7 +60,6 @@ public class MyWxPayService extends WxPayService  {
     public Map<String, Object> unifiedOrder(String orderId,Shop shop) {
         PayOrder order = new PayOrder(shop.getSubject(), shop.getBody(),  new BigDecimal(shop.getPrice()) ,orderId,WxTransactionType.APP );
         Map<String, Object> data = this.orderInfo(order);
-        System.out.println("====="+data);
         return data;
     }
 
@@ -83,7 +83,6 @@ public class MyWxPayService extends WxPayService  {
                     params.put("noncestr", result.get("nonce_str"));
                     params.put("package", "Sign=WXPay");
                 }
-
                 String paySign = this.createSign(SignUtils.parameterText(params), this.payConfigStorage.getInputCharset());
                 params.put("sign", paySign);
                 return params;

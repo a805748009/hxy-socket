@@ -1,5 +1,6 @@
 package com.business.bean.comEntry;
 
+
 import java.util.Map;
 
 /**
@@ -13,15 +14,31 @@ public class OrderInfo {
 
     private String userToken;//加密后的userId
 
-    private String gameName;
+    private String gameName;//游戏名称
 
-    private String payType;
+    private String payType;//支付方式
+
+    private int payStatus;//支付状态
 
     private String orderId;
 
-    private String iosPayId;
+    private String iosPayId;//ios上的商品Id
 
-    private Map<String,Object> payInfoMap;
+    private String subject;
+
+    private String body;
+
+    private int price;//分为单位
+
+    private String receiptData; //苹果支付传的参数
+
+    private String  aliwxReturnInfo; //微信支付宝预付单返回的消息
+
+
+
+
+
+
 
     public int getShopId() {
         return shopId;
@@ -71,11 +88,51 @@ public class OrderInfo {
         this.iosPayId = iosPayId;
     }
 
-    public Map<String, Object> getPayInfoMap() {
-        return payInfoMap;
+    public String getAliwxReturnInfo() {
+        return aliwxReturnInfo;
     }
 
-    public void setPayInfoMap(Map<String, Object> payInfoMap) {
-        this.payInfoMap = payInfoMap;
+    public void setAliwxReturnInfo(String aliwxReturnInfo) {
+        this.aliwxReturnInfo = aliwxReturnInfo;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(int payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public String getReceiptData() {
+        return receiptData;
+    }
+
+    public void setReceiptData(String receiptData) {
+        this.receiptData = receiptData;
     }
 }

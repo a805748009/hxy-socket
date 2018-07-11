@@ -1,5 +1,6 @@
 package com.business.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.business.bean.PayOrder;
 import com.business.bean.Shop;
 import com.business.bean.comEntry.OrderInfo;
@@ -8,19 +9,17 @@ import com.business.enums.GameType;
 import com.business.enums.PayType;
 import com.business.service.OrderService;
 import com.business.service.PayService.MyAliPayService;
+import com.business.service.PayService.MyIosPayService;
 import com.business.service.ShopService;
 import com.business.service.PayService.MyWxPayService;
 import com.mode.error.MyHttpResponseStatus;
 import com.result.base.annotation.Nuri;
 import com.result.base.annotation.Route;
-import com.result.base.tools.AESUtil;
-import com.result.base.tools.DateUtil;
-import com.result.base.tools.ObjectUtil;
-import com.result.base.tools.SnowflakeIdWorker;
+import com.result.base.tools.*;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Map;
 import java.util.Random;
 
@@ -40,6 +39,9 @@ public class PayController {
     @Autowired
     ShopService shopService;
 
+    @Autowired
+    MyIosPayService myIosPayService;
+
 
 
 
@@ -50,7 +52,6 @@ public class PayController {
     * @param
     * @return java.lang.Object
     */
-
     @Nuri(uri="/createOrder")
     public Object createOrder(OrderInfo orderInfo) throws Exception  {
         int shopId = orderInfo.getShopId();
@@ -85,30 +86,75 @@ public class PayController {
         if(PayType.IOS.getType().equals(payType)){
             String iosPayId = shop.getIosPayId();
             orderInfo.setIosPayId(iosPayId);
+            return orderInfo;
         }
-
 
         //----------微信生成预付单
         if(PayType.WX.getType().equals(payType)){
-            Map<String,Object> wxpayInfoMap = MyWxPayService.gePayService().unifiedOrder(orderId, shop);
-            if(ObjectUtil.isNull(wxpayInfoMap))
+            Map<String,Object> payInfoMap = MyWxPayService.gePayService().unifiedOrder(orderId, shop);
+            if(ObjectUtil.isNull(payInfoMap))
                 return MyHttpResponseStatus.CREATE_ORDER_FAILED;
-            orderInfo.setPayInfoMap(wxpayInfoMap);
-            return wxpayInfoMap;
+            orderInfo.setAliwxReturnInfo(JSON.toJSONString(payInfoMap));
+            return orderInfo;
         }
 
-        //-阿里生成预付单
+        //----------阿里生成预付单
         if(PayType.ALI.equals(payType)){
+            Map<String,Object> payInfoMap = MyWxPayService.gePayService().unifiedOrder(orderId, shop);
+            orderInfo.setAliwxReturnInfo(JSON.toJSONString(payInfoMap));
+            return orderInfo;
+        }
 
+        //----------华为||OPPO||小米
+        if(PayType.HUAWEI.equals(payType)||PayType.OPPO.equals(payType)||PayType.XIAOMI.equals(payType)){
+            orderInfo.setSubject(shop.getSubject());
+            orderInfo.setBody(shop.getBody());
+            orderInfo.setPrice(shop.getIsDiscount()?shop.getDiscountPrice():shop.getPrice());
+            return orderInfo;
         }
 
         return MyHttpResponseStatus.CREATE_ORDER_FAILED;
     }
 
+
+    /**
+    * @Author 黄新宇
+    * @date 2018/7/11 下午3:33
+    * @Description(获取支付状态)
+    * @param ( orderInfo)
+    * @return java.lang.Object
+    */
+    @Nuri(uri="/getPayStatus")
+    public Object payStatus(OrderInfo orderInfo)  {
+        String orderId = orderInfo.getOrderId();
+        PayOrder payOrder = orderService.getOrderById(orderId);
+        orderInfo.setOrderId(null);
+        //已经完成支付
+        if(payOrder.getPayStatus()==1){
+            orderInfo.setPayStatus(1);
+            return orderInfo;
+        }
+
+        //苹果支付的
+        if(PayType.IOS.getType().equals(payOrder.getPayType())){
+            orderInfo.setPayStatus(myIosPayService.iosPayVerify(orderInfo.getReceiptData(),payOrder));
+            return orderInfo;
+        }
+
+        orderInfo.setPayStatus(0);
+        return orderInfo;
+    }
+
+
     public static void main(String[] args) {
         Shop shop = new Shop(10001, "2123", true,1, false, 0, "测试1", "测试1");
 
         Map<String,Object> wxpayInfoMap = MyAliPayService.gePayService().unifiedOrder("217094701319702397109270", shop);
+
+//        Map<String,Object> wxpayInfoMap = MyWxPayService.gePayService().unifiedOrder("217094701319702397109270", shop);
+        System.out.println(JSON.toJSONString(wxpayInfoMap));
+
     }
+
 
 }

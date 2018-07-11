@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.business.dao.IosReceiptMd5Mapper" >
+  <resultMap id="BaseResultMap" type="com.business.bean.IosReceiptMd5" >
+    <constructor >
+      <idArg column="receipt_data" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="order_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    receipt_data, order_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ios_receipt_md5
+    where receipt_data = #{receiptData,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ios_receipt_md5
+    where receipt_data = #{receiptData,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.business.bean.IosReceiptMd5" >
+    insert into ios_receipt_md5 (receipt_data, order_id)
+    values (#{receiptData,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.business.bean.IosReceiptMd5" >
+    insert into ios_receipt_md5
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="receiptData != null" >
+        receipt_data,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="receiptData != null" >
+        #{receiptData,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>
