@@ -29,8 +29,8 @@
         <!-- Netty-go   包含spring，shiro，json，redis，netty,prostuff，slf4j -->
         <dependency>
             <groupId>hxy</groupId>
-            <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>nettygo-core</artifactId>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
