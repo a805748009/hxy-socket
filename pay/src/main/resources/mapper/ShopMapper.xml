@@ -22,6 +22,11 @@
     from shop
     where shop_id = #{shopId,jdbcType=INTEGER}
   </select>
+  <select id="selectList" resultType="java.util.List"  >
+    select
+    <include refid="Base_Column_List" />
+    from shop
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from shop
     where shop_id = #{shopId,jdbcType=INTEGER}
@@ -127,4 +132,6 @@
       body = #{body,jdbcType=VARCHAR}
     where shop_id = #{shopId,jdbcType=INTEGER}
   </update>
+
+
 </mapper>

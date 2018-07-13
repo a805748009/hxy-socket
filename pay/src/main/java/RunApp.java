@@ -10,8 +10,8 @@ import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 @MapperScan("com.business.dao")
-@EnableFeignClients
-@EnableDiscoveryClient
+//@EnableFeignClients
+//@EnableDiscoveryClient
 public class RunApp {
 
 
