@@ -1,6 +1,6 @@
 package com.business.dao;
 
-import com.result.base.entry.backStageBean.LoginTime;
+import com.hxy.nettygo.result.base.entry.backStageBean.LoginTime;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 

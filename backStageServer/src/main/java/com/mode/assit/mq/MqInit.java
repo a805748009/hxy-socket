@@ -1,12 +1,9 @@
 package com.mode.assit.mq;
 
-import com.result.NettyGoConstant;
-import com.result.base.tools.CastUtil;
-import com.result.base.tools.ConfigUtil;
+import com.hxy.nettygo.result.NettyGoConstant;
+import com.hxy.nettygo.result.base.tools.CastUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.ResourceBundle;
 
 /**
  * @Author 黄新宇

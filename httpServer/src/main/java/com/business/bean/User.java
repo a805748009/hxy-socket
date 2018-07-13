@@ -1,7 +1,7 @@
 
 package com.business.bean;
 
-import com.result.base.entry.Base.BaseUser;
+import com.hxy.nettygo.result.base.entry.Base.BaseUser;
 
 import java.io.Serializable;
 

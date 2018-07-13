@@ -2,12 +2,12 @@ package com.business.controller;
 
 import com.business.entry.SocketMessage;
 import com.business.entry.User;
-import com.result.base.annotation.On;
-import com.result.base.annotation.Route;
-import com.result.base.cache.Client;
-import com.result.base.tools.CastUtil;
-import com.result.base.tools.SerializationUtil;
-import com.result.base.tools.SnowflakeIdWorker;
+import com.hxy.nettygo.result.base.annotation.On;
+import com.hxy.nettygo.result.base.annotation.Route;
+import com.hxy.nettygo.result.base.cache.Client;
+import com.hxy.nettygo.result.base.tools.CastUtil;
+import com.hxy.nettygo.result.base.tools.SerializationUtil;
+import com.hxy.nettygo.result.base.tools.SnowflakeIdWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,7 @@
 package com.mode.init;
 
-import com.result.base.redis.RedisUtil;
-import com.result.base.tools.ConfigUtil;
+import com.hxy.nettygo.result.base.redis.RedisUtil;
+import com.hxy.nettygo.result.base.tools.ConfigUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.JedisPool;

@@ -1,6 +1,6 @@
 package com.business.dao;
 
-import com.result.base.entry.backStageBean.JVMmemory;
+import com.hxy.nettygo.result.base.entry.backStageBean.JVMmemory;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 

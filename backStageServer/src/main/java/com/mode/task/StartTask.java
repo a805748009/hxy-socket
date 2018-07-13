@@ -1,9 +1,6 @@
 package com.mode.task;
 
-import com.mode.assit.mq.MqInit;
-import com.mode.mqListener.MyQueueMessageListener;
-import com.result.base.task.StartAppTask;
-import com.result.base.tools.SpringApplicationContextHolder;
+import com.hxy.nettygo.result.base.task.StartAppTask;
 import org.springframework.stereotype.Component;
 
 /** 

@@ -6,7 +6,7 @@ import com.alibaba.druid.pool.DruidDataSourceStatValue;
 import com.alibaba.druid.stat.JdbcSqlStatValue;
 import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
-import com.result.base.entry.backStageBean.DruidMonitor;
+import com.hxy.nettygo.result.base.entry.backStageBean.DruidMonitor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

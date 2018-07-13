@@ -1,6 +1,6 @@
 package com.business.tools;
 
-import com.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
 
 import java.util.Map;
 

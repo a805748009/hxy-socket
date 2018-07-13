@@ -1,11 +1,11 @@
 package com.mode.mqListener;
 
-import com.result.base.entry.SocketRouteClassAndMethod;
-import com.result.base.entry.backStageBean.BaseMqMessage;
-import com.result.base.inits.InitMothods;
-import com.result.base.tools.ObjectUtil;
-import com.result.base.tools.SerializationUtil;
-import com.result.base.tools.SpringApplicationContextHolder;
+import com.hxy.nettygo.result.base.entry.SocketRouteClassAndMethod;
+import com.hxy.nettygo.result.base.entry.backStageBean.BaseMqMessage;
+import com.hxy.nettygo.result.base.inits.InitMothods;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.base.tools.SerializationUtil;
+import com.hxy.nettygo.result.base.tools.SpringApplicationContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

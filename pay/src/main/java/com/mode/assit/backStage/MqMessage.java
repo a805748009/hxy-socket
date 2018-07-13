@@ -1,6 +1,6 @@
 package com.mode.assit.backStage;
 
-import com.result.serverbootstrap.assist.rabbitMq.QueueProducer;
+import com.hxy.nettygo.result.serverbootstrap.assist.rabbitMq.QueueProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

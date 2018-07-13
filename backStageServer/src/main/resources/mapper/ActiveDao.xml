@@ -6,7 +6,7 @@
         active_id,active_count,create_time,game_name
     </sql>
 
-    <insert id="addActive" parameterType="com.result.base.entry.backStageBean.ActiveCount">
+    <insert id="addActive" parameterType="com.hxy.nettygo.result.base.entry.backStageBean.ActiveCount">
         INSERT INTO active_count(
         <include refid="Base_Active"/>
         )
@@ -14,7 +14,7 @@
     </insert>
 
 
-    <select id="selectSevenDayActiveCount" resultType="com.result.base.entry.backStageBean.ActiveCount">
+    <select id="selectSevenDayActiveCount" resultType="com.hxy.nettygo.result.base.entry.backStageBean.ActiveCount">
         select
         <include refid="Base_Active"/>
         from active_count

@@ -1,7 +1,7 @@
 
 package com.business.entry;
 
-import com.result.base.entry.Base.BaseSocketMessage;
+import com.hxy.nettygo.result.base.entry.Base.BaseSocketMessage;
 
 import java.io.Serializable;
 

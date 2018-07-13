@@ -1,10 +1,10 @@
 package com.mode.filter;
 
-import com.result.base.entry.ResultStatus;
-import com.result.base.fitle.HttpMessageFilter;
-import com.result.base.tools.UriUtil;
+import com.hxy.nettygo.result.base.entry.ResultStatus;
+import com.hxy.nettygo.result.base.fitle.HttpMessageFilter;
+import com.hxy.nettygo.result.base.tools.UriUtil;
 import com.mode.error.MyHttpResponseStatus;
-import com.result.serverbootstrap.shutdown.Shutdown;
+import com.hxy.nettygo.result.serverbootstrap.shutdown.Shutdown;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 import org.springframework.stereotype.Component;

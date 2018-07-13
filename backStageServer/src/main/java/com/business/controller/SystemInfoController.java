@@ -2,9 +2,9 @@ package com.business.controller;
 
 import com.business.service.SystemInfoService;
 import com.business.tools.ResponseTool;
-import com.result.base.annotation.Nuri;
-import com.result.base.annotation.Route;
-import com.result.base.tools.CastUtil;
+import com.hxy.nettygo.result.base.annotation.Nuri;
+import com.hxy.nettygo.result.base.annotation.Route;
+import com.hxy.nettygo.result.base.tools.CastUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;

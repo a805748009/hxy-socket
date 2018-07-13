@@ -1,8 +1,8 @@
 package com.mode.init;
 
-import com.result.NettyGoConstant;
-import com.result.Server;
-import com.result.base.config.ConfigForSSL;
+import com.hxy.nettygo.result.NettyGoConstant;
+import com.hxy.nettygo.result.Server;
+import com.hxy.nettygo.result.base.config.ConfigForSSL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

@@ -6,7 +6,7 @@
        id,sql_str,execute_count,execute_millis_max,execute_millis_total,execute_error_count,running_count,concurrent_max
     </sql>
 
-    <update id="updateSqlMonitor" parameterType="com.result.base.entry.backStageBean.DruidMonitor" >
+    <update id="updateSqlMonitor" parameterType="com.hxy.nettygo.result.base.entry.backStageBean.DruidMonitor" >
         update druid_monitor
         set execute_count = execute_count+#{executeCount},
         execute_millis_max = #{executeMillisMax},
@@ -18,11 +18,11 @@
     </update>
 
 
-    <select id="getDruidMonitor" resultType="com.result.base.entry.backStageBean.DruidMonitor" parameterType="java.lang.String" >
+    <select id="getDruidMonitor" resultType="com.hxy.nettygo.result.base.entry.backStageBean.DruidMonitor" parameterType="java.lang.String" >
         select * from druid_monitor where sql_str = #{0}
     </select>
 
-    <insert id="insertDruidMonitor" parameterType="com.result.base.entry.backStageBean.DruidMonitor" >
+    <insert id="insertDruidMonitor" parameterType="com.hxy.nettygo.result.base.entry.backStageBean.DruidMonitor" >
         insert into druid_monitor (<include refid="Base_DruidMonitor"/>)
         values (#{id}, #{sqlStr}, #{executeCount},
         #{executeMillisMax}, #{executeMillisTotal}, #{executeErrorCount},

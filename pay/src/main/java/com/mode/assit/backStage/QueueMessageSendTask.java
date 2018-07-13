@@ -1,16 +1,15 @@
 package com.mode.assit.backStage;
 
 import com.mode.assit.druidDataSource.MyDruidStatLogger;
-import com.result.base.config.ConfigForMQConnect;
-import com.result.base.entry.backStageBean.LoginTime;
-import com.result.base.entry.backStageBean.UserCount;
-import com.result.base.pool.ExecutorPool;
-import com.result.base.tools.CastUtil;
-import com.result.base.tools.DateUtil;
-import com.result.base.tools.ObjectUtil;
-import com.result.base.tools.SnowflakeIdWorker;
-import com.result.serverbootstrap.assist.rabbitMq.QueueProducer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hxy.nettygo.result.base.config.ConfigForMQConnect;
+import com.hxy.nettygo.result.base.entry.backStageBean.LoginTime;
+import com.hxy.nettygo.result.base.entry.backStageBean.UserCount;
+import com.hxy.nettygo.result.base.pool.ExecutorPool;
+import com.hxy.nettygo.result.base.tools.CastUtil;
+import com.hxy.nettygo.result.base.tools.DateUtil;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.base.tools.SnowflakeIdWorker;
+import com.hxy.nettygo.result.serverbootstrap.assist.rabbitMq.QueueProducer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

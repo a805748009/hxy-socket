@@ -1,7 +1,7 @@
 package com.mode.assit.druidDataSource;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.result.base.tools.SpringApplicationContextHolder;
+import com.hxy.nettygo.result.base.tools.SpringApplicationContextHolder;
 
 /**
  * @Author 黄新宇

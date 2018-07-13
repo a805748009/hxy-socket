@@ -1,7 +1,7 @@
 package com.business.dao;
 
 
-import com.result.base.entry.backStageBean.DruidMonitor;
+import com.hxy.nettygo.result.base.entry.backStageBean.DruidMonitor;
 import org.springframework.stereotype.Component;
 
 /**

@@ -6,7 +6,7 @@
         login_id,login_user_id,login_time,game_name
     </sql>
 
-    <insert id="addLoginTime" parameterType="com.result.base.entry.backStageBean.LoginTime">
+    <insert id="addLoginTime" parameterType="com.hxy.nettygo.result.base.entry.backStageBean.LoginTime">
         INSERT INTO login_time(
         <include refid="Base_LoginTime"/>
         )

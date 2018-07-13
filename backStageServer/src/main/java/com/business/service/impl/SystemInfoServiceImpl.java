@@ -3,9 +3,9 @@ package com.business.service.impl;
 import Entry.ActiveCount;
 import com.business.dao.*;
 import com.business.service.SystemInfoService;
-import com.result.base.tools.CastUtil;
-import com.result.base.tools.ObjectUtil;
-import com.result.base.tools.SnowflakeIdWorker;
+import com.hxy.nettygo.result.base.tools.CastUtil;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.base.tools.SnowflakeIdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

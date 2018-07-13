@@ -5,9 +5,8 @@ import com.business.cache.ShopCache;
 import com.business.dao.ShopMapper;
 import com.mode.assit.backStage.MqInit;
 import com.mode.assit.druidDataSource.DruidMonitorInit;
-import com.mode.init.RedisInit;
-import com.result.base.task.StartAppTask;
-import com.result.base.tools.SpringApplicationContextHolder;
+import com.hxy.nettygo.result.base.task.StartAppTask;
+import com.hxy.nettygo.result.base.tools.SpringApplicationContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

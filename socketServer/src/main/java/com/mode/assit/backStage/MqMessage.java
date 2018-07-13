@@ -1,12 +1,12 @@
 package com.mode.assit.backStage;
 
-import com.result.base.cache.IoCache;
-import com.result.base.entry.backStageBean.ActiveCount;
-import com.result.base.entry.backStageBean.JVMmemory;
-import com.result.base.tools.CastUtil;
-import com.result.base.tools.DateUtil;
-import com.result.base.tools.SnowflakeIdWorker;
-import com.result.serverbootstrap.assist.rabbitMq.QueueProducer;
+import com.hxy.nettygo.result.base.cache.IoCache;
+import com.hxy.nettygo.result.base.entry.backStageBean.ActiveCount;
+import com.hxy.nettygo.result.base.entry.backStageBean.JVMmemory;
+import com.hxy.nettygo.result.base.tools.CastUtil;
+import com.hxy.nettygo.result.base.tools.DateUtil;
+import com.hxy.nettygo.result.base.tools.SnowflakeIdWorker;
+import com.hxy.nettygo.result.serverbootstrap.assist.rabbitMq.QueueProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

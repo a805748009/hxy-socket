@@ -1,7 +1,7 @@
 package com;
 
 import com.mode.init.NettyModeInit;
-import com.result.base.inits.InitMothods;
+import com.hxy.nettygo.result.base.inits.InitMothods;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.business.bean.BaseMessage;
 import com.business.service.LoginService;
-import com.result.base.annotation.Nuri;
-import com.result.base.annotation.Route;
-import com.result.base.entry.Result;
-import com.result.base.pool.ThreadLocalUtil;
-import com.result.base.security.SecurityUtil;
-import com.result.base.tools.ObjectUtil;
-import com.result.base.tools.SerializationUtil;
+import com.hxy.nettygo.result.base.annotation.Nuri;
+import com.hxy.nettygo.result.base.annotation.Route;
+import com.hxy.nettygo.result.base.entry.Result;
+import com.hxy.nettygo.result.base.pool.ThreadLocalUtil;
+import com.hxy.nettygo.result.base.security.SecurityUtil;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.base.tools.SerializationUtil;
 
 /**
  * @author 作者 huangxinyu

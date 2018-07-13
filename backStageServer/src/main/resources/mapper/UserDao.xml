@@ -11,11 +11,11 @@
     </sql>
     <!--END -->
 
-    <select id="loginById" resultType="com.result.base.entry.backStageBean.Admin">
+    <select id="loginById" resultType="com.hxy.nettygo.result.base.entry.backStageBean.Admin">
         select <include refid="Base_User"/> from user
     </select>
 
-    <insert id="updateGameUserCount" parameterType="com.result.base.entry.backStageBean.UserCount">
+    <insert id="updateGameUserCount" parameterType="com.hxy.nettygo.result.base.entry.backStageBean.UserCount">
         INSERT INTO user_count(
         <include refid="Base_User_Count" />
         )

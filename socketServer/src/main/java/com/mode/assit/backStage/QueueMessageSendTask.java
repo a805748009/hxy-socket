@@ -1,9 +1,9 @@
 package com.mode.assit.backStage;
 
-import com.result.base.config.ConfigForMQConnect;
-import com.result.base.pool.ExecutorPool;
-import com.result.base.tools.ObjectUtil;
-import com.result.serverbootstrap.assist.rabbitMq.QueueProducer;
+import com.hxy.nettygo.result.base.config.ConfigForMQConnect;
+import com.hxy.nettygo.result.base.pool.ExecutorPool;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.serverbootstrap.assist.rabbitMq.QueueProducer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

@@ -1,17 +1,13 @@
 package com.mode.init;
 
-import com.result.NettyGoConstant;
-import com.result.Server;
-import com.result.base.config.ConfigForSSL;
-import com.result.base.tools.CastUtil;
-import com.result.base.tools.ConfigUtil;
-import org.apache.log4j.PropertyConfigurator;
+import com.hxy.nettygo.result.NettyGoConstant;
+import com.hxy.nettygo.result.Server;
+import com.hxy.nettygo.result.base.config.ConfigForSSL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * @Author 黄新宇

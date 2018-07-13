@@ -1,8 +1,8 @@
 
 package com.business.entry;
 
-import com.result.base.entry.Base.BaseSocketMessage;
-import com.result.base.entry.Base.BaseUser;
+import com.hxy.nettygo.result.base.entry.Base.BaseSocketMessage;
+import com.hxy.nettygo.result.base.entry.Base.BaseUser;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;

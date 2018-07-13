@@ -1,6 +1,6 @@
 package com.business.dao;
 
-import com.result.base.entry.backStageBean.ActiveCount;
+import com.hxy.nettygo.result.base.entry.backStageBean.ActiveCount;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 

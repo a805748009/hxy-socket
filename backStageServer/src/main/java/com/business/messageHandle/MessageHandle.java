@@ -2,11 +2,11 @@ package com.business.messageHandle;
 
 import com.business.dao.*;
 import com.business.service.SystemInfoService;
-import com.result.base.annotation.QueueListener;
-import com.result.base.annotation.Route;
-import com.result.base.entry.backStageBean.*;
-import com.result.base.tools.DateUtil;
-import com.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.base.annotation.QueueListener;
+import com.hxy.nettygo.result.base.annotation.Route;
+import com.hxy.nettygo.result.base.entry.backStageBean.*;
+import com.hxy.nettygo.result.base.tools.DateUtil;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 

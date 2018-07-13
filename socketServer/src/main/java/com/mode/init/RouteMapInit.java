@@ -1,6 +1,6 @@
 package com.mode.init;
 
-import com.result.NettyGoConstant;
+import com.hxy.nettygo.result.NettyGoConstant;
 
 import java.util.HashMap;
 import java.util.Map;

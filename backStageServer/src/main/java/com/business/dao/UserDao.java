@@ -1,7 +1,7 @@
 package com.business.dao;
 
 import com.business.entry.User;
-import com.result.base.entry.backStageBean.UserCount;
+import com.hxy.nettygo.result.base.entry.backStageBean.UserCount;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import java.util.Map;

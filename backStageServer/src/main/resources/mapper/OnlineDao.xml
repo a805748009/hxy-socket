@@ -8,7 +8,7 @@
     </sql>
     <!--END -->
 
-    <insert id="addOnlineCount" parameterType="com.result.base.entry.backStageBean.OnlineCount">
+    <insert id="addOnlineCount" parameterType="com.hxy.nettygo.result.base.entry.backStageBean.OnlineCount">
         INSERT INTO online_count(
         <include refid="Base_OnlineDao" />
         )

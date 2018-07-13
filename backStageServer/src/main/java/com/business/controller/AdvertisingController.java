@@ -2,8 +2,8 @@ package com.business.controller;
 
 import com.business.service.AdvertisingService;
 import com.business.tools.ResponseTool;
-import com.result.base.annotation.Nuri;
-import com.result.base.annotation.Route;
+import com.hxy.nettygo.result.base.annotation.Nuri;
+import com.hxy.nettygo.result.base.annotation.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

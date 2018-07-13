@@ -1,9 +1,8 @@
 package com.mode.tasks;
 
 import com.mode.init.RedisInit;
-import com.mode.init.RouteMapInit;
-import com.result.base.task.StartAppTask;
-import com.result.base.tools.SpringApplicationContextHolder;
+import com.hxy.nettygo.result.base.task.StartAppTask;
+import com.hxy.nettygo.result.base.tools.SpringApplicationContextHolder;
 import org.springframework.stereotype.Component;
 
 /** 

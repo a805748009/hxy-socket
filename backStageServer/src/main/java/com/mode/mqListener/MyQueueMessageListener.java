@@ -1,8 +1,8 @@
 package com.mode.mqListener;
 
-import com.result.base.pool.ExecutorPool;
-import com.result.serverbootstrap.assist.rabbitMq.QueueConsumer;
-import com.result.serverbootstrap.assist.rabbitMq.QueueMessageListener;
+import com.hxy.nettygo.result.base.pool.ExecutorPool;
+import com.hxy.nettygo.result.serverbootstrap.assist.rabbitMq.QueueConsumer;
+import com.hxy.nettygo.result.serverbootstrap.assist.rabbitMq.QueueMessageListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

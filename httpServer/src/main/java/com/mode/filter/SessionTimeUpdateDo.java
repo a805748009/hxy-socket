@@ -1,6 +1,6 @@
 package com.mode.filter;
 
-import com.result.base.security.SessionTimeUpdate;
+import com.hxy.nettygo.result.base.security.SessionTimeUpdate;
 import org.springframework.stereotype.Component;
 
 /**

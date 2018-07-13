@@ -1,7 +1,7 @@
 package com.mode.init;
 
-import com.result.base.tools.ObjectUtil;
-import com.result.base.tools.SerializationUtil;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.base.tools.SerializationUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;

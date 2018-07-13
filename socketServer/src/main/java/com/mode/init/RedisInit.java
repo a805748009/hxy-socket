@@ -1,6 +1,6 @@
 package com.mode.init;
 
-import com.result.base.redis.RedisUtil;
+import com.hxy.nettygo.result.base.redis.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

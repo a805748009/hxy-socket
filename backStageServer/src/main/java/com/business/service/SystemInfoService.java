@@ -1,7 +1,7 @@
 package com.business.service;
 
 
-import com.result.base.entry.backStageBean.ActiveCount;
+import com.hxy.nettygo.result.base.entry.backStageBean.ActiveCount;
 
 import java.util.List;
 import java.util.Map;

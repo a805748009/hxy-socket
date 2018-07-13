@@ -12,11 +12,13 @@ import com.business.service.PayService.MyAliPayService;
 import com.business.service.PayService.MyIosPayService;
 import com.business.service.ShopService;
 import com.business.service.PayService.MyWxPayService;
+import com.hxy.nettygo.result.base.tools.AESUtil;
+import com.hxy.nettygo.result.base.tools.DateUtil;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.base.tools.SnowflakeIdWorker;
 import com.mode.error.MyHttpResponseStatus;
-import com.result.base.annotation.Nuri;
-import com.result.base.annotation.Route;
-import com.result.base.tools.*;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import com.hxy.nettygo.result.base.annotation.Nuri;
+import com.hxy.nettygo.result.base.annotation.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,7 @@ public class PayController {
             }
         }
         //2.生成订单号 3+6+18+5
-        String orderId = gameNumber+DateUtil.getNowYYMMDD()+ SnowflakeIdWorker.getStringId()+new Random().nextInt(99999);
+        String orderId = gameNumber+ DateUtil.getNowYYMMDD()+ SnowflakeIdWorker.getStringId()+new Random().nextInt(99999);
         //3.获取用户ID
         String userId = AESUtil.decrypt(orderInfo.getUserToken(),selfGameType.getKey());
         PayOrder payOrder = null;

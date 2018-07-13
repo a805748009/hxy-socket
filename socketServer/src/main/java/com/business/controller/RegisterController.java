@@ -1,7 +1,7 @@
 package com.business.controller;
 
-import com.result.base.annotation.On;
-import com.result.base.annotation.Route;
+import com.hxy.nettygo.result.base.annotation.On;
+import com.hxy.nettygo.result.base.annotation.Route;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

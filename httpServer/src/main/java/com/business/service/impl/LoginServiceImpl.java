@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.business.dao.UserDao;
 import com.business.service.LoginService;
-import com.result.base.tools.DateUtil;
-import com.result.base.tools.SnowflakeIdWorker;
+import com.hxy.nettygo.result.base.tools.SnowflakeIdWorker;
 
 /** 
 * @author 作者 huangxinyu 

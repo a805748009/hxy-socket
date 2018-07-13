@@ -6,7 +6,7 @@
         memory_id,number,game_name,create_time
     </sql>
 
-    <insert id="addMemory" parameterType="com.result.base.entry.backStageBean.JVMmemory">
+    <insert id="addMemory" parameterType="com.hxy.nettygo.result.base.entry.backStageBean.JVMmemory">
         INSERT INTO jvm_memory(
         <include refid="Base_Memory"/>
         )

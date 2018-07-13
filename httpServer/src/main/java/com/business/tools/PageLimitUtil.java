@@ -2,7 +2,7 @@ package com.business.tools;
 
 import java.util.Map;
 
-import com.result.base.tools.ObjectUtil;
+import com.hxy.nettygo.result.base.tools.ObjectUtil;
 
 /** 
 * @author 作者 huangxinyu 
