@@ -97,8 +97,8 @@ public class MySocketRunnable implements Runnable {
                 byte[] uriByte = new byte[4];//解析路由的uri
                 System.arraycopy(contentBytes, 4, uriByte, 0, 4);
                 int uri = ArrayUtil.byteArrayToInt(uriByte);
-                byte[] contentByte = new byte[frame.content().readableBytes()];
-                System.arraycopy(contentBytes, 8, uriByte, 0, contentBytes.length-8);
+                byte[] contentByte = new byte[contentBytes.length-8];
+                System.arraycopy(contentBytes, 8, contentByte, 0, contentBytes.length-8);
                 routeMethod(ConfigForSystemMode.SOCKETROUTEMAP.get(uri), ctx.channel(), contentByte, idByte);
             } else if (ConfigForSystemMode.BINARYTYPE.equals(SocketBinaryType.PARENTFORBASESOCKETMESSAGE.getType())) {
                 BaseSocketMessage baseSocketMessage = SerializationUtil.deserializeFromByte(contentBytes,
