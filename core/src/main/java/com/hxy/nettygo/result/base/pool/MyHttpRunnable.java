@@ -101,13 +101,15 @@ public class MyHttpRunnable implements Runnable {
 		if("JSON".equals(route.getType())){
 			return UriUtil.getRequestParamsMap(request); //json传输方式 不支持任何处理，基本难用到
 		}else{
+			if(ObjectUtil.isNull(route.getParamType()))//不需要任何参数
+				return false;
 			byte[] content = UriUtil.getRequestParamsObj(request);
+			if(ObjectUtil.isNull(content))
+				return null;
 			content = ZlibMessageHandle.unZlibByteMessage(content);//解压
 			content = Crc32MessageHandle.checkCrc32IntBefore(content);//CRC32校验
 			if(ObjectUtil.isNull(content))
 				return null;
-			if(ObjectUtil.isNull(route.getParamType()))//不需要任何参数
-				return false;
 			return SerializationUtil.deserializeFromByte(content,route.getParamType());
 		}
 	}
@@ -120,9 +122,11 @@ public class MyHttpRunnable implements Runnable {
 	* @return java.lang.Object
 	*/
 	private Object routeMethod (HttpRouteClassAndMethod route,Object object){
-		if(!(boolean)object){
-			return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
-					new Object[]{});
+		if(object instanceof  Boolean){
+			if(!(boolean)object){
+				return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
+						new Object[]{});
+			}
 		}
 		return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
 				route.isRequest()?new Object[]{object,request,context}:new Object[]{object});

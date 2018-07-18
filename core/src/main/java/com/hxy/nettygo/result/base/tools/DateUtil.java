@@ -560,6 +560,17 @@ public class DateUtil {
             return null;
         }
     }
+
+    public static String addHourFormatSDF(String s, int n) {
+        try {
+            Calendar cd = Calendar.getInstance();
+            cd.setTime(sdf.parse(s));
+            cd.add(Calendar.HOUR, n);// 增加小时
+            return sdf.format(cd.getTime());
+        } catch (Exception e) {
+            return null;
+        }
+    }
     
     public static String addMonth(String s, int n) {
         try {
