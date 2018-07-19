@@ -1,8 +1,8 @@
 package com.business.service.impl;
 
-import Entry.ActiveCount;
 import com.business.dao.*;
 import com.business.service.SystemInfoService;
+import com.hxy.nettygo.result.base.entry.backStageBean.ActiveCount;
 import com.hxy.nettygo.result.base.tools.CastUtil;
 import com.hxy.nettygo.result.base.tools.ObjectUtil;
 import com.hxy.nettygo.result.base.tools.SnowflakeIdWorker;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class SystemInfoServiceImpl implements SystemInfoService{
     @Autowired
-    UserDao userDao;
+    AdminDao adminDao;
 
     @Autowired
     ActiveDao activeDao;
@@ -44,7 +44,7 @@ public class SystemInfoServiceImpl implements SystemInfoService{
      */
     @Override
     public int getNowUserCount(String gameName) {
-        Map res = userDao.selectNowUserCount(gameName);
+        Map res = adminDao.selectNowUserCount(gameName);
         if(ObjectUtil.isNotNull(res)){
             return (Integer) res.get("count");
         }
@@ -56,7 +56,7 @@ public class SystemInfoServiceImpl implements SystemInfoService{
      * @return
      */
     @Override
-    public List<ActiveCount> selectSevenDayActiveCount(String gameName,String time) {
+    public List<ActiveCount> selectSevenDayActiveCount(String gameName, String time) {
         return activeDao.selectSevenDayActiveCount(gameName,time);
     }
 

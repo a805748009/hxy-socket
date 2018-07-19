@@ -1,23 +1,23 @@
 package com.business.service.impl;
 
-import Entry.User;
-import com.business.dao.UserDao;
+import com.business.dao.AdminDao;
 import com.business.service.UserService;
+import com.hxy.nettygo.result.base.entry.backStageBean.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    UserDao userDao;
+    AdminDao adminDao;
 
     @Override
-    public User selectUserById(String userId) {
-        return userDao.loginById(userId);
+    public Admin selectUserById(String userId) {
+        return adminDao.selectLoginById(userId);
     }
 
     @Override
-    public void AddUser(User user) {
+    public void AddUser(Admin user) {
 
     }
 }

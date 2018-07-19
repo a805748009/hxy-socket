@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.business.dao.HotBarDao">
+
+    <sql id="hotbar_banner">
+        game_name,appid,img_url,order_value
+    </sql>
+
+    <sql id="hotbar_games">
+      game_name,img_url,appid,game_introduct,icon_url,order_value
+    </sql>
+
+    <insert id="addGame">
+        INSERT INTO hotbar_games(`game_name`,`img_url`,`appid`,`game_introduct`,`icon_url`,`order_value`)VALUES
+        (#{gameName},#{imgUrl},#{appID},#{gameIntro},#{iconUrl},#{order});
+    </insert>
+
+    <delete id="deleteGame">
+        delete from hotbar_games where id = #{id}
+    </delete>
+
+    <update id="updateGame">
+        UPDATE hotbar_games set game_name=#{gameName},img_url=#{imgUrl},appid=#{appID},game_introduct=#{gameIntro},icon_url=#{iconUrl},order_value=#{order} where id=#{id}
+    </update>
+
+    <select id="selectAllGame" resultType="java.util.Map">
+        select id,game_name,img_url,appid,game_introduct,icon_url,order_value from hotbar_games  order by order_value desc
+    </select>
+
+
+    <insert id="addBanner">
+        INSERT INTO hotbar_banner(`game_name`,`img_url`,`appid`,`order_value`)VALUES
+        (#{gameName},#{imgUrl},#{appID},#{order});
+    </insert>
+
+    <delete id="deleteBanner">
+        delete from hotbar_banner where id = #{id}
+    </delete>
+
+    <update id="updateBanner">
+        UPDATE hotbar_banner set game_name=#{gameName},img_url=#{imgUrl},appid=#{appID},order_value=#{order} where id=#{id}
+    </update>
+
+    <select id="selectAllBanner" resultType="java.util.Map">
+        select id,game_name,appid,img_url,order_value from hotbar_banner order by order_value desc
+    </select>
+
+</mapper>

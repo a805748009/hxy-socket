@@ -1,15 +1,14 @@
 package com.business.dao;
 
-import com.business.entry.User;
+import com.hxy.nettygo.result.base.entry.backStageBean.Admin;
 import com.hxy.nettygo.result.base.entry.backStageBean.UserCount;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import java.util.Map;
 
-
 @Component
-public interface UserDao {
-    User loginById(@Param("userId") String userId);
+public interface AdminDao {
+    Admin selectLoginById(@Param("userId") String userId);
 
     void updateGameUserCount(UserCount userCount);
 

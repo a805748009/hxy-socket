@@ -31,7 +31,7 @@ public class MessageHandle {
     OnlineDao onlineDao;
 
     @Autowired
-    UserDao userDao;
+    AdminDao adminDao;
 
     @Autowired
     SystemInfoService systemInfoService;
@@ -51,7 +51,7 @@ public class MessageHandle {
 
     @QueueListener("userCount")
     public void userCount(UserCount userCount) {
-        userDao.updateGameUserCount(userCount);
+        adminDao.updateGameUserCount(userCount);
     }
     @QueueListener("loginTime")
     public void setLoginTime(LoginTime lt) {

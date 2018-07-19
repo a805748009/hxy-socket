@@ -1,9 +1,9 @@
 package com.business.service;
 
-import Entry.User;
+import com.hxy.nettygo.result.base.entry.backStageBean.Admin;
 
 public interface UserService {
-    User selectUserById(String userId);
+    Admin selectUserById(String userId);
 
-    void AddUser(User user);
+    void AddUser(Admin user);
 }

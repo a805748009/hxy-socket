@@ -61,7 +61,19 @@ public class NettyModeInit {
         list.add("/SystemInfo/getShareOpen");
         list.add("/SystemInfo/getDruidInfoListPage");
         list.add("/SystemInfo/deleteDruidInfoById");
-        list.add("/backstage/getSession1");
+        list.add("/Advertising/getAllAdvertising");
+        list.add("/Advertising/updateAdvertisingById");
+        list.add("/Advertising/deleteAdvertisingById");
+        list.add("/Advertising/addAdvertising");
+        list.add("/hotBar/getBanners");
+        list.add("/hotBar/updateBanner");
+        list.add("/hotBar/deleteBanner");
+        list.add("/hotBar/addBanner");
+        list.add("/hotBar/getGames");
+        list.add("/hotBar/updateGame");
+        list.add("/hotBar/deleteGame");
+        list.add("/hotBar/addGame");
+
         // 4.配置安全相关配置
         NettyGoConstant.setSecurityMode("ALLVALIDATE", list, 18000,false);
     }

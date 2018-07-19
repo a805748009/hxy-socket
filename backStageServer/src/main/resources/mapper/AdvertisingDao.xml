@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.business.dao.AdervtisingDao">
+    <sql id="Base_Adervtising">
+        button_Img,ground_Img,comment
+    </sql>
+
+    <insert id="addAdvertising">
+        INSERT INTO ${dataBaseName}.system_advertising (<include refid="Base_Adervtising"/>)
+        VALUES (#{buttonImg},#{groundImg},#{comment})
+    </insert>
+
+    <delete id="deleteAdvertising">
+        DELETE FROM ${dataBaseName}.system_advertising where id = #{id}
+    </delete>
+
+    <update id="updateAvertising">
+        UPDATE ${dataBaseName}.system_advertising SET button_img=#{buttonImg},ground_img = #{groundImg},comment=#{comment} where id = #{id}
+    </update>
+
+    <select id="selectAllAvertising" resultType="java.util.Map">
+        select id,button_img,ground_img,comment from ${dataBaseName}.system_advertising order by id;
+    </select>
+</mapper>

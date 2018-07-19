@@ -1,10 +1,10 @@
 package com.business.controller;
 
-import Entry.User;
 import com.business.service.UserService;
 import com.business.tools.ResponseTool;
 import com.hxy.nettygo.result.base.annotation.Nuri;
 import com.hxy.nettygo.result.base.annotation.Route;
+import com.hxy.nettygo.result.base.entry.backStageBean.Admin;
 import com.hxy.nettygo.result.base.pool.ThreadLocalUtil;
 import com.hxy.nettygo.result.base.security.SecurityUtil;
 import com.hxy.nettygo.result.base.tools.ObjectUtil;
@@ -31,7 +31,10 @@ public class BackStageController {
     public Object getUserById(Map<String, Object> map) {
         String userId = map.get("userId").toString();
         String password = map.get("password").toString();
-        User user = userService.selectUserById(userId);
+        System.out.println(userId);
+        System.out.println(password);
+        Admin user = userService.selectUserById(userId);
+        System.out.println(user.toString());
         String sessionId = ThreadLocalUtil.getRequest().getSecurityCookieId();
         if (ObjectUtil.isNotNull(user)) {
             if (password.equals(user.getUserPass())) {
