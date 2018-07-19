@@ -1,5 +1,7 @@
 package com.business.controller;
 
+import com.business.entry.BackStageGameTypes;
+import com.business.entry.BackStageGames;
 import com.business.service.HotBarService;
 import com.business.tools.ResponseTool;
 import com.hxy.nettygo.result.base.annotation.Nuri;
@@ -62,7 +64,13 @@ public class HotBarController {
 
     @Nuri(uri = "/getGames", method = "GET", type = "JSON")
     public Object getGames(Map<String, Object> map) {
-        List<Map> games = hotBarService.selectAllGameList();
+        String type = map.get("gameType").toString();
+        List<BackStageGames> games;
+        if("所有类型".equals(type)){
+            games = hotBarService.selectAllGameList();
+        }else{
+            games = hotBarService.selectGamesByType(type);
+        }
         return ResponseTool.newObjectResponse(games);
     }
 
@@ -105,5 +113,17 @@ public class HotBarController {
             return ResponseTool.newObjectResponse(count);
         }
         return ResponseTool.newErrorResponse("插入新信息失败，请检查数据是否错误");
+    }
+
+
+    @Nuri(uri = "/getAllTypes", method = "GET", type = "JSON")
+    public Object getAllTypes(Map<String, Object> map) {
+        List<BackStageGameTypes> games = hotBarService.selectAllGameTypes();
+        return ResponseTool.newObjectResponse(games);
+    }
+
+    @Nuri(uri = "/getGameByType",method = "GET" ,type = "JSON")
+    public Object getGameByType(Map<String,Object> map){
+        return null;
     }
 }

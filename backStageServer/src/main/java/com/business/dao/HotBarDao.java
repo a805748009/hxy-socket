@@ -1,5 +1,7 @@
 package com.business.dao;
 
+import com.business.entry.BackStageGameTypes;
+import com.business.entry.BackStageGames;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -15,7 +17,7 @@ public interface HotBarDao {
 
     int updateGame(@Param("id") String id, @Param("gameName") String gameName, @Param("imgUrl") String imgUrl, @Param("iconUrl") String iconUrl, @Param("appID") String appID, @Param("order") int order, @Param("gameIntro") String gameIntro);
 
-    List<Map> selectAllGame();
+    List<BackStageGames> selectAllGame();
 
     List<Map> selectAllBanner();
 
@@ -24,4 +26,8 @@ public interface HotBarDao {
     int deleteBanner(@Param("id") String id);
 
     int addBanner(@Param("gameName") String gameName, @Param("appID") String appID, @Param("imgUrl") String imgUrl, @Param("order") int order);
+
+    List<BackStageGameTypes> selectAllTypes();
+
+    List<BackStageGames> selectGamesByType(@Param("type") String type);
 }

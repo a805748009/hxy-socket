@@ -73,6 +73,8 @@ public class NettyModeInit {
         list.add("/hotBar/updateGame");
         list.add("/hotBar/deleteGame");
         list.add("/hotBar/addGame");
+        list.add("/hotBar/getAllTypes");
+        list.add("/hotBar/getGameByType");
 
         // 4.配置安全相关配置
         NettyGoConstant.setSecurityMode("ALLVALIDATE", list, 18000,false);

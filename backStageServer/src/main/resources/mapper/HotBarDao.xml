@@ -24,10 +24,6 @@
         UPDATE hotbar_games set game_name=#{gameName},img_url=#{imgUrl},appid=#{appID},game_introduct=#{gameIntro},icon_url=#{iconUrl},order_value=#{order} where id=#{id}
     </update>
 
-    <select id="selectAllGame" resultType="java.util.Map">
-        select id,game_name,img_url,appid,game_introduct,icon_url,order_value from hotbar_games  order by order_value desc
-    </select>
-
 
     <insert id="addBanner">
         INSERT INTO hotbar_banner(`game_name`,`img_url`,`appid`,`order_value`)VALUES
@@ -44,6 +40,24 @@
 
     <select id="selectAllBanner" resultType="java.util.Map">
         select id,game_name,appid,img_url,order_value from hotbar_banner order by order_value desc
+    </select>
+
+    <select id="selectAllGame" resultType="com.business.entry.BackStageGames">
+          select id,game_name,img_url,appid,game_introduct,icon_url,order_value,`type`,coment_url from hotbar_games  order by order_value desc
+    </select>
+
+    <select id="selectAllTypes" resultType="com.business.entry.BackStageGameTypes">
+        select id,`type`,`type_name`,`type_img_url`,`order_value` from hotbar_gameType order by order_value asc
+    </select>
+
+    <select id="selectGamesByType" resultType="com.business.entry.BackStageGames">
+        select id,game_name,img_url,appid,game_introduct,icon_url,order_value,`type`,coment_url from hotbar_games
+        <where>
+            <if test="type!=null and type!=''">
+                and `type` = #{type}
+            </if>
+        </where>
+        order by order_value desc
     </select>
 
 </mapper>

@@ -1,6 +1,8 @@
 package com.business.service.impl;
 
 import com.business.dao.HotBarDao;
+import com.business.entry.BackStageGameTypes;
+import com.business.entry.BackStageGames;
 import com.business.service.HotBarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class HotBarServiceImpl implements HotBarService {
     }
 
     @Override
-    public List<Map> selectAllGameList() {
+    public List<BackStageGames> selectAllGameList() {
         return hotBarDao.selectAllGame();
     }
 
@@ -51,5 +53,15 @@ public class HotBarServiceImpl implements HotBarService {
     @Override
     public List<Map> selectAllBannerList() {
         return hotBarDao.selectAllBanner();
+    }
+
+    @Override
+    public List<BackStageGameTypes> selectAllGameTypes() {
+        return hotBarDao.selectAllTypes();
+    }
+
+    @Override
+    public List<BackStageGames> selectGamesByType(String type) {
+        return hotBarDao.selectGamesByType(type);
     }
 }

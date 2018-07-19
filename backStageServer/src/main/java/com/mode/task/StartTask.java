@@ -1,6 +1,9 @@
 package com.mode.task;
 
 import com.hxy.nettygo.result.base.task.StartAppTask;
+import com.hxy.nettygo.result.base.tools.SpringApplicationContextHolder;
+import com.mode.assit.mq.MqInit;
+import com.mode.mqListener.MyQueueMessageListener;
 import org.springframework.stereotype.Component;
 
 /** 
@@ -19,9 +22,9 @@ public class StartTask implements StartAppTask {
 		//3)
 //		new Assit().setAssit();
 
-//		SpringApplicationContextHolder.getContext().getBean(MqInit.class).initMQ();
+		SpringApplicationContextHolder.getContext().getBean(MqInit.class).initMQ();
 
 		// 1)开启mq消息队列监听
-//		MyQueueMessageListener.startListener();
+		MyQueueMessageListener.startListener();
 	}
 }
