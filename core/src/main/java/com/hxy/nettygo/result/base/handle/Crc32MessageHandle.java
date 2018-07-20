@@ -2,10 +2,9 @@ package com.hxy.nettygo.result.base.handle;
 
 import com.hxy.nettygo.result.base.config.ConfigForSystemMode;
 import com.hxy.nettygo.result.base.tools.ArrayUtil;
-import com.hxy.nettygo.result.base.tools.CastUtil;
+import com.hxy.nettygo.result.base.tools.Crc32IntUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.zip.CRC32;
 
 /**
@@ -19,14 +18,26 @@ public class Crc32MessageHandle {
     /**
     * @Author 黄新宇
     * @date 2018/7/4 下午2:34
-    * @Description(获取crc32的int码)
+    * @Description(获取crc32的long码)
     * @param
     * @return int
     */
-    public static int getCrc32Int(byte[] bye){
+    public static long getCrc32Long(byte[] bye){
         CRC32 crc32 = new CRC32();
         crc32.update(bye);
-        return CastUtil.castInt(crc32.getValue());
+        long ai = crc32.getValue();
+        return crc32.getValue();
+    }
+
+    /**
+     * @Author 黄新宇
+     * @date 2018/7/4 下午2:34
+     * @Description(获取crc32的int码)
+     * @param
+     * @return int
+     */
+    public static int getCrc32Int(byte[] bye){
+        return Crc32IntUtil.getCRC32(bye);
     }
 
     /**

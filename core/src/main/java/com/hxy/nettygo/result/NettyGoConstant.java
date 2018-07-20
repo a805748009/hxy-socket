@@ -137,6 +137,11 @@ public class NettyGoConstant {
 	public static void setZlibConfig(boolean compressIn,boolean compressOut){
 		setZlibConfig(compressIn,compressOut,50);
 	}
+
+	public static void setCrc32Config(boolean isCrc32In,boolean isCrc32Out){
+		ConfigForSystemMode.IS_CRC32_IN = isCrc32In;
+		ConfigForSystemMode.IS_CRC32_OUT = isCrc32Out;
+	}
 	
 
 	

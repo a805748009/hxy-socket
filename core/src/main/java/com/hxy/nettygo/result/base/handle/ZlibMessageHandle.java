@@ -29,7 +29,7 @@ public class ZlibMessageHandle   {
         byte[] bs = new byte[4];
         System.arraycopy(bytes, 0, bs, 0, 4);
         byte[] content = new byte[bytes.length-4];
-        System.arraycopy(bytes, 4, content, 4, bytes.length-4);
+        System.arraycopy(bytes, 4, content, 0, bytes.length-4);
         if(ArrayUtil.byteArrayToInt(bs)==1){
             logger.debug("解压数据中-------》》》》》");
             content = ZlibUtil.decompress(content);
