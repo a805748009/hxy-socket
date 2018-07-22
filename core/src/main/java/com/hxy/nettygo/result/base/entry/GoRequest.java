@@ -59,7 +59,7 @@ public class GoRequest {
 
     public String getSecurityCookieId() {
         //H5跨域不能设置cookie问题，暂用此方法解决
-        if (ObjectUtil.isNotNull(request.headers().get("GoSessionId")) && !request.headers().get("GoSessionId").equals("null")&&!request.headers().get("GoSessionId").equals("[object Null]")) {
+        if (ObjectUtil.isNotNull(request.headers().get("GoSessionId"))&& !request.headers().get("GoSessionId").equals("undefined") && !request.headers().get("GoSessionId").equals("null")&&!request.headers().get("GoSessionId").equals("[object Null]")) {
             try {
                 securityCookieId = AESUtil.decrypt(request.headers().get("GoSessionId"));
                 return securityCookieId;

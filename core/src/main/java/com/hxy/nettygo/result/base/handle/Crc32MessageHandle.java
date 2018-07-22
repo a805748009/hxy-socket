@@ -67,6 +67,7 @@ public class Crc32MessageHandle {
         System.arraycopy(bye, 0, crc32byte, 0, 4);
         byte[] content = new byte[bye.length-4];
         System.arraycopy(bye, 4, content, 0, bye.length-4);
+        System.out.println("getCrc32Int(content)====="+getCrc32Int(content));
         //校验失败，数据被修改
         if(getCrc32Int(content)!=ArrayUtil.byteArrayToInt(crc32byte)){
             logger.error("==============>>>>>>>CRC32校验失败");
