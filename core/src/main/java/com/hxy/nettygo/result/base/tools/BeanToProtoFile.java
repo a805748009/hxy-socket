@@ -41,22 +41,22 @@ public class BeanToProtoFile {
             int i =1;
             for (Field f : fieldList) {
                 if(f.getType().getName().equals("java.lang.Integer") ){
-                    ps.append("    optional int32 "+f.getName()+ " = "+i+";\n");
+                    ps.append("    optional int32 "+f.getName()+ " = "+i+";"+"\n");
                 }
                 if(f.getType().getName().equals("java.lang.Boolean") ){
-                    ps.append("    optional bool "+f.getName()+ " = "+i+";\n");
+                    ps.append("    optional bool "+f.getName()+ " = "+i+";"+"\n");
                 }
                 if(f.getType().getName().equals("java.lang.String") ){
-                    ps.append("    optional string "+f.getName()+ " = "+i+";\n");
+                    ps.append("    optional string "+f.getName()+ " = "+i+";"+"\n");
                 }
                 if(f.getType().getName().equals("int") ){
-                    ps.append("    optional int32 "+f.getName()+ " = "+i+";\n");
+                    ps.append("    optional int32 "+f.getName()+ " = "+i+";"+"\n");
                 }
                 if(f.getType().getName().equals("java.util.List") ){
-                    ps.append("    repeated int32 "+f.getName()+ " = "+i+";\n");
+                    ps.append("    repeated int32 "+f.getName()+ " = "+i+";"+"\n");
                 }
                 if(f.getType().getName().equals("long") ){
-                    ps.append("    optional int64 "+f.getName()+ " = "+i+";\n");
+                    ps.append("    optional int64 "+f.getName()+ " = "+i+";"+"n");
                 }
                 i++;
             }
