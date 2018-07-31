@@ -187,10 +187,10 @@ public class Room {
         }
     }
 
-    public boolean userContainsInUsers(String user) {
+    public boolean userContainsInUsers(String userId) {
         boolean isContain = false;
         for (BaseUser s : users) {
-            if (s.getBaseUserId().equals(user)) {
+            if (s.getBaseUserId().equals(userId)) {
                 isContain = true;
             }
         }
