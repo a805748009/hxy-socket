@@ -122,12 +122,17 @@ public class MySocketRunnable implements Runnable {
             logger.error("================>>>>路由方法未找到:" + uri);
             return;
         }
+        Client client = (Client) channel.attr(AttributeKey.valueOf("client")).get();
+        //前置filter，如果返回false，不处理
+        if(!socketMessageFilter(client,uri)){
+            return;
+        }
         if (content instanceof byte[]) {
             route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),
-                    route.getIndex(), new Object[]{channel.attr(AttributeKey.valueOf("client")).get(), SerializationUtil.deserializeFromByte((byte[]) content, route.getParamType()), id});
+                    route.getIndex(), new Object[]{client, SerializationUtil.deserializeFromByte((byte[]) content, route.getParamType()), id});
         } else {
             route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),
-                    route.getIndex(), new Object[]{channel.attr(AttributeKey.valueOf("client")).get(), JsonUtil.json2Object((String) content, route.getParamType()), id});
+                    route.getIndex(), new Object[]{client, JsonUtil.json2Object((String) content, route.getParamType()), id});
         }
 
     }
@@ -163,12 +168,7 @@ public class MySocketRunnable implements Runnable {
     }
 
     private void clientInitOnHandshake(ChannelHandlerContext ctx, FullHttpRequest req) {
-        // 封装client
-        ctx.channel().attr(AttributeKey.valueOf("client")).set(new Client(ctx.channel()));
-        // 1.获取url后置参数
-        QueryStringDecoder queryStringDecoder = new QueryStringDecoder(req.uri());
-        Map<String, List<String>> parameters = queryStringDecoder.parameters();
-        // 1.1)前置filter事件
+        // 前置filter事件
         RouteClassAndMethod filter = InitMothods.getMessageFilter();
         if (ObjectUtil.isNotNull(filter)) {
             ResultStatus resultStatus = (ResultStatus) filter.getMethod().invoke(
@@ -179,18 +179,20 @@ public class MySocketRunnable implements Runnable {
                 return;
             }
         }
-        try {
-            if (ObjectUtil.isNotNull(req.headers().get("token"))) {
-                ctx.channel().attr(AttributeKey.valueOf("token")).set(AESUtil.decrypt(req.headers().get("token")));
-             } else {
-                ctx.channel().attr(AttributeKey.valueOf("token")).set(AESUtil.decrypt(parameters.get("token").get(0)));
-             }
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-        // 1.3设置命名空间
-        ctx.channel().attr(AttributeKey.valueOf("nameSpace")).set(req.uri().substring(1, req.uri().indexOf("?")));
-        NameSpace.inviteClient(req.uri().substring(1, req.uri().indexOf("?")),
-                (Client) ctx.channel().attr(AttributeKey.valueOf("client")).get());
+
+    }
+
+    private boolean socketMessageFilter(Client client, String uri) {
+        // 前置filter事件
+        RouteClassAndMethod filter = InitMothods.getSocketMessageFilter();
+        if (ObjectUtil.isNotNull(filter)) {
+            ResultStatus resultStatus = (ResultStatus) filter.getMethod().invoke(
+                    SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),
+                    new Object[]{client, uri});
+            if (!resultStatus.isSuccess()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

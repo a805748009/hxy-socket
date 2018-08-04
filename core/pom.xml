@@ -6,7 +6,7 @@
 
     <groupId>hxy</groupId>
     <artifactId>nettygo-core</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

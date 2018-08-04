@@ -3,6 +3,7 @@ package com.hxy.nettygo.result.base.inits;
 import com.hxy.nettygo.result.base.entry.Base.BaseUser;
 import com.hxy.nettygo.result.base.fitle.MessageFilterInit;
 import com.hxy.nettygo.result.base.fitle.RemoteCallFilterInit;
+import com.hxy.nettygo.result.base.fitle.SocketMessageFilterInit;
 import com.hxy.nettygo.result.base.route.Route;
 import com.hxy.nettygo.result.base.security.SessionTimeUpdateHandleInit;
 import com.hxy.nettygo.result.serverbootstrap.assist.rabbitMq.init.QueueMessageHandleInit;
@@ -31,6 +32,8 @@ public class InitMothods extends ApplicationObjectSupport {
 	private static RouteClassAndMethod messageFilter = null;
 	//filter
 	private static RouteClassAndMethod remoteCallFilter = null;
+	//socketFilter
+	private static RouteClassAndMethod socketMessageFilter = null;
 	//user类
 	private static Class<?> userClazz ;
 	//MQ消息监听处理类
@@ -66,6 +69,10 @@ public class InitMothods extends ApplicationObjectSupport {
 
 		//6.获取远程前置filter
 		remoteCallFilter = new RemoteCallFilterInit(context).getFilter();
+
+		//7.获取socket每次交互前置filter
+		socketMessageFilter = new SocketMessageFilterInit(context).getFilter();
+
 	}
 	
 
@@ -105,6 +112,10 @@ public class InitMothods extends ApplicationObjectSupport {
 
 	public static RouteClassAndMethod getSessionUpdateHandle(){
 		return sessionUpdateHandle;
+	}
+
+	public static RouteClassAndMethod getSocketMessageFilter(){
+		return socketMessageFilter;
 	}
 	
 }
