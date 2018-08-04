@@ -18,6 +18,7 @@ public class AdvertisingController {
     @Nuri(uri = "/getAllAdvertising", method = "GET", type = "JSON")
     public Object getAllAdvertising(Map<String, Object> map) {
         List<Map> res =  advertisingService.selectAllAvertising();
+        System.out.println(res.get(0).size());
         return ResponseTool.newObjectResponse(res);
     }
 
