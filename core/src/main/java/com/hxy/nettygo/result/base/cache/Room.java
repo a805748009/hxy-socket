@@ -29,7 +29,7 @@ public class Room {
 
     protected final CopyOnWriteArrayList<Client> clients = new CopyOnWriteArrayList<>();//在线用户列表
 
-    protected final CopyOnWriteArrayList<BaseUser> users = new CopyOnWriteArrayList<>();//当前机器人列表
+    protected final CopyOnWriteArrayList<BaseUser> users = new CopyOnWriteArrayList<>();//当前用户列表
 
     public Room(String id) {
         this.id = id;
@@ -39,33 +39,29 @@ public class Room {
 
     public void RoomInit() {
         roomData.clear();
-        List<String> l = new ArrayList<>();
-        for (Client client : clients) {
-            if (!client.getChannel().isActive()) {
-                clients.remove(client);
-                continue;
-            }
-            String userId = ((BaseUser) SecurityUtil.getLoginUser(client.getToken(), InitMothods.getUserClazz())).getBaseUserId();
-            if (userData.containsKey(userId)) {
-                l.add(userId);
-            }
-        }
-        //清除掉线的人
-        userData.keySet().forEach(userId -> {
-            if (!l.contains(userId)) {
-                userData.remove(userId);
-            }
-        });
+        clearUNActiveUser();
     }
 
     public void RoomInitButSaveroomDATA() {
+        clearUNActiveUser();
+    }
+
+    /**
+    * @Author 黄新宇
+    * @date 2018/8/4 下午5:28
+    * @Description(清楚掉线的人)
+    * @param
+    * @return void
+    */
+    public void clearUNActiveUser(){
         List<String> l = new ArrayList<>();
         for (Client client : clients) {
+            String userId = ((BaseUser) SecurityUtil.getLoginUser(client.getToken(), InitMothods.getUserClazz())).getBaseUserId();
             if (!client.getChannel().isActive()) {
-                clients.remove(client);
+                removeUser(client);
                 continue;
             }
-            String userId = ((BaseUser) SecurityUtil.getLoginUser(client.getToken(), InitMothods.getUserClazz())).getBaseUserId();
+
             if (userData.containsKey(userId)) {
                 l.add(userId);
             }
@@ -135,6 +131,7 @@ public class Room {
     public void clientLeaveNotDelRoom(Client client) {
         String userId = ((BaseUser) SecurityUtil.getLoginUser(client.getToken(), InitMothods.getUserClazz())).getBaseUserId();
         clients.remove(client);
+        userData.remove(userId);
         for (BaseUser s : users) {
             if (s.getBaseUserId().equals(userId)) {
                 users.remove(s);
@@ -143,8 +140,7 @@ public class Room {
     }
 
     public void deleteRoomInCacheAndNameSpace() {
-        if (IoCache.roomMap.containsKey(id))
-            IoCache.roomMap.remove(id);
+        IoCache.roomMap.remove(id);
         NameSpace.removeRoom(nameSpace, id);
     }
 
@@ -161,8 +157,7 @@ public class Room {
             }
         }
         if (userData.isEmpty()) {
-            IoCache.roomMap.remove(id);
-            NameSpace.removeRoom(this.nameSpace, id);
+            deleteRoomInCacheAndNameSpace();
         }
     }
 
@@ -176,8 +171,7 @@ public class Room {
             }
         }
         if (clients.isEmpty()) {
-            IoCache.roomMap.remove(id);
-            NameSpace.removeRoom(client.getNameSpace(), id);
+            deleteRoomInCacheAndNameSpace();
         }
     }
 
