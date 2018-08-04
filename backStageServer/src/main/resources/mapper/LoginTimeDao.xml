@@ -13,6 +13,12 @@
         values ( #{loginId},#{loginUserId},#{loginTime},#{gameName})
     </insert>
 
+    <insert id="addLoginTimeList">
+        INSERT INTO login_time(
+        `login_id`,`login_user_id`,`login_time`,`game_name`
+        )VALUES ${paramString}
+    </insert>
+
     <select id="selectSevenDayLoginTime" resultType="java.util.Map">
         select DATE_FORMAT(total.login_time,'%m-%d') as countKey,ifnull(total.login_user_id, 0) as countValue from
         (

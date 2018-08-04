@@ -61,6 +61,7 @@ public class MessageHandle {
     @QueueListener("loginTimeList")
     public void setLoginTimeList(LoginTimeList lts) {
         StringBuffer param = new StringBuffer();
+        System.out.println(lts.toString());
         for (int x = 0; x < lts.getLoginTime().size(); x++) {
             LoginTime time = lts.getLoginTime().get(x);
             if (x == lts.getLoginTime().size() - 1) {

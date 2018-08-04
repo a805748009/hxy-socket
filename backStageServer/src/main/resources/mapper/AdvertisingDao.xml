@@ -3,7 +3,7 @@
 
 <mapper namespace="com.business.dao.AdervtisingDao">
     <sql id="Base_Adervtising">
-        button_Img,ground_Img,comment
+        button_Img,ground_Img,comment,appid,title_content
     </sql>
 
     <insert id="addAdvertising">
@@ -20,6 +20,6 @@
     </update>
 
     <select id="selectAllAvertising" resultType="java.util.Map">
-        select id,button_img,ground_img,comment from ${dataBaseName}.system_advertising order by id;
+        select id,button_img,ground_img,comment,appid,title_content from ${dataBaseName}.system_advertising order by id;
     </select>
 </mapper>

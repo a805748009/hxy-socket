@@ -37,6 +37,7 @@ public class MyQueueMessageRoute implements  Runnable{
             return;
         }
         logger.error("收到MQ发来的消息================>>>>:" + uri);
+        System.out.println(route.toString());
         route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),
                 route.getIndex(), new Object[]{SerializationUtil.deserializeFromByte(content, route.getParamType())});
     }

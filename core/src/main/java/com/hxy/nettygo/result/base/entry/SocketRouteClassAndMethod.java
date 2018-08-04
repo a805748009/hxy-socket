@@ -12,4 +12,14 @@ public class SocketRouteClassAndMethod extends  RouteClassAndMethod{
 	public SocketRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType) {
 		super(clazz, method, index, paramType);
 	}
+
+	@Override
+	public String toString() {
+		return "SocketRouteClassAndMethod{" +
+				"clazz=" + clazz.getName() +
+				", method=" + method.toString()+
+				", index=" + index.toString() +
+				", paramType=" + paramType.getTypeName() +
+				'}';
+	}
 }
