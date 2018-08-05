@@ -47,7 +47,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 		if (ObjectUtil.isNotNull(route)) {
 			try {
 				route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),
-						route.getIndex(), new Object[] { ctx.channel().attr(AttributeKey.valueOf("client")).get() });
+						route.getIndex(), new Object[] { ctx.channel()});
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			}
