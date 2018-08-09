@@ -127,7 +127,7 @@ public class Route {
             //方法被注解了
             if (methodOn != null) {
                 uri = methodOn.value();
-                METHODHANDLEMAP.put(uri,new SocketRouteClassAndMethod(handlerType,ma,ma.getIndex(method.getName()),method.getParameterTypes().length>1?method.getParameterTypes()[1]:null));
+                METHODHANDLEMAP.put(uri,new SocketRouteClassAndMethod(handlerType,ma,ma.getIndex(method.getName()),method.getParameterTypes().length==3?method.getParameterTypes()[1]:null));
             }
             //加載RPC路由
             BCRemoteCall classBCRemoteCall = AnnotationUtils.findAnnotation(method,BCRemoteCall.class);

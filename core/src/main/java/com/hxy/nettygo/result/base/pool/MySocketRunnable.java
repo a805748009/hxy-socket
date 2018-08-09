@@ -98,7 +98,9 @@ public class MySocketRunnable implements Runnable {
                 System.arraycopy(contentBytes, 4, uriByte, 0, 4);
                 int uri = ArrayUtil.byteArrayToInt(uriByte);
                 byte[] contentByte = new byte[contentBytes.length-8];
-                System.arraycopy(contentBytes, 8, contentByte, 0, contentBytes.length-8);
+                if(contentBytes.length>8){
+                    System.arraycopy(contentBytes, 8, contentByte, 0, contentBytes.length-8);
+                }
                 routeMethod(ConfigForSystemMode.SOCKETROUTEMAP.get(uri), ctx.channel(), contentByte, idByte);
             } else if (ConfigForSystemMode.BINARYTYPE.equals(SocketBinaryType.PARENTFORBASESOCKETMESSAGE.getType())) {
                 BaseSocketMessage baseSocketMessage = SerializationUtil.deserializeFromByte(contentBytes,
@@ -129,10 +131,17 @@ public class MySocketRunnable implements Runnable {
         }
         if (content instanceof byte[]) {
             route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),
-                    route.getIndex(), new Object[]{client, SerializationUtil.deserializeFromByte((byte[]) content, route.getParamType()), id});
+                    route.getIndex(),
+                    ObjectUtil.isNotNull(route.getParamType())?
+                            new Object[]{client, SerializationUtil.deserializeFromByte((byte[]) content, route.getParamType()), id}
+                            :new Object[]{client, id});
         } else {
             route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),
-                    route.getIndex(), new Object[]{client, JsonUtil.json2Object((String) content, route.getParamType()), id});
+                    route.getIndex(),
+                    ObjectUtil.isNotNull(route.getParamType())?
+                            new Object[]{client, JsonUtil.json2Object((String) content, route.getParamType()), id}
+                            :new Object[]{client, id}
+            );
         }
 
     }
