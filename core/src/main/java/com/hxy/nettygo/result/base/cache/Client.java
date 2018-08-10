@@ -1,6 +1,7 @@
 package com.hxy.nettygo.result.base.cache;
 
 import com.hxy.nettygo.result.base.config.ConfigForSystemMode;
+import com.hxy.nettygo.result.base.inits.InitMothods;
 import com.hxy.nettygo.result.base.security.SecurityUtil;
 import com.hxy.nettygo.result.base.tools.ObjectUtil;
 import com.hxy.nettygo.result.base.tools.SerializationUtil;
@@ -109,14 +110,14 @@ public class Client {
             room = IoCache.roomMap.get(roomId);
         }
         room.addUser(this);
-        room.addUserWithoutClient(SecurityUtil.getLoginUser(this.getToken(),BaseUser.class));
+        room.addUserWithoutClient(((BaseUser) SecurityUtil.getLoginUser(this.getToken(), InitMothods.getUserClazz())));
         channel.attr(AttributeKey.valueOf("room")).set(room);
     }
 
     public void joinRoom(Room room) {
         if (ObjectUtil.isNotNull(room)) {
             room.addUser(this);
-            room.addUserWithoutClient(SecurityUtil.getLoginUser(this.getToken(), BaseUser.class));
+            room.addUserWithoutClient(((BaseUser) SecurityUtil.getLoginUser(this.getToken(), InitMothods.getUserClazz())));
             channel.attr(AttributeKey.valueOf("room")).set(room);
         }
     }
