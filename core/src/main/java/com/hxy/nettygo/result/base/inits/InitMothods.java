@@ -9,6 +9,7 @@ import com.hxy.nettygo.result.base.security.SessionTimeUpdateHandleInit;
 import com.hxy.nettygo.result.serverbootstrap.assist.rabbitMq.init.QueueMessageHandleInit;
 import com.hxy.nettygo.result.serverbootstrap.assist.rabbitMq.init.QueueMessageListenerInit;
 import com.hxy.nettygo.result.base.entry.RouteClassAndMethod;
+import com.hxy.nettygo.result.serverbootstrap.shutdown.ShutDownFilterInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -42,6 +43,8 @@ public class InitMothods extends ApplicationObjectSupport {
 	private static Map<String, Object> mqQueueHandleMap ;
 	//用户session更新时的外置handle
 	private static RouteClassAndMethod sessionUpdateHandle = null;
+	//关机的时候执行事件
+	private static RouteClassAndMethod shutDownFilter  = null;
 
 	
 	@Override
@@ -72,6 +75,9 @@ public class InitMothods extends ApplicationObjectSupport {
 
 		//7.获取socket每次交互前置filter
 		socketMessageFilter = new SocketMessageFilterInit(context).getFilter();
+
+		//8.关机的时候执行事件
+		shutDownFilter = new ShutDownFilterInit(context).getFilter();
 
 	}
 	
@@ -116,6 +122,10 @@ public class InitMothods extends ApplicationObjectSupport {
 
 	public static RouteClassAndMethod getSocketMessageFilter(){
 		return socketMessageFilter;
+	}
+
+	public static RouteClassAndMethod getShutDownFilter(){
+		return shutDownFilter;
 	}
 	
 }

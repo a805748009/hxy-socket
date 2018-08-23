@@ -155,6 +155,15 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.diffplug.guava:guava-concurrent:19.0.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.google.j2objc:j2objc-annotations:0.1" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.sun:tools:1.8">
+        <CLASSES>
+          <root url="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/lib/tools.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:1.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:8.0.23" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:8.0.23" level="project" />

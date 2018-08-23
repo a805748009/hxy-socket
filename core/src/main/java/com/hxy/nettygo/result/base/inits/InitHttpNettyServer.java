@@ -81,9 +81,9 @@ public class InitHttpNettyServer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			logger.info("server exit...");
 			bossGroup.shutdownGracefully();
 			workGroup.shutdownGracefully();
-			logger.info("server exit...");
 		}
 		
 		ISRUNNETTY = true;
