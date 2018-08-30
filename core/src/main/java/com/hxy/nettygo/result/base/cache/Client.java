@@ -151,6 +151,13 @@ public class Client {
         room.offLineClient(this);
     }
 
+    public void offLineRoomNotDelRoom() {
+        Room room = getRoom();
+        if (ObjectUtil.isNull(room))
+            return;
+        room.offLineClientNotDel(this);
+    }
+
     public void leaveRoomNotDelRoom() {
         Room room = getRoom();
         if (ObjectUtil.isNull(room))
