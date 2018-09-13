@@ -163,8 +163,10 @@ public class Room {
                 users.remove(s);
             }
         }
-        if (userData.isEmpty()) {
-            deleteRoomInCacheAndNameSpace();
+        synchronized (clients){
+            if (clients.isEmpty()) {
+                deleteRoomInCacheAndNameSpace();
+            }
         }
     }
 
@@ -177,8 +179,10 @@ public class Room {
                 users.remove(s);
             }
         }
-        if (clients.isEmpty()) {
-            deleteRoomInCacheAndNameSpace();
+        synchronized (clients){
+            if (clients.isEmpty()) {
+                deleteRoomInCacheAndNameSpace();
+            }
         }
     }
 
