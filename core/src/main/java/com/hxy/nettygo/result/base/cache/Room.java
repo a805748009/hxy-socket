@@ -126,6 +126,13 @@ public class Room {
             NameSpace.removeRoom(client.getNameSpace(), id);
         }
     }
+    //用户掉线，不删除在房间中的信息,即使掉光了，也不删除房间
+    public void offLineClientNotDel(Client client) {
+        String userId = ((BaseUser) SecurityUtil.getLoginUser(client.getToken(), InitMothods.getUserClazz())).getBaseUserId();
+        clients.remove(client);
+    }
+
+
 
     //客户端离开房间但是不删除房间信息，让机器人删除
     public void clientLeaveNotDelRoom(Client client) {
@@ -156,8 +163,10 @@ public class Room {
                 users.remove(s);
             }
         }
-        if (userData.isEmpty()) {
-            deleteRoomInCacheAndNameSpace();
+        synchronized (clients){
+            if (clients.isEmpty()) {
+                deleteRoomInCacheAndNameSpace();
+            }
         }
     }
 
@@ -170,8 +179,10 @@ public class Room {
                 users.remove(s);
             }
         }
-        if (clients.isEmpty()) {
-            deleteRoomInCacheAndNameSpace();
+        synchronized (clients){
+            if (clients.isEmpty()) {
+                deleteRoomInCacheAndNameSpace();
+            }
         }
     }
 
