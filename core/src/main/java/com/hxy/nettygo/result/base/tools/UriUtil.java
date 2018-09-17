@@ -1,6 +1,7 @@
 package com.hxy.nettygo.result.base.tools;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 import com.alibaba.fastjson.util.Base64;
 import com.hxy.nettygo.result.base.config.ConfigForNettyMode;
 import com.hxy.nettygo.result.base.config.ConfigForSystemMode;
+import com.hxy.nettygo.result.base.entry.HttpRouteClassAndMethod;
 import com.hxy.nettygo.result.base.handle.ZlibMessageHandle;
 
 import io.netty.buffer.ByteBuf;
@@ -18,6 +20,7 @@ import io.netty.handler.codec.http.multipart.Attribute;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.util.CharsetUtil;
+import org.apache.commons.beanutils.BeanUtils;
 
 
 public class UriUtil {
@@ -41,17 +44,23 @@ public class UriUtil {
 	}
 	
 	/**
-	 * 获取参数 ->MAP
+	 * 获取参数 ->MAP  JSON方式
 	 * @param req
 	 * @return
 	 * @throws IOException
 	 */
-	public static Map<String, ?> getRequestParamsMap(FullHttpRequest req) throws IOException{
+	public static Object getRequestParamsForJson(FullHttpRequest req,HttpRouteClassAndMethod route) throws IOException{
+		Object obj = null;
 		if (req.uri().length()>13&&req.uri().substring(0, 13).equals(ConfigForSystemMode.REMOTE_CALL_URI)) {
 			//远程调用的restful-json处理
 			ByteBuf jsonBuf = req.content();
 			String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
-			return JsonUtil.jsonToMap(jsonStr);
+			if(Map.class.isAssignableFrom(route.getParamType())){
+				obj = JsonUtil.jsonToMap(jsonStr);
+			}else{
+				obj = JsonUtil.json2Object(jsonStr,route.getParamType());
+			}
+			return obj;
 		}
         Map<String, String>requestParams=new HashMap<>();
         // 处理get请求  
@@ -72,7 +81,18 @@ public class UriUtil {
                 requestParams.put(data.getName(), data.getValue());
             }
         }
-        return requestParams;
+		if(!Map.class.isAssignableFrom(route.getParamType())){
+			try {
+				BeanUtils.populate(obj, requestParams);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}else{
+			obj = requestParams;
+		}
+        return obj;
     }
 	
 	

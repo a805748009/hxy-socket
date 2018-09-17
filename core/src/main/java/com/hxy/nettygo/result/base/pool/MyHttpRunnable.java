@@ -99,7 +99,7 @@ public class MyHttpRunnable implements Runnable {
 	*/
 	private Object getMessageObjOnContent(HttpRouteClassAndMethod route) throws IOException {
 		if("JSON".equals(route.getType())){
-			return UriUtil.getRequestParamsMap(request); //json传输方式 不支持任何处理，基本难用到
+			return UriUtil.getRequestParamsForJson(request,route); //json传输方式 不支持任何处理，基本难用到
 		}else{
 			if(ObjectUtil.isNull(route.getParamType()))//不需要任何参数
 				return false;

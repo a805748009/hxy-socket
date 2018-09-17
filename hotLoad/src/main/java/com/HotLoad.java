@@ -15,6 +15,7 @@ import java.util.List;
  * @Author 黄新宇
  * @Date 2018/7/9 下午2:42
  * @Description 热更新，使用时请将需要更新的class文件带目录结构和此jar包丢在同一目录下，操作会重新加载所有的class文件。
+ * 在core中有工具类HotLoadUtil。  调用即可
  **/
 public class HotLoad {
     private static List<String> classPathList = new ArrayList<String>();
