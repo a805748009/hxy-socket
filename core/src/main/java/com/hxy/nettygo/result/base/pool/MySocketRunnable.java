@@ -11,6 +11,7 @@ import com.hxy.nettygo.result.base.enums.SocketBinaryType;
 import com.hxy.nettygo.result.base.handle.Crc32MessageHandle;
 import com.hxy.nettygo.result.base.handle.ZlibMessageHandle;
 import com.hxy.nettygo.result.base.inits.InitMothods;
+import com.hxy.nettygo.result.base.security.SecurityUtil;
 import com.hxy.nettygo.result.base.tools.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -68,6 +69,7 @@ public class MySocketRunnable implements Runnable {
             ctx.channel().write(new PongWebSocketFrame(frame.content()));
             return;
         }
+        SecurityUtil.updateSessionTime((String) ctx.channel().attr(AttributeKey.valueOf("token")).get());
         // 3.如果是文本消息
         if (frame instanceof TextWebSocketFrame) {
             String msg = ((TextWebSocketFrame) frame).text();
