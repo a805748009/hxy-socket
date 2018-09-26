@@ -83,9 +83,30 @@ public class MyHttpRunnable implements Runnable {
 		}
 
 		// 4)寻找路由成功,返回结果
-		synchronized (cookieId){
+		if(ObjectUtil.isNotNull(cookieId)){
+			synchronized (cookieId){
+				long startTime = 0;
+				if(route.isPrintLog()){
+					startTime=System.currentTimeMillis();
+				}
+				contentObj = routeMethod(route,contentObj);
+				if(route.isPrintLog()){
+					long endTime=System.currentTimeMillis();
+					logger.info("sessionId:"+cookieId+"      方法："+route.getClazz().getName()+"."+route.getMethod().getMethodNames()[route.getIndex()]+"       程序耗时："+(endTime-startTime)+"ms");
+				}
+			}
+		}else{
+			long startTime = 0;
+			if(route.isPrintLog()){
+				startTime=System.currentTimeMillis();
+			}
 			contentObj = routeMethod(route,contentObj);
+			if(route.isPrintLog()){
+				long endTime=System.currentTimeMillis();
+				logger.info("方法："+route.getClazz().getName()+"."+route.getMethod().getMethodNames()[route.getIndex()]+"       程序耗时："+(endTime-startTime)+"ms");
+			}
 		}
+
 
 
 		// 5）发送处理
@@ -125,14 +146,19 @@ public class MyHttpRunnable implements Runnable {
 	* @return java.lang.Object
 	*/
 	private Object routeMethod (HttpRouteClassAndMethod route,Object object){
-		if(object instanceof  Boolean){
-			if(!(boolean)object){
-				return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
-						new Object[]{});
+		try {
+			if(object instanceof  Boolean){
+				if(!(boolean)object){
+					return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
+							new Object[]{});
+				}
 			}
+			return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
+					route.isRequest()?new Object[]{object,request,context}:new Object[]{object});
+		}catch (Exception e){
+			e.printStackTrace();
+			return HttpResponseStatus.INTERNAL_SERVER_ERROR;
 		}
-		return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
-				route.isRequest()?new Object[]{object,request,context}:new Object[]{object});
 	}
 
 	/**

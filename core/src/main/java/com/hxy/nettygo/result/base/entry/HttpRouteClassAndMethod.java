@@ -13,8 +13,8 @@ public class HttpRouteClassAndMethod extends  RouteClassAndMethod {
 
 	protected boolean isRequest;//是否需要request
 
-	public HttpRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, String type, boolean isRequest) {
-		super(clazz, method, index, paramType);
+	public HttpRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, String type, boolean isRequest,boolean printLog) {
+		super(clazz, method, index, paramType,printLog);
 		this.type = type;
 		this.isRequest = isRequest;
 	}

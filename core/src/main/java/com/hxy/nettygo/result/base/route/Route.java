@@ -120,14 +120,14 @@ public class Route {
                 }
             }
             METHODHANDLEMAP.put(uri,new HttpRouteClassAndMethod(handlerType, ma,
-                    ma.getIndex(method.getName()),method.getParameterTypes().length>0?method.getParameterTypes()[0]:null,methodNuri.type(),method.getParameterTypes().length==1?false:true));
+                    ma.getIndex(method.getName()),method.getParameterTypes().length>0?method.getParameterTypes()[0]:null,methodNuri.type(),method.getParameterTypes().length==1?false:true,methodNuri.printLog()));
         }else{
             //获取方法method上的@On实例。
             On methodOn = AnnotationUtils.findAnnotation(method, On.class);
             //方法被注解了
             if (methodOn != null) {
                 uri = methodOn.value();
-                METHODHANDLEMAP.put(uri,new SocketRouteClassAndMethod(handlerType,ma,ma.getIndex(method.getName()),method.getParameterTypes().length==3?method.getParameterTypes()[1]:null));
+                METHODHANDLEMAP.put(uri,new SocketRouteClassAndMethod(handlerType,ma,ma.getIndex(method.getName()),method.getParameterTypes().length==3?method.getParameterTypes()[1]:null,methodOn.printLog()));
             }
             //加載RPC路由
             BCRemoteCall classBCRemoteCall = AnnotationUtils.findAnnotation(method,BCRemoteCall.class);
@@ -149,7 +149,7 @@ public class Route {
                 ConfigForSecurityMode.EXCEPTIONVALIDATE.add(uri);
 
                 METHODHANDLEMAP.put(uri,new HttpRouteClassAndMethod(handlerType, ma,
-                        ma.getIndex(method.getName()),method.getParameterTypes().length>0?method.getParameterTypes()[0]:null,methodNuri.type(),method.getParameterTypes().length==1?false:true));
+                        ma.getIndex(method.getName()),method.getParameterTypes().length>0?method.getParameterTypes()[0]:null,methodNuri.type(),method.getParameterTypes().length==1?false:true,methodNuri.printLog()));
             }
         }
         logger.info("================注册uri："+uri+"方法："+method);

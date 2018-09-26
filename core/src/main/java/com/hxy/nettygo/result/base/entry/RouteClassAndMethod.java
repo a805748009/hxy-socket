@@ -17,11 +17,14 @@ public class RouteClassAndMethod {
 
 	protected Class<?> paramType;//参数类型class
 
-	public RouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType) {
+	protected boolean printLog;//是否打印方法时间
+
+	public RouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog) {
 		this.clazz = clazz;
 		this.method = method;
 		this.index = index;
 		this.paramType = paramType;
+		this.printLog = printLog;
 	}
 
 	public Class<?> getClazz() {
@@ -54,5 +57,13 @@ public class RouteClassAndMethod {
 
 	public void setParamType(Class<?> paramType) {
 		this.paramType = paramType;
+	}
+
+	public boolean isPrintLog() {
+		return printLog;
+	}
+
+	public void setPrintLog(boolean printLog) {
+		this.printLog = printLog;
 	}
 }

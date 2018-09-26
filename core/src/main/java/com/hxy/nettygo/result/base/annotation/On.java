@@ -19,4 +19,6 @@ import org.springframework.stereotype.Component;
 @Component
 public @interface On {
 	String value();
+
+	boolean printLog() default false;
 }

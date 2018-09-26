@@ -22,4 +22,6 @@ public @interface Nuri {
 	String method() default "";
 	//编解码方式
 	String type() default "PRO";
+
+	boolean printLog() default false;
 }

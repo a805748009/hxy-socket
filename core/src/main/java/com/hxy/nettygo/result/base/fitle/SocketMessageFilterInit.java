@@ -19,7 +19,7 @@ public class SocketMessageFilterInit {
             //自定义了handleHttpRequest
             MethodAccess filterMa = MethodAccess.get(context.getType(filterNames[0]));
             int index = filterMa.getIndex("filter");
-            routeClassAndMethod =  new RouteClassAndMethod(context.getType(filterNames[0]), filterMa, index, null);
+            routeClassAndMethod =  new RouteClassAndMethod(context.getType(filterNames[0]), filterMa, index, null,false);
         }
     }
 

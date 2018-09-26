@@ -9,8 +9,8 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 */
 public class SocketRouteClassAndMethod extends  RouteClassAndMethod{
 
-	public SocketRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType) {
-		super(clazz, method, index, paramType);
+	public SocketRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType,boolean printLog) {
+		super(clazz, method, index, paramType,printLog);
 	}
 
 	@Override
