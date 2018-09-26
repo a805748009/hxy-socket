@@ -33,7 +33,7 @@ public class LoginController {
 	public Object thirdPartyLogin(User user) {
 		BaseMessage basemsg = new BaseMessage();
 		basemsg.setId(loginService.regiest(user));
-		return SerializationUtil.serializeToByte(basemsg);
+		return basemsg;
 	}
 
 	@Nuri(uri = "/getSession", method = "GET", type = "JSON")
