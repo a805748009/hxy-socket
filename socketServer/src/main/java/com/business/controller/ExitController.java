@@ -24,17 +24,10 @@ public class ExitController {
 	public void onDisconnect(Client client) {
 		if (ObjectUtil.isNull(client))
 			return;
+		logger.info("有人退出了");
 		client.leaveNameSpace();
 		if (!client.isJoinRoom())
 			return;
-		SocketMessage repBuild = new SocketMessage();
-		repBuild.setClientUri("leaveRoom");
-		User user = SecurityUtil.getLoginUser(client.getToken(), User.class);
-		repBuild.setId(user.getUserId());
-		repBuild.setParam1(user.getUserName());
-		repBuild.setParam2(user.getUserImg());
-		client.roomBroadcast(SerializationUtil.serializeToByte(repBuild));
-		client.leaveRoom();
-		logger.info("有人退出了");
+
 	}
 }

@@ -25,7 +25,7 @@
     <!--输出到文件-->
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logback.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/logback.%d{yyyy-MM-dd}.log</fileNamePattern>
             <!--<fileNamePattern>${log.path}/logback.%d{yyyy-MM-dd}.log</fileNamePattern>-->
         </rollingPolicy>
         <encoder>
