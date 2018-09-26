@@ -83,7 +83,10 @@ public class MyHttpRunnable implements Runnable {
 		}
 
 		// 4)寻找路由成功,返回结果
-		contentObj = routeMethod(route,contentObj);
+		synchronized (cookieId){
+			contentObj = routeMethod(route,contentObj);
+		}
+
 
 		// 5）发送处理
 		sendMethod(route,contentObj);

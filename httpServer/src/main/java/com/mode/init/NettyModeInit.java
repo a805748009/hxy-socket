@@ -40,6 +40,11 @@ public class NettyModeInit {
     private boolean zlibCompressOut;
     @Value("${zlib.compress.out.length}")
     private int zlibCompressOutLength;
+    @Value("${crc32.compress.in}")
+    private boolean crcCompressIn;
+    @Value("${crc32.compress.out}")
+    private boolean crcCompressOut;
+
 
 
     // 配置系统相关参数
@@ -63,6 +68,8 @@ public class NettyModeInit {
         NettyGoConstant.setSecurityMode("ALLVALIDATE", list, 18000,true);
         // 5.配置zlib压缩相关
         NettyGoConstant.setZlibConfig(zlibCompressIn,zlibCompressOut,zlibCompressOutLength);
+        // 6.配置crc32
+        NettyGoConstant.setCrc32Config(crcCompressIn,crcCompressOut);
     }
 
     public void runNetty(){
