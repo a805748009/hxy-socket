@@ -1,36 +1,41 @@
 # BC-NETTYGO
 
 #### 项目介绍
-   基于netty的高性能游戏框架，结合spring全家桶的优势，进阶优化简易开发，让开发人员可以更致力于业务开发。
+   基于netty的高性能游戏框架，结合spring全家桶的优势，优化简易开发，让开发人员可以更致力于业务开发。
 
-#### 软件架构
-####【backStageServer】： 
+**【backStageServer】**： 
     暂时未开发。
 
 
-####【core】  ：
+**【core】**  ：
     核心基础库，支持http socket通信处理，路由。以及房间概念，前置处理器，简易安全框架。
 
 
-####【eurekaServer】 ：
+**【eurekaServer】** ：
      springcloud的eureka监听启动jar
 
 
-####【hotload】 ：
+**【hotload】** ：
     热更新工具启动jar
 
 
-####【pay】 ：
+**【pay】** ：
      各种渠道支付的工具jar。暂时未开发。
 
 
-####【httpServer】  ：  
-    core包的http通信使用demo
+**【httpServer】**  ：  core包的http通信使用demo
 
 
-####【socketServer】： 
+**【socketServer】**： 
     core包的socket通信的简单demo
+    
+    
+    
+#### 软件架构
 
+netty - springboot - spirngCloud - mybatis
+
+集成了redis、rabbitMQ，可直接使用。
 
 
 
