@@ -42,4 +42,7 @@ public class ConfigForSystemMode {
 
 		//出口是否采用crc32验证
 		public static boolean IS_CRC32_OUT = false;
+
+		//是否开启系统信息监控打印
+		public static boolean IS_LOG_SYSTEM_MONITOR = true;
 }

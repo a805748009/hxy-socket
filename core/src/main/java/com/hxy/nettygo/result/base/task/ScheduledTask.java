@@ -1,5 +1,7 @@
 package com.hxy.nettygo.result.base.task;
 
+import com.hxy.nettygo.result.base.config.ConfigForSystemMode;
+import com.hxy.nettygo.result.base.monitor.SystemMonitor;
 import com.hxy.nettygo.result.base.security.CacheMapDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,5 +23,14 @@ public class ScheduledTask {
 		 	CacheMapDao.delTimeOut();
 	        logger.info("过时的session清除完毕============");
 	    }
-	
+
+	@Scheduled(cron="0 0/1 * * * ?")
+	public void systemMonitor() throws Exception {
+	 	if(ConfigForSystemMode.IS_LOG_SYSTEM_MONITOR){
+			Thread.currentThread().setName( "SystemMonitor");
+			SystemMonitor.gcLog();
+			SystemMonitor.memoryLog();
+			SystemMonitor.threadLog();
+		}
+	}
 }

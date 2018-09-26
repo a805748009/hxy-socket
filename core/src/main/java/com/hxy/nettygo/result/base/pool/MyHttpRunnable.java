@@ -37,6 +37,7 @@ public class MyHttpRunnable implements Runnable {
 
 	@Override
 	public void run() {
+		Thread.currentThread().setName( "nettyGo-Thread");
 		//线程设置request
 		ThreadLocalUtil.setSession(new GoHttpThread(new GoRequest(request)));
 		// 根据URI来查找object.method.invoke
