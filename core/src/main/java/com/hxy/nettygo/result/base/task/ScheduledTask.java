@@ -27,6 +27,7 @@ public class ScheduledTask {
 	@Scheduled(cron="0 0/1 * * * ?")
 	public void systemMonitor() throws Exception {
 	 	if(ConfigForSystemMode.IS_LOG_SYSTEM_MONITOR){
+			logger.info("============开始打印系统信息日志============");
 			Thread.currentThread().setName( "SystemMonitor");
 			SystemMonitor.gcLog();
 			SystemMonitor.memoryLog();

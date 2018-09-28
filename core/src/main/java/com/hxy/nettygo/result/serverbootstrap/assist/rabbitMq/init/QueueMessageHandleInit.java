@@ -87,7 +87,7 @@ public class QueueMessageHandleInit {
         if (methodQueueListener != null) {
             uri = methodQueueListener.value();
         }
-        METHODHANDLEMAP.put(uri,new SocketRouteClassAndMethod(handlerType,ma,ma.getIndex(method.getName()),method.getParameterTypes()[0]));
+        METHODHANDLEMAP.put(uri,new SocketRouteClassAndMethod(handlerType,ma,ma.getIndex(method.getName()),method.getParameterTypes()[0],false));
         logger.info("================注册MQ-listener："+uri+"方法："+method);
     }
 }
