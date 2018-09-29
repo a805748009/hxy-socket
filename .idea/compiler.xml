@@ -6,13 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="backStageServer" />
         <module name="core" />
         <module name="eurekaServer" />
         <module name="hotLoad" />
-        <module name="httpServer" />
-        <module name="pay" />
-        <module name="socketServer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
