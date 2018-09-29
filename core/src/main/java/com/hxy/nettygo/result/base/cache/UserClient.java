@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserClient {
     //用户userId,client
-    public static final Map<String,Client> userClient = new ConcurrentHashMap<>();
+    public static final Map<String,Client> userClient = new ConcurrentHashMap<>(1024);
 
     public static Client getClient(String userId){
         return userClient.get(userId);

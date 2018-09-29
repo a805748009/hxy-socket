@@ -26,7 +26,7 @@ public class QueueMessageHandleInit {
 
     private static final Logger logger = LoggerFactory.getLogger(QueueMessageHandleInit.class);
 
-    private Map<String, Object> METHODHANDLEMAP = new HashMap<>();
+    private final Map<String, Object> METHODHANDLEMAP = new HashMap<>(32);
 
     public QueueMessageHandleInit(ApplicationContext context) {
         Map<String, Object> taskBeanMap = context.getBeansWithAnnotation(Route.class);

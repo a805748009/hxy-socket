@@ -60,7 +60,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="core" />
+    <orderEntry type="library" name="Maven: hxy:nettygo-core:1.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter:1.2.0.RC1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-context:1.2.0.RC1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-crypto:4.2.2.RELEASE" level="project" />

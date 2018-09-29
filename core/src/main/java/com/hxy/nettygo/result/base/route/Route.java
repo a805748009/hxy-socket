@@ -31,7 +31,7 @@ public class Route {
 
     private static final Logger logger = LoggerFactory.getLogger(Route.class);
 
-    private Map<String, Object> METHODHANDLEMAP = new HashMap<>();
+    private final Map<String, Object> METHODHANDLEMAP = new HashMap<>(1024);
 
     public Route(ApplicationContext context) {
         Map<String, Object> taskBeanMap = context.getBeansWithAnnotation(com.hxy.nettygo.result.base.annotation.Route.class);
