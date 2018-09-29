@@ -164,7 +164,12 @@ public class MySocketRunnable implements Runnable {
             return;
         }
         //业务处理
-        clientInitOnHandshake(ctx, req);
+        ResultStatus resultStatus = clientInitOnHandshake(ctx, req);
+        if (ObjectUtil.isNotNull(resultStatus)&&!resultStatus.isSuccess()) {
+            logger.error("SOCKET-handShake 处理返回false-连接失败");
+            NettyUtil.sendError(ctx, resultStatus.getResponseStatus());
+            return;
+        }
         // 构造握手响应返回，本机测试
         WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
                 "ws://" + req.headers().get(HttpHeaderNames.HOST) + req.uri(), null, false);
@@ -178,19 +183,16 @@ public class MySocketRunnable implements Runnable {
         ReferenceCountUtil.release(msg);
     }
 
-    private void clientInitOnHandshake(ChannelHandlerContext ctx, FullHttpRequest req) {
+    private ResultStatus clientInitOnHandshake(ChannelHandlerContext ctx, FullHttpRequest req) {
         // 前置filter事件
         RouteClassAndMethod filter = InitMothods.getMessageFilter();
         if (ObjectUtil.isNotNull(filter)) {
             ResultStatus resultStatus = (ResultStatus) filter.getMethod().invoke(
                     SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),
                     new Object[]{ctx, req});
-            if (!resultStatus.isSuccess()) {
-                NettyUtil.sendError(ctx, resultStatus.getResponseStatus());
-                return;
-            }
+            return resultStatus;
         }
-
+        return null;
     }
 
     private boolean socketMessageFilter(Client client, String uri) {
