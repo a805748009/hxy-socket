@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/socketServer/pom.xml" />
         <option value="$PROJECT_DIR$/backStageServer/pom.xml" />
         <option value="$PROJECT_DIR$/hotLoad/pom.xml" />
+        <option value="$PROJECT_DIR$/pay/pom.xml" />
       </list>
     </option>
   </component>

@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/eurekaServer/eurekaServer.iml" filepath="$PROJECT_DIR$/eurekaServer/eurekaServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/hotLoad/hotLoad.iml" filepath="$PROJECT_DIR$/hotLoad/hotLoad.iml" />
       <module fileurl="file://$PROJECT_DIR$/httpServer/httpServer.iml" filepath="$PROJECT_DIR$/httpServer/httpServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pay/pay.iml" filepath="$PROJECT_DIR$/pay/pay.iml" />
       <module fileurl="file://$PROJECT_DIR$/socketServer/socketServer.iml" filepath="$PROJECT_DIR$/socketServer/socketServer.iml" />
     </modules>
   </component>

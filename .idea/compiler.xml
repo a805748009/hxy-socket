@@ -11,15 +11,17 @@
         <module name="eurekaServer" />
         <module name="hotLoad" />
         <module name="httpServer" />
+        <module name="pay" />
         <module name="socketServer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="backStageServer" target="1.8" />
       <module name="core" target="1.8" />
-      <module name="eurekaServer" target="1.5" />
+      <module name="eurekaServer" target="1.8" />
       <module name="hotLoad" target="1.5" />
       <module name="httpServer" target="1.8" />
+      <module name="pay" target="1.8" />
       <module name="socketServer" target="1.8" />
     </bytecodeTargetLevel>
   </component>
