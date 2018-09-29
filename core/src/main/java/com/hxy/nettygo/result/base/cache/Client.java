@@ -127,14 +127,24 @@ public class Client {
     }
 
 
-    //是否加入房间
+
+    /**
+    * @Author 黄新宇
+    * @date 2018/2/29 下午9:23
+    * @Description(是否加入房间)
+    * @return boolean
+    */
     public boolean isJoinRoom() {
         Room room = getRoom();
         return ObjectUtil.isNotNull(room);
     }
 
 
-    // 离开房间,T掉
+    /**
+     * @Author 黄新宇
+     * @date 2018/2/29 下午9:23
+     * @Description(离开房间,T掉)
+     */
     public void leaveRoom() {
         Room room = getRoom();
         if (ObjectUtil.isNull(room))
@@ -143,7 +153,11 @@ public class Client {
         channel.attr(AttributeKey.valueOf("room")).set(null);
     }
 
-    //离线房间，不删除用户信息，只是断开连接，可以重连
+    /**
+     * @Author 黄新宇
+     * @date 2018/2/29 下午9:23
+     * @Description(离线房间，不删除用户信息，只是断开连接，可以重连)
+     */
     public void offLineRoom() {
         Room room = getRoom();
         if (ObjectUtil.isNull(room))

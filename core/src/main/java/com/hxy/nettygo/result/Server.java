@@ -19,9 +19,11 @@ public class Server {
 
 		//1.执行项目启动任务
 		new InitStartAppTasks().startApp();
+
 		//2.开启redis监听
 		if(ConfigForSecurityMode.ISSETSESSIONTOREDIS)
 		JedisListener.runRedisListener();
+
 		//3.开启netty服务
 		if(ConnectType.HTTP.getType().equals(ConfigForSystemMode.CONNECTTYPE)){
 			InitHttpNettyServer.runHttp(port,maxSize); 
