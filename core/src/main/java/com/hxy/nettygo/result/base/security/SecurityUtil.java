@@ -11,6 +11,7 @@ import com.hxy.nettygo.result.base.tools.SpringApplicationContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -141,10 +142,32 @@ public class SecurityUtil {
      * @param sessionId
      */
     public static void updateSessionTime(String sessionId) {
-        if (CacheMapDao.isFourFifthsExpiryTime(sessionId)) {
-            if(ConfigForSecurityMode.ISSETSESSIONTOREDIS)
+        boolean isFourFifthsExpiryTime = false;
+        if(ObjectUtil.isNotNull(CacheMapDao.doReadCache(sessionId))){
+            if (CacheMapDao.isFourFifthsExpiryTime(sessionId)) {
+                isFourFifthsExpiryTime = true;
+            }
+        }else{
+           Jedis jedis = null;
+           try{
+               jedis = RedisUtil.getJedis();
+               long syTime = jedis.ttl(RedisKey.SESSIONKEY+sessionId);
+               if(syTime<=ConfigForSecurityMode.LOGINSESSIONTIMEOUT/5){
+                   isFourFifthsExpiryTime = true;
+               }
+           }catch (Exception e){
+               e.printStackTrace();
+           }finally {
+               RedisUtil.returnResource(jedis);
+           }
+        }
+
+        if(isFourFifthsExpiryTime){
+            if(ConfigForSecurityMode.ISSETSESSIONTOREDIS){
                 RedisSessionDao.update(sessionId);
-            CacheMapDao.setExpiryTime(RedisKey.CACHEKEY + sessionId);
+            }else{
+                CacheMapDao.setExpiryTime(RedisKey.CACHEKEY + sessionId);
+            }
             //附带的外置操作
             RouteClassAndMethod route = InitMothods.getSessionUpdateHandle();
             route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),

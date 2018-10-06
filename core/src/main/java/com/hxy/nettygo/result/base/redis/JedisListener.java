@@ -1,6 +1,7 @@
 package com.hxy.nettygo.result.base.redis;
 
 import com.hxy.nettygo.result.base.security.CacheMapDao;
+import com.hxy.nettygo.result.base.tools.SerializationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -64,7 +64,7 @@ public class RedisSessionDao {
 
     /**
      * 获取存活的sessions
-     * @param <T>
+     * @param
      */
     public static Set<String> getActiveSessions() {
         return RedisUtil.keys(RedisKey.SESSIONKEY+"*");
@@ -88,8 +88,6 @@ public class RedisSessionDao {
     
     /**
      * 保存session并存储过期时间
-     * @param session
-     * @throws UnknownSessionException
      */
     public static void saveSession(String sessionId,Object obj) {
         if (obj == null) {

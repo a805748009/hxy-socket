@@ -68,7 +68,7 @@ public class CacheMapDao {
     }
     
     /**
-     * 是否超过过期时间的一般
+     * 是否超过过期时间的4/5
      * @param key
      * @return
      */
