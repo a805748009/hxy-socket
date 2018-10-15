@@ -4,11 +4,14 @@ import nafos.core.entry.ClassAndMethod;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.entry.SocketRouteClassAndMethod;
 import nafos.core.mode.filter.HttpMessageFilterInit;
+import nafos.core.mode.filter.RemoteCallFilterInit;
+import nafos.core.mode.filter.SecurityFilterInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +33,8 @@ public class InitMothods  {
 	//其他filter等处理事件
 	private static final HashMap<String, ClassAndMethod> filterMap = new HashMap<>();
 
+	private static final HashMap<String, List<ClassAndMethod>> filterListMap = new HashMap<>();
+
 
 
 	public static void init( ApplicationContext ac) {
@@ -44,27 +49,20 @@ public class InitMothods  {
 		filterMap.put("httpMessageFilter",new HttpMessageFilterInit(context).getFilter());
 
 		//3.获取远程前置filter
-		filterMap.put("remoteCallFilter",new HttpMessageFilterInit(context).getFilter());
+		filterMap.put("remoteCallFilter",new RemoteCallFilterInit(context).getFilter());
 
 		//4.获取http安全校验filter
-		filterMap.put("httpSecurityFilter",new HttpMessageFilterInit(context).getFilter());
+		filterMap.put("httpSecurityFilter",new SecurityFilterInit(context).getHttpSecurityFilter());
 
 		//5.获取socket安全校验filter
-		filterMap.put("socketSecurityFilter",new HttpMessageFilterInit(context).getFilter());
+		filterMap.put("socketSecurityFilter",new SecurityFilterInit(context).getSocketSecurityFilter());
 
         //6.获取socket连接filter
-		filterMap.put("connectClassAndMethod",new HttpMessageFilterInit(context).getFilter());
+		filterListMap.put("connectClassAndMethods",new SocketConnectFactory(context).getConnectClassAndMethod());
 
         //7.获取socket断开连接filter
-		filterMap.put("disConnectClassAndMethod",new HttpMessageFilterInit(context).getFilter());
+		filterListMap.put("disConnectClassAndMethods",new SocketConnectFactory(context).getDisConnectClassAndMethod());
 
-
-//		//1.获取user类型class
-//		String[] s = context.getBeanNamesForType(BaseUser.class);
-//		userClazz = s.length>0?context.getType(context.getBeanNamesForType(BaseUser.class)[0]):null;
-//		if(userClazz == null)logger.warn("-------->>>>>>>由于user类未实现BaseUser接口，Room类中操作可能存在报错");
-//
-//
 //
 //		//3.获取MQ消息处理handle
 //		mqQueueMessageListener = new QueueMessageListenerInit(context).getListener();
@@ -117,12 +115,12 @@ public class InitMothods  {
         return filterMap.get("socketSecurityFilter");
     }
 
-    public static ClassAndMethod getSocketConnectFilter(){
-		return filterMap.get("connectClassAndMethod");
+    public static List<ClassAndMethod> getSocketConnectFilter(){
+		return filterListMap.get("connectClassAndMethods");
     }
 
-    public static ClassAndMethod getSocketDisConnectFilter(){
-		return filterMap.get("disConnectClassAndMethod");
+    public static List<ClassAndMethod> getSocketDisConnectFilter(){
+		return filterListMap.get("disConnectClassAndMethods");
     }
 
 	

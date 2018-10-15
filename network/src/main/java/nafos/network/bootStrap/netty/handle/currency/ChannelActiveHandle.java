@@ -9,6 +9,8 @@ import nafos.core.util.SpringApplicationContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * ClassName:MyWebSocketServerHandler Function: TODO ADD FUNCTION. Date:
  * 2017年10月10日 下午10:19:10
@@ -39,15 +41,8 @@ public class ChannelActiveHandle extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         logger.info("有人接入，{}",ctx.channel().toString());
 
-        ClassAndMethod route = InitMothods.getSocketConnectFilter();
-        if (ObjectUtil.isNotNull(route)) {
-            try {
-                route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),
-                        route.getIndex(), new Object[] { ctx.channel()});
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-        }
+        List<ClassAndMethod> routes = InitMothods.getSocketConnectFilter();
+        invokeMethods(routes,ctx);
     }
 
 
@@ -60,11 +55,18 @@ public class ChannelActiveHandle extends ChannelInboundHandlerAdapter {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         logger.info("有人断开，{}",ctx.channel().toString());
 
-        ClassAndMethod route = InitMothods.getSocketDisConnectFilter();
-        if (ObjectUtil.isNotNull(route)) {
+        List<ClassAndMethod> routes = InitMothods.getSocketDisConnectFilter();
+        invokeMethods(routes,ctx);
+    }
+
+
+    private void invokeMethods(List<ClassAndMethod> routes,ChannelHandlerContext ctx){
+        if (!routes.isEmpty()) {
             try {
-                route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),
-                        route.getIndex(), new Object[] { ctx.channel()});
+                for (ClassAndMethod route : routes) {
+                    route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),
+                            route.getIndex(), new Object[] { ctx.channel()});
+                }
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }

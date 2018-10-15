@@ -10,6 +10,8 @@ import org.springframework.core.MethodIntrospector;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,23 +23,26 @@ import java.util.Set;
 public class SocketConnectFactory {
     private static final Logger logger = LoggerFactory.getLogger(SocketConnectFactory.class);
 
-    private ClassAndMethod connectClassAndMethod;
+    private final List<ClassAndMethod> connectClassAndMethod = new ArrayList<>();
 
-    private ClassAndMethod disConnectClassAndMethod;
+    private List<ClassAndMethod> disConnectClassAndMethod = new ArrayList<>();;
 
 
     public SocketConnectFactory(ApplicationContext context) {
         Map<String, Object> taskBeanMap = context.getBeansWithAnnotation(SocketActive.class);
         Object[] names =  taskBeanMap.keySet().toArray();
-        if(names.length>0)
-        detectHandlerMethods(context.getType((String) names[0]));
+        if(names.length>0){
+            for(int i = 0;i<names.length;i++){
+                detectHandlerMethods(context.getType((String) names[i]));
+            }
+        }
     }
 
-    public  ClassAndMethod getConnectClassAndMethod(){
+    public  List<ClassAndMethod> getConnectClassAndMethod(){
         return  connectClassAndMethod;
     }
 
-    public  ClassAndMethod getDisConnectClassAndMethod(){
+    public  List<ClassAndMethod> getDisConnectClassAndMethod(){
         return  disConnectClassAndMethod;
     }
 
@@ -64,9 +69,9 @@ public class SocketConnectFactory {
         });
 
 
-        connectClassAndMethod = registerHandlerMethod((Method) methods1.toArray()[0], userType);
+        connectClassAndMethod.add(registerHandlerMethod((Method) methods1.toArray()[0], userType));
 
-        disConnectClassAndMethod = registerHandlerMethod((Method) methods2.toArray()[0], userType);
+        disConnectClassAndMethod.add(registerHandlerMethod((Method) methods2.toArray()[0], userType));
 
     }
 
