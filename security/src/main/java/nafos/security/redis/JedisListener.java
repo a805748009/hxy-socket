@@ -2,7 +2,7 @@ package nafos.security.redis;
 
 
 import nafos.core.util.SpringApplicationContextHolder;
-import nafos.security.CacheMapDao;
+import nafos.security.cache.CacheMapDao;
 import nafos.security.config.SecurityConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

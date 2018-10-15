@@ -6,6 +6,8 @@ import nafos.core.util.CastUtil;
 import nafos.core.util.ObjectUtil;
 import nafos.core.util.ProtoUtil;
 import nafos.core.util.SpringApplicationContextHolder;
+import nafos.security.cache.CacheMapDao;
+import nafos.security.cache.RedisSessionDao;
 import nafos.security.config.SecurityConfig;
 import nafos.security.redis.RedisKey;
 import nafos.security.redis.RedisUtil;

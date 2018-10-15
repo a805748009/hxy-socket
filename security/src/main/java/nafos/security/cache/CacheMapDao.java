@@ -1,4 +1,4 @@
-package nafos.security;
+package nafos.security.cache;
 
 
 import nafos.core.util.SpringApplicationContextHolder;

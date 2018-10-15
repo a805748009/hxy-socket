@@ -30,6 +30,10 @@ public class SecurityConfig {
     @Value("${nafos.security.sessionTimeOut}")
     private int sessionTimeOut;
 
+    //不通过安全验证连接允许存活的时间
+    @Value("${nafos.security.channelUnSafeConnectTime}")
+    private long channelUnSafeConnectTime;
+
 
     public boolean getIsUseRedis(){
         return isUseRedis;
@@ -50,5 +54,9 @@ public class SecurityConfig {
 
     public int getSessionTimeOut(){
         return sessionTimeOut;
+    }
+
+    public long getChannelUnSafeConnectTime(){
+        return channelUnSafeConnectTime;
     }
 }
