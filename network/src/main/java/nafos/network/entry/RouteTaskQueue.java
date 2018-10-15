@@ -6,7 +6,9 @@ import nafos.core.util.ObjectUtil;
 import nafos.core.util.SpringApplicationContextHolder;
 import nafos.network.bootStrap.netty.handle.RouteRunnable;
 import nafos.network.bootStrap.netty.handle.http.HttpRouteHandle;
-import nafos.network.bootStrap.netty.handle.socket.SocketRouteHandle;
+import nafos.network.bootStrap.netty.handle.socket.AbstractSocketRouteHandle;
+import nafos.network.bootStrap.netty.handle.socket.IocBeanFactory;
+
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -56,7 +58,7 @@ public class RouteTaskQueue extends TaskQueue{
 			// 只有一个任务，那就是刚刚加的，直接开始执行...
 			if (queue.size() == 1) {
 				try {
-					SpringApplicationContextHolder.getSpringBeanForClass(SocketRouteHandle.class)
+					SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(),AbstractSocketRouteHandle.class)
 							.route(mode.getCtx(), mode.getSocketRouteClassAndMethod(), mode.getBody(), mode.getId());
 				}finally {
 					complete();
@@ -87,7 +89,7 @@ public class RouteTaskQueue extends TaskQueue{
 						SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
 								.route(mode.getCtx(), mode.getRequest(),mode.getHttpRouteClassAndMethod());
 					}else{
-						SpringApplicationContextHolder.getSpringBeanForClass(SocketRouteHandle.class)
+						SpringApplicationContextHolder.getSpringBeanForClass(AbstractSocketRouteHandle.class)
 								.route(mode.getCtx(), mode.getSocketRouteClassAndMethod(),mode.getBody(),mode.getId());
 					}
 				}

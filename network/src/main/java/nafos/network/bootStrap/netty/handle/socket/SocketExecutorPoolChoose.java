@@ -9,10 +9,8 @@ import nafos.core.util.ArrayUtil;
 import nafos.core.util.ObjectUtil;
 import nafos.network.bootStrap.netty.handle.ExecutorPoolChoose;
 import nafos.network.bootStrap.netty.handle.currency.AsyncSessionHandle;
-import nafos.network.entry.RouteTaskQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -24,10 +22,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
     private static final Logger logger = LoggerFactory.getLogger(SocketExecutorPoolChoose.class);
-
-    @Autowired
-    SocketRouteHandle socketRouteHandle;
-
 
 
     @Override

@@ -23,7 +23,8 @@ public class SocketRouteRunnable extends RouteRunnable {
 	@Override
 	public void run() {
 		try{
-			SpringApplicationContextHolder.getSpringBeanForClass(SocketRouteHandle.class).route(super.context,socketRouteClassAndMethod,super.body,idByte);
+			SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(),AbstractSocketRouteHandle.class)
+					.route(super.context,socketRouteClassAndMethod,super.body,idByte);
 		}finally {
 			super.taskQueue.complete();
 		}

@@ -23,9 +23,17 @@ public class Client {
 
     protected boolean isHide;
 
+    protected BaseUser gameUserInfo;
+
     public Client(Channel channel) {
         super();
         this.channel = channel;
+    }
+
+    public Client(Channel channel,BaseUser gameUserInfo) {
+        super();
+        this.channel = channel;
+        this.gameUserInfo = gameUserInfo;
     }
 
     /**
@@ -69,11 +77,11 @@ public class Client {
     }
 
     public String getUserId() {
-        return (String) channel.attr(AttributeKey.valueOf("userId")).get();
+        return this.gameUserInfo.getUserId();
     }
 
-    public void setUserId(String userId) {
-        channel.attr(AttributeKey.valueOf("userId")).set(userId);
+    public void setUser(BaseUser gameUserInfo) {
+        this.gameUserInfo = gameUserInfo;
     }
 
     public String getRoomId() {
@@ -98,7 +106,7 @@ public class Client {
      */
 
     // 加入房间
-    public void joinRoom(String roomId,BaseUser userInfo) {
+    public void joinRoom(String roomId) {
         Room room;
         if (ObjectUtil.isNull(IoCache.roomMap.get(roomId))) {
             room = new Room(roomId);
@@ -108,14 +116,14 @@ public class Client {
             room = IoCache.roomMap.get(roomId);
         }
         room.addClient(this);
-        room.addUser(userInfo);
+        room.addUser(this.gameUserInfo);
         channel.attr(AttributeKey.valueOf("room")).set(room);
     }
 
-    public void joinRoom(Room room,BaseUser userInfo) {
+    public void joinRoom(Room room) {
         if (ObjectUtil.isNotNull(room)) {
             room.addClient(this);
-            room.addUser(userInfo);
+            room.addUser(this.gameUserInfo);
             channel.attr(AttributeKey.valueOf("room")).set(room);
         }
     }
