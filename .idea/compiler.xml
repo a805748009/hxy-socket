@@ -15,7 +15,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="core" target="1.8" />
-      <module name="game" target="1.5" />
+      <module name="game" target="1.8" />
       <module name="nafos" target="1.5" />
       <module name="network" target="1.8" />
       <module name="security" target="1.8" />

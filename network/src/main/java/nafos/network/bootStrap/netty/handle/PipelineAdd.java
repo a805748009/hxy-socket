@@ -9,6 +9,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketFrameAggregator;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import nafos.network.bootStrap.netty.handle.http.HttpServerHandler;
+import nafos.network.bootStrap.netty.handle.websocket.BytebufToBinaryFrameHandle;
 import nafos.network.bootStrap.netty.handle.websocket.WsHandShakeHandle;
 import nafos.network.bootStrap.netty.handle.websocket.WsPacketHandle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class PipelineAdd {
     WsHandShakeHandle wsHandShakeServerHandle;
     @Autowired
     WsPacketHandle wsPacketHandle;
+    @Autowired
+    BytebufToBinaryFrameHandle bytebufToBinaryFrameHandle;
 
 
 
@@ -37,21 +40,24 @@ public class PipelineAdd {
     public  void websocketAdd(ChannelHandlerContext ctx){
 
         // HttpServerCodec：将请求和应答消息解码为HTTP消息
-        ctx.pipeline().addBefore("protocolResolve","http-codec",new HttpServerCodec());
+        ctx.pipeline().addBefore("byteToBuf","http-codec",new HttpServerCodec());
 
         // HttpObjectAggregator：将HTTP消息的多个部分合成一条完整的HTTP消息
-        ctx.pipeline().addBefore("protocolResolve","aggregator",new HttpObjectAggregator(65535));
+        ctx.pipeline().addBefore("byteToBuf","aggregator",new HttpObjectAggregator(65535));
 
         // ChunkedWriteHandler：向客户端发送HTML5文件
-        ctx.pipeline().addBefore("protocolResolve","http-chunked",new ChunkedWriteHandler());
+        ctx.pipeline().addBefore("byteToBuf","http-chunked",new ChunkedWriteHandler());
 
-        ctx.pipeline().addBefore("protocolResolve","WebSocketAggregator",new WebSocketFrameAggregator(65535));
+        ctx.pipeline().addBefore("byteToBuf","WebSocketAggregator",new WebSocketFrameAggregator(65535));
 
         // 在管道中添加我们自己的接收数据实现方法
-        ctx.pipeline().addBefore("protocolResolve","ws-handShake",wsHandShakeServerHandle);
+        ctx.pipeline().addBefore("byteToBuf","ws-handShake",wsHandShakeServerHandle);
 
         // 后续直接走消息处理
-        ctx.pipeline().addBefore("protocolResolve","wsPack",wsPacketHandle);
+        ctx.pipeline().addBefore("byteToBuf","wsPack",wsPacketHandle);
+
+        // 编码。将通用byteBuf编码成binaryWebSocketFrame.通过前面的编码器
+        ctx.pipeline().addBefore("byteToBuf","bufToFrame",bytebufToBinaryFrameHandle);
 
 
     }

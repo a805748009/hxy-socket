@@ -5,6 +5,7 @@ import nafos.core.cache.CaffenineCache;
 import nafos.core.task.LineTask;
 import nafos.core.task.TaskQueue;
 import nafos.network.bootStrap.netty.handle.RouteRunnable;
+import nafos.network.entry.RouteTaskQueue;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,17 +15,17 @@ import java.util.concurrent.TimeUnit;
  * @Description TODO
  **/
 public class AsyncSessionHandle implements LineTask {
-    private  static CaffenineCache<Integer,TaskQueue> caffenineCache ;
+    private  static CaffenineCache<Integer,RouteTaskQueue> caffenineCache ;
 
     static{
-        caffenineCache = new CaffenineCache<>(20, TimeUnit.SECONDS,()-> new TaskQueue(ExecutorPool.getInstance()));
+        caffenineCache = new CaffenineCache<>(20, TimeUnit.SECONDS,()-> new RouteTaskQueue(ExecutorPool.getInstance()));
     }
 
     public static void runTask(Integer hashCode,RouteRunnable routeRunnable){
-        caffenineCache.get(hashCode).submit(routeRunnable);
+        ( caffenineCache.get(hashCode)).submit(routeRunnable);
     }
 
-    public static TaskQueue getTask(Integer hashCode){
+    public static RouteTaskQueue getTask(Integer hashCode){
        return  caffenineCache.get(hashCode);
     }
 

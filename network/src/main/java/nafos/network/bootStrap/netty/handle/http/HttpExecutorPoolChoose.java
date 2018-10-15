@@ -60,7 +60,7 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
         }
 
         ReferenceCountUtil.retain(msg);
-        ((RouteTaskQueue) AsyncSessionHandle.getTask(queuecCode)).submitHttpOnWork(new AsyncTaskMode(ctx,request,httpRouteClassAndMethod));
+        ( AsyncSessionHandle.getTask(queuecCode)).submitHttpOnWork(new AsyncTaskMode(ctx,request,httpRouteClassAndMethod));
 
 
     }

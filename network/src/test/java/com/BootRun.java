@@ -16,7 +16,7 @@ import java.net.Socket;
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 @SpringBootApplication
-@ComponentScan(basePackages = {"com","nafos.core"})
+@ComponentScan(basePackages = {"com","nafos"})
 public class BootRun {
     public static void main(String[] args) {
         NafosServer.startup(BootRun.class,args);

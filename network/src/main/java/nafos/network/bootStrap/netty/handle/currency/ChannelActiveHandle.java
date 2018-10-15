@@ -1,4 +1,4 @@
-package nafos.network.bootStrap.netty.handle.socket;
+package nafos.network.bootStrap.netty.handle.currency;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -15,9 +15,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author hxy
  */
-public class SocketActiveHandle extends ChannelInboundHandlerAdapter {
+public class ChannelActiveHandle extends ChannelInboundHandlerAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(SocketActiveHandle.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChannelActiveHandle.class);
     int activeCount = 0;
 
     @Override

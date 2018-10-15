@@ -24,13 +24,11 @@ public class RouteRunnable implements Runnable{
         ReferenceCountUtil.retain(req);
         context = ctx;
         request = req;
-        this.taskQueue = taskQueue;
     }
 
     public RouteRunnable(ChannelHandlerContext ctx, byte[] body) {
         context = ctx;
         this.body = body;
-        this.taskQueue = taskQueue;
     }
 
     public void setTaskQueue(TaskQueue taskQueue){

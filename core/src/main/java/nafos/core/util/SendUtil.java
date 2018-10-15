@@ -34,26 +34,14 @@ public class SendUtil {
 		}
 	}
 
-//	public static Object castSendMsg(Object id,Object object){
-//    	//intBefore模式
-//		if(id instanceof byte[]){
-//			if(object instanceof byte[])
-//				return	ArrayUtil.concat((byte[])id,(byte[])object);
-//			return	ArrayUtil.concat((byte[])id, ProtoUtil.serializeToByte(object));
-//		}
-//		//textWebsocketFrame模式
-//		if(id instanceof String){
-//			if(object instanceof String)
-//				return	id+"|"+object;
-//			//PARENTFORBASESOCKETMESSAGE模式
-//			if(object instanceof BaseSocketMessage){
-//				((BaseSocketMessage) object).setClientUri((String)id);
-//				((BaseSocketMessage) object).setServerUri(null);
-//				return ProtoUtil.serializeToByte(object);
-//			}
-//			return id+"|"+JsonUtil.toJson(object);
-//		}
-//		logger.error("================>>>>>>传入参数错误");
-//    	return null;
-//	}
+	public static Object castSendMsg(Object id,Object object){
+    	//intBefore模式
+		if(id instanceof byte[]){
+			if(object instanceof byte[])
+				return	ArrayUtil.concat((byte[])id,(byte[])object);
+			return	ArrayUtil.concat((byte[])id, ProtoUtil.serializeToByte(object));
+		}
+		logger.error("================>>>>>>传入参数错误");
+    	return null;
+	}
 }

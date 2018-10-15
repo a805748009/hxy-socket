@@ -5,8 +5,11 @@ import nafos.core.util.HttpUtil;
 import nafos.core.util.ObjectUtil;
 import nafos.core.util.SnowflakeIdWorker;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * @Author 黄新宇
@@ -39,24 +42,23 @@ public class SocketTest {
         System.out.println(p.length);
         socket.getOutputStream().write(p);
         socket.getOutputStream().flush();
-//
-//        socket.getOutputStream().write(p);
-//        socket.getOutputStream().flush();
 
 
-
-//        Thread.sleep(3000);
-        for(int i = 0;i<100;i++){
-            System.out.println(p.length);
-            socket.getOutputStream().write(p);
-            socket.getOutputStream().flush();
+        Scanner scanner=new Scanner(System.in);
+        BufferedReader in=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String readline;
+        while(true)                                                 //循环发消息
+        {
+            System.out.println(1);
+            readline=scanner.nextLine();
+//            write.write(readline+'\n');                            //write()要加'\n'
+//            write.flush();
+//			socket.shutdownOutput();
+            System.out.println(in.readLine());
         }
 
-//        System.out.println(ArrayUtil.concat(ArrayUtil.intToByteArray(m.length),m).length);
-//        socket.getOutputStream().write(ArrayUtil.concat(ArrayUtil.intToByteArray(m.length),m));
-//        socket.getOutputStream().flush();
 
-        socket.close();
+//        socket.close();
 
     }
 

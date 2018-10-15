@@ -64,7 +64,7 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
         }
 
         ReferenceCountUtil.retain(msg);
-        ((RouteTaskQueue) AsyncSessionHandle.getTask(queuecCode)).submitSocketOnWork(new AsyncTaskMode(ctx, socketRouteClassAndMethod,messageBody,idByte));
+        ( AsyncSessionHandle.getTask(queuecCode)).submitSocketOnWork(new AsyncTaskMode(ctx, socketRouteClassAndMethod,messageBody,idByte));
 
     }
 }

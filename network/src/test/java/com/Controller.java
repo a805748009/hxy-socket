@@ -1,6 +1,8 @@
 package com;
 
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import nafos.core.annotation.controller.Handle;
 import nafos.core.mode.RouteFactory;
 import org.slf4j.Logger;
@@ -26,9 +28,10 @@ public class Controller {
 
 
     @Handle(code = 1000,type="JSON")
-    public Object h(Channel channel, Map map,byte[] id){
+    public void h(Channel channel, Map map,byte[] id){
 
         logger.info(map.toString());
-        return map;
+//        channel.writeAndFlush(new BinaryWebSocketFrame(Unpooled.wrappedBuffer("121".getBytes())));
+        channel.writeAndFlush("121".getBytes());
     }
 }
