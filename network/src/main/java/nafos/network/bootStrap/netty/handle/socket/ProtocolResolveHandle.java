@@ -49,7 +49,7 @@ public class ProtocolResolveHandle extends SimpleChannelInboundHandler<byte[]> {
 
         // 安全验证filter
         ClassAndMethod filter = InitMothods.getSocketSecurityFilter();
-        if(!ClassAndMethodHelper.checkResultStatus(filter,context,contentBytes)) return;
+        if(!ClassAndMethodHelper.socketCheckResultStatus(filter,context,contentBytes)) return;
 
         //选择线程池
         socketExecutorPoolChoose.choosePool(context,contentBytes);

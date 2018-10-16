@@ -80,9 +80,6 @@ public class NettyServer {
      * @param port
      */
     public void startup(int port,String connectType) {
-        ShowLogo.consoleout();
-        logger.info("================Netty端口启动========"+"port: " + port );
-
         // Boss线程：由这个线程池提供的线程是boss种类的，用于创建、连接、绑定socket， （有点像门卫）然后把这些socket传给worker线程池。
         // 在服务器端每个监听的socket都有一个boss线程来处理。在客户端，只有一个boss线程来处理所有的socket。
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -101,6 +98,7 @@ public class NettyServer {
                     });
             // 开始真正绑定端口进行监听
             ChannelFuture future = b.bind("0.0.0.0", port).sync();
+            logger.info("================Nafos启动成功，端口号：{}========", port );
 
             future.channel().closeFuture().sync();
         } catch (Exception e) {

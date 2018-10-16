@@ -4,11 +4,15 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import nafos.core.Thread.ThreadLocalHelper;
+import nafos.core.entry.ClassAndMethod;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.entry.http.NafosRequest;
 import nafos.core.entry.http.NafosRespone;
 import nafos.core.entry.http.NafosThreadInfo;
+import nafos.core.helper.ClassAndMethodHelper;
 import nafos.core.helper.RequestHelper;
+import nafos.core.mode.InitMothods;
+import nafos.core.mode.RouteFactory;
 import nafos.core.util.*;
 import nafos.network.bootStrap.netty.handle.currency.Crc32MessageHandle;
 import nafos.network.bootStrap.netty.handle.currency.ZlibMessageHandle;
@@ -38,6 +42,19 @@ public class HttpRouteHandle {
 
         //线程设置request
         ThreadLocalHelper.setThreadInfo(new NafosThreadInfo(new NafosRequest(request)));
+
+        ClassAndMethod filter;
+        //  1.前置filter
+        if(request.uri().length()>16&&request.uri().substring(0,16).equals(RouteFactory.REMOTE_CALL_URI)){
+            filter = InitMothods.getRemoteCallFilter();
+        }else{
+            filter = InitMothods.getMessageFilter();
+        }
+        if(!ClassAndMethodHelper.httpCheckResultStatus(filter,ctx,request)) return;
+
+        // 1.安全验证filter
+        filter = InitMothods.getHttpSecurityFilter();
+        if(!ClassAndMethodHelper.httpCheckResultStatus(filter,ctx,request)) return;
 
         // 2.消息入口处理
         Object contentObj = null;

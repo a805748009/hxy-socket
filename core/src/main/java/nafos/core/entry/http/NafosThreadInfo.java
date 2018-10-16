@@ -13,6 +13,7 @@ public class NafosThreadInfo {
 
 	public NafosThreadInfo(NafosRequest nafosRequest) {
 		this.nafosRequest = nafosRequest;
+		this.nafosRespone = new NafosRespone();
 	}
 
 

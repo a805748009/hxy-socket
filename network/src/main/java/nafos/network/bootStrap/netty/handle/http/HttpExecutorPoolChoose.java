@@ -51,7 +51,7 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
 
         String cookieId = new NafosRequest(request).getNafosCookieId();
         cookieId = ObjectUtil.isNotNull(cookieId)?cookieId: CastUtil.castString(new Random().nextInt(10));
-        int queuecCode = cookieId.hashCode()%10;
+        int queuecCode = cookieId.hashCode()%200;
 
         if(!isRunOnWork){
             HttpRouteRunnable runnable = new HttpRouteRunnable(ctx, request,httpRouteClassAndMethod);

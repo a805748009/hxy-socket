@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
  * @Description TODO
  **/
 @Component
-public class TimeTask {
-    private static final Logger logger = LoggerFactory.getLogger(TimeTask.class);
+public class NafosSecurityTimeTask {
+    private static final Logger logger = LoggerFactory.getLogger(NafosSecurityTimeTask.class);
     @Autowired
     SecurityConfig securityConfig;
 

@@ -15,10 +15,22 @@ import nafos.core.util.SpringApplicationContextHolder;
  **/
 public class ClassAndMethodHelper {
 
-    public static boolean checkResultStatus(ClassAndMethod filter,ChannelHandlerContext ctx,Object... objects){
+    public static boolean httpCheckResultStatus(ClassAndMethod filter,ChannelHandlerContext ctx,FullHttpRequest object){
         if(ObjectUtil.isNotNull(filter)){
             ResultStatus resultStatus =  (ResultStatus) filter.getMethod().invoke(
-                    SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),ctx,objects);
+                    SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),ctx,object);
+            if(!resultStatus.isSuccess()){
+                NettyUtil.sendError(ctx, resultStatus.getResponseStatus());
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean socketCheckResultStatus(ClassAndMethod filter,ChannelHandlerContext ctx,byte[] bytes){
+        if(ObjectUtil.isNotNull(filter)){
+            ResultStatus resultStatus =  (ResultStatus) filter.getMethod().invoke(
+                    SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),ctx, bytes);
             if(!resultStatus.isSuccess()){
                 NettyUtil.sendError(ctx, resultStatus.getResponseStatus());
                 return false;

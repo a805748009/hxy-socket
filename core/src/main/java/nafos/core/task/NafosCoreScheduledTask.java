@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 * 类说明 
 */
 @Component
-public class ScheduledTask {
+public class NafosCoreScheduledTask {
 
 	@Value("${nafos.monnitor.showSystem:false}")
 	private boolean showSystem;
 	
-	private static Logger logger = LoggerFactory.getLogger(ScheduledTask.class);
+	private static Logger logger = LoggerFactory.getLogger(NafosCoreScheduledTask.class);
 
 
 

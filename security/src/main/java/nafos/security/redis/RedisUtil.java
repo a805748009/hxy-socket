@@ -1,8 +1,9 @@
 package nafos.security.redis;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import nafos.core.util.ObjectUtil;
 import nafos.core.util.ProtoUtil;
+import nafos.core.util.SpringApplicationContextHolder;
+import nafos.security.config.SecurityConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.*;
@@ -19,6 +20,33 @@ public class RedisUtil {
 	private static JedisPool jedisPool = null;
 	//集群jedis，这里主要做从机。 jedispool主机设置密码，给写权限，从机给只读权限，读写分离。
 	private static ShardedJedisPool shardedJedisPool = null;
+
+	static{
+		SecurityConfig securityConfig = SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class);
+		if(ObjectUtil.isNotNull(securityConfig.getIp())) {
+
+			// 创建jedis池配置实例  nettygo系统用，主要用来存储用户session
+			JedisPoolConfig config = new JedisPoolConfig();
+			// 设置池配置项值
+			config.setMaxTotal(securityConfig.getMaxActive());//最大连接数, 默认8个
+			config.setMaxIdle(securityConfig.getMaxIdle());  //最大空闲连接数
+			config.setMaxWaitMillis(securityConfig.getMaxWait());//获取连接时的最大等待毫秒数(如果设置为阻塞时BlockWhenExhausted),如果超时就抛异常, 小于零:阻塞不确定的时间,  默认-1
+			config.setTestOnBorrow(securityConfig.isTestOnBorrow());//在获取连接的时候检查有效性, 默认false
+			config.setTestOnReturn(securityConfig.isTestOnReturn());// 跟验证有关
+			//下面实例化连接池，若redis没有设置密码连接，就吧最后的密码注释掉即可
+			JedisPool jedisPool = new JedisPool(config, securityConfig.getIp(), securityConfig.getPort(), 10000, securityConfig.getPassword(), 0);
+			// slave链接
+			List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>();
+			JedisShardInfo info = new JedisShardInfo(securityConfig.getIp(), securityConfig.getPort1());
+			info.setPassword(securityConfig.getPassword());
+			shards.add(info);
+			ShardedJedisPool shardedJedisPool = new ShardedJedisPool(config, shards);
+			//初始化
+			setJedisPool(jedisPool, shardedJedisPool);
+		}
+	}
+
+
 	/**
 	 * 初始化Redis连接池
 	 */
@@ -314,7 +342,7 @@ public class RedisUtil {
 	/**
 	 * 获取相关的key 
 	 * 
-	 * @param key
+	 * @param keys
 	 * @return
 	 */
 	public static  Set<String> keys(String keys) {

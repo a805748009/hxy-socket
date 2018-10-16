@@ -99,20 +99,8 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
 	 * @param request
 	 */
 	private void httpFilter(ChannelHandlerContext ctx, FullHttpRequest request){
-		ClassAndMethod filter;
-		//  0.前置filter
-		if(request.uri().length()>16&&request.uri().substring(0,16).equals(RouteFactory.REMOTE_CALL_URI)){
-			filter = InitMothods.getRemoteCallFilter();
-		}else{
-			filter = InitMothods.getMessageFilter();
-		}
-		if(!ClassAndMethodHelper.checkResultStatus(filter,ctx,request)) return;
 
-		// 1.安全验证filter
-		filter = InitMothods.getHttpSecurityFilter();
-		if(!ClassAndMethodHelper.checkResultStatus(filter,ctx,request)) return;
-
-		// 2.选择线程池执行
+		// 1.选择线程池执行
 		httpExecutorPoolChoose.choosePool(ctx,request);
 
 

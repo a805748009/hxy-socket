@@ -49,7 +49,7 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
         boolean isRunOnWork = socketRouteClassAndMethod.isRunOnWorkGroup();
 
         String cookieId = ctx.channel().id().toString();
-        int queuecCode = cookieId.hashCode()%10;
+        int queuecCode = cookieId.hashCode()%200;
 
         if(!isRunOnWork){
             SocketRouteRunnable runnable = new SocketRouteRunnable(ctx, socketRouteClassAndMethod,messageBody,idByte);

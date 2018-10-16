@@ -1,6 +1,5 @@
 package nafos.core.util;
 
-import com.alibaba.fastjson.JSONObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -8,6 +7,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +25,7 @@ public class NettyUtil {
 		object.put("status", status.reasonPhrase());
 		// 设置到response对象
 		final FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status,
-				Unpooled.copiedBuffer(object.toJSONString(), CharsetUtil.UTF_8));
+				Unpooled.copiedBuffer(object.toString(), CharsetUtil.UTF_8));
 		response.headers().set(CONTENT_TYPE, "application/json");
 		response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
 		response.headers().set(SERVER, "NAFOS-SERVER");
@@ -60,7 +60,7 @@ public class NettyUtil {
 		object.put("status", status.toString());
 		// 设置到response对象
 		final FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status,
-				Unpooled.copiedBuffer(object.toJSONString(), CharsetUtil.UTF_8));
+				Unpooled.copiedBuffer(object.toString(), CharsetUtil.UTF_8));
 		//设置头部
 		response.headers().set("Access-Control-Allow-Origin", "*");
     	response.headers().set("Access-Control-Allow-Headers", "content-type,GoSessionId");
