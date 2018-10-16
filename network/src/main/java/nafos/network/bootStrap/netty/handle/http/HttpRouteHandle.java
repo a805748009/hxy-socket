@@ -128,7 +128,7 @@ public class HttpRouteHandle {
         try {
 
             if("JSON".equals(route.getType())){
-                send(context, FastJson.getBeanToJson(object),request,HttpResponseStatus.OK);
+                send(context, JsonUtil.toJson(object),request,HttpResponseStatus.OK);
             }else{
                 //error处理
                 if(object instanceof  HttpResponseStatus){

@@ -19,7 +19,7 @@ import java.util.*;
 /**
  * @author 作者 huangxinyu
  * @version 创建时间：2018年1月25日 下午9:41:34
- * 类说明
+ * 安全操作工具类
  */
 public class SecurityUtil {
     private static final Logger logger = LoggerFactory.getLogger(SecurityUtil.class);

@@ -1,6 +1,5 @@
 package nafos.security.scheduled;
 
-import nafos.core.monitor.SystemMonitor;
 import nafos.security.cache.CacheMapDao;
 import nafos.security.config.SecurityConfig;
 import nafos.security.manager.AutoCloseChannelManager;

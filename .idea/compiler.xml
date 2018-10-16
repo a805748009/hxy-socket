@@ -10,6 +10,7 @@
         <module name="game" />
         <module name="nafos" />
         <module name="network" />
+        <module name="remote" />
         <module name="security" />
       </profile>
     </annotationProcessing>
@@ -18,6 +19,7 @@
       <module name="game" target="1.8" />
       <module name="nafos" target="1.5" />
       <module name="network" target="1.8" />
+      <module name="remote" target="1.8" />
       <module name="security" target="1.8" />
     </bytecodeTargetLevel>
   </component>

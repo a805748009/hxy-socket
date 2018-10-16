@@ -10,8 +10,7 @@ import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.util.CharsetUtil;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.mode.RouteFactory;
-import nafos.core.util.FastJson;
-import nafos.core.util.GsonUtil;
+import nafos.core.util.JsonUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -41,9 +40,9 @@ public class RequestHelper {
 			ByteBuf jsonBuf = req.content();
 			String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
 			if(Map.class.isAssignableFrom(route.getParamType())){
-				obj = GsonUtil.gsonToMap(jsonStr);
+				obj = JsonUtil.jsonToMap(jsonStr);
 			}else{
-				obj = FastJson.getJsonToBean(jsonStr,route.getParamType());
+				obj = JsonUtil.json2Object(jsonStr,route.getParamType());
 			}
 			return obj;
 		}

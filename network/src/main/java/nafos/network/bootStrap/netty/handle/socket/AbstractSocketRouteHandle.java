@@ -2,10 +2,7 @@ package nafos.network.bootStrap.netty.handle.socket;
 
 import io.netty.channel.ChannelHandlerContext;
 import nafos.core.entry.SocketRouteClassAndMethod;
-import nafos.core.util.FastJson;
-import nafos.core.util.GsonUtil;
-import nafos.core.util.ProtoUtil;
-import nafos.core.util.SpringApplicationContextHolder;
+import nafos.core.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,9 +26,9 @@ public abstract class AbstractSocketRouteHandle {
             try {
                String jsonStr =  new String(body,"UTF-8");
                 if(Map.class.isAssignableFrom(route.getParamType())){
-                    obj = GsonUtil.gsonToMap(jsonStr);
+                    obj = JsonUtil.jsonToMap(jsonStr);
                 }else{
-                    obj = FastJson.getJsonToBean(jsonStr,route.getParamType());
+                    obj = JsonUtil.json2Object(jsonStr,route.getParamType());
                 }
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
