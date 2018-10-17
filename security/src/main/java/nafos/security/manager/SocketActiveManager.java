@@ -18,13 +18,13 @@ public class SocketActiveManager {
 
     @Connect
     public void connect(Channel channel){
-        AutoCloseChannelManager.connect(channel);
+        ChannelConnectManager.connect(channel);
         logger.debug("[nafos-Security]:   将channel-{} 连接至非安全线路",channel.toString());
     }
 
 
     @DisConnect
     public void Disconnect(Channel channel){
-        AutoCloseChannelManager.safe(channel);
+        ChannelConnectManager.safe(channel);
     }
 }

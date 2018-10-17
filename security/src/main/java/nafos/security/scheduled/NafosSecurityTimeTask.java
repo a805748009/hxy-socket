@@ -2,7 +2,7 @@ package nafos.security.scheduled;
 
 import nafos.security.cache.CacheMapDao;
 import nafos.security.config.SecurityConfig;
-import nafos.security.manager.AutoCloseChannelManager;
+import nafos.security.manager.ChannelConnectManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,6 @@ public class NafosSecurityTimeTask {
 
     @Scheduled(cron="0 0/1 * * * ?")
     public void closeUnSafeChannel() {
-        AutoCloseChannelManager.closeUnSafeChannel(securityConfig.getChannelUnSafeConnectTime());
+        ChannelConnectManager.closeUnSafeChannel(securityConfig.getChannelUnSafeConnectTime());
     }
 }

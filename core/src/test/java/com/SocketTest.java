@@ -45,11 +45,6 @@ public class SocketTest {
 //
 ////        socket.close();
 
-
-        for(int i = 0;i<10000;i++){
-            System.out.println(SnowflakeIdWorker.getStringId().hashCode()%200);
-        }
-
     }
 
 

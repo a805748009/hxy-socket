@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @Date 2018/10/15 下午3:49
  * @Description TODO
  **/
-@Component
 public class ChannelConnectInitialize {
 
     /**
@@ -22,7 +21,7 @@ public class ChannelConnectInitialize {
      * @param nameSpace
      * @param gameUserInfo
      */
-    public void initChannel(Channel channel, String token, String nameSpace, BaseUser gameUserInfo){
+    public static void initChannel(Channel channel, String token, String nameSpace, BaseUser gameUserInfo){
         channel.attr(AttributeKey.valueOf("client")).set(new Client(channel,gameUserInfo));
         channel.attr(AttributeKey.valueOf("nameSpace")).set(nameSpace);
         channel.attr(AttributeKey.valueOf("token")).set(token);

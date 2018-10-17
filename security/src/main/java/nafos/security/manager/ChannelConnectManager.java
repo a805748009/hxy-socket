@@ -14,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 登录之后或者通过安全验证确实是有效用户之后删除
  * 否则在一定时间内关闭连接
  **/
-public class AutoCloseChannelManager {
-    private static final Logger logger = LoggerFactory.getLogger(AutoCloseChannelManager.class);
+public class ChannelConnectManager {
+    private static final Logger logger = LoggerFactory.getLogger(ChannelConnectManager.class);
 
     private static ConcurrentHashMap<Channel,Long> NoSecurityChannelMap = new ConcurrentHashMap<>(1024);
 
