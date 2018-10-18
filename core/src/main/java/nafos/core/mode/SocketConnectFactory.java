@@ -68,15 +68,17 @@ public class SocketConnectFactory {
             }
         });
 
-
+        if(!methods1.isEmpty())
         connectClassAndMethod.add(registerHandlerMethod((Method) methods1.toArray()[0], userType));
 
+        if(!methods2.isEmpty())
         disConnectClassAndMethod.add(registerHandlerMethod((Method) methods2.toArray()[0], userType));
 
     }
 
 
     private ClassAndMethod registerHandlerMethod(Method method, Class<?> handlerType) {
+        logger.debug("加载socket连接事件：{}",handlerType.toString()+method.getName().toString());
         MethodAccess ma = MethodAccess.get(handlerType);
         return new ClassAndMethod(handlerType,ma,ma.getIndex(method.getName()));
     }

@@ -22,7 +22,7 @@ public class NafosCoreScheduledTask {
 
 
 
-	@Scheduled(cron="0 0/1 * * * ?")
+	@Scheduled(cron="0 0/2 * * * *")
 	public void systemMonitor() throws Exception {
 	 	if(showSystem){
 			logger.info("============开始打印系统信息日志============");

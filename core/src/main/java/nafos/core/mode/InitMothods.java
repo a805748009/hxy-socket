@@ -51,17 +51,16 @@ public class InitMothods  {
 		//3.获取远程前置filter
 		filterMap.put("remoteCallFilter",new RemoteCallFilterInit(context).getFilter());
 
-		//4.获取http安全校验filter
-		filterMap.put("httpSecurityFilter",new SecurityFilterInit(context).getHttpSecurityFilter());
+		//4.获取http和socket安全校验filter
+		SecurityFilterInit securityFilterInit = new SecurityFilterInit(context);
+		filterMap.put("httpSecurityFilter",securityFilterInit.getHttpSecurityFilter());
+		filterMap.put("socketSecurityFilter",securityFilterInit.getSocketSecurityFilter());
 
-		//5.获取socket安全校验filter
-		filterMap.put("socketSecurityFilter",new SecurityFilterInit(context).getSocketSecurityFilter());
 
-        //6.获取socket连接filter
-		filterListMap.put("connectClassAndMethods",new SocketConnectFactory(context).getConnectClassAndMethod());
-
-        //7.获取socket断开连接filter
-		filterListMap.put("disConnectClassAndMethods",new SocketConnectFactory(context).getDisConnectClassAndMethod());
+        //6.获取socket连接和断开filter
+		SocketConnectFactory socketConnectFactory = new SocketConnectFactory(context);
+		filterListMap.put("connectClassAndMethods",socketConnectFactory.getConnectClassAndMethod());
+		filterListMap.put("disConnectClassAndMethods",socketConnectFactory.getDisConnectClassAndMethod());
 
 //
 //		//3.获取MQ消息处理handle
