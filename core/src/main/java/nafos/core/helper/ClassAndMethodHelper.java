@@ -27,10 +27,10 @@ public class ClassAndMethodHelper {
         return true;
     }
 
-    public static boolean socketCheckResultStatus(ClassAndMethod filter,ChannelHandlerContext ctx,byte[] bytes){
+    public static boolean socketCheckResultStatus(ClassAndMethod filter,ChannelHandlerContext ctx,int code){
         if(ObjectUtil.isNotNull(filter)){
             ResultStatus resultStatus =  (ResultStatus) filter.getMethod().invoke(
-                    SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),ctx, bytes);
+                    SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),ctx, code);
             if(!resultStatus.isSuccess()){
                 NettyUtil.sendError(ctx, resultStatus.getResponseStatus());
                 return false;

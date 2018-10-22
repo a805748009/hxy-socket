@@ -197,6 +197,7 @@ public class SecurityUtil {
      * @param sessionId
      */
     public static void updateSessionTime(String sessionId) {
+        if(ObjectUtil.isNull(sessionId))return;
         if (CacheMapDao.isFourFifthsExpiryTime(sessionId)) {
             if(isUseRedis)
                 RedisSessionDao.update(sessionId);

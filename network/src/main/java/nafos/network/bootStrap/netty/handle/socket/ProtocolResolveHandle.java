@@ -47,9 +47,6 @@ public class ProtocolResolveHandle extends SimpleChannelInboundHandler<byte[]> {
 
         if(ObjectUtil.isNull(contentBytes))return; //如果null，证明校验失败，直接返回不处理
 
-        // 安全验证filter
-        ClassAndMethod filter = InitMothods.getSocketSecurityFilter();
-        if(!ClassAndMethodHelper.socketCheckResultStatus(filter,context,contentBytes)) return;
 
         //选择线程池
         socketExecutorPoolChoose.choosePool(context,contentBytes);

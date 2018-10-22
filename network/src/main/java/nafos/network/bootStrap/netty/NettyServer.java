@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -66,9 +67,15 @@ public class NettyServer {
      * 开始启动
      */
     public void serverRun(){
-        if(httpServerPort>0){
-            startup(httpServerPort, ConnectEnum.HTTP.getType());
-        }
+        new Thread() {
+            public void run() {
+                if(httpServerPort>0){
+                    startup(httpServerPort, ConnectEnum.HTTP.getType());
+                }
+            }
+        }.start();
+
+
 
         if(socketServerPort>0){
             startup(socketServerPort,ConnectEnum.SOCKET.getType());

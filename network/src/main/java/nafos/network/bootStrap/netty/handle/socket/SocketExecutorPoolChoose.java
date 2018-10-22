@@ -3,7 +3,9 @@ package nafos.network.bootStrap.netty.handle.socket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
 import nafos.core.entry.AsyncTaskMode;
+import nafos.core.entry.ClassAndMethod;
 import nafos.core.entry.SocketRouteClassAndMethod;
+import nafos.core.helper.ClassAndMethodHelper;
 import nafos.core.mode.InitMothods;
 import nafos.core.util.ArrayUtil;
 import nafos.core.util.ObjectUtil;
@@ -39,6 +41,10 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
         if(contentBytes.length>8){
             System.arraycopy(contentBytes, 8, messageBody, 0, contentBytes.length-8);
         }
+
+        // 安全验证filter
+        ClassAndMethod filter = InitMothods.getSocketSecurityFilter();
+        if(!ClassAndMethodHelper.socketCheckResultStatus(filter,ctx,code)) return;
 
         SocketRouteClassAndMethod socketRouteClassAndMethod = InitMothods.getSocketHandler(code);
         if(ObjectUtil.isNull(socketRouteClassAndMethod)){
