@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * @Author 黄新宇
  * @Date 2018/10/23 上午11:10
- * @Description TODO
+ * @Description 这里是boot启动的时候查找selvet容器的类，我们重写EmbeddedNullContainer，使得boot调用空start。
  **/
 @Component
 public class RemoveTomcatFactory extends AbstractEmbeddedServletContainerFactory implements ResourceLoaderAware {

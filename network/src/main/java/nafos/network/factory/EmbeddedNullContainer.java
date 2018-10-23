@@ -6,7 +6,7 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerExcepti
 /**
  * @Author 黄新宇
  * @Date 2018/10/23 上午10:34
- * @Description TODO
+ * @Description start空方法，让boot启动的时候不去启动tomcat等容器，我们自己使用netty
  **/
 public class EmbeddedNullContainer implements EmbeddedServletContainer {
 
