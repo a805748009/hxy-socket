@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/xuxueli/xxl-job/master/doc/images/xxl-logo.jpg" width="150">
+    <img src="http://thyrsi.com/t6/394/1540300684x-1404795810.png" width="150">
     <h3 align="center">NAFOS</h3>
     <p align="center">
         一个基于netty的轻量级高性能服务端框架。
