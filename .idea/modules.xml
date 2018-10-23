@@ -3,10 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/eurekaServer.iml" filepath="$PROJECT_DIR$/sample/eurekaServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/game/game.iml" filepath="$PROJECT_DIR$/game/game.iml" />
       <module fileurl="file://$PROJECT_DIR$/nafos.iml" filepath="$PROJECT_DIR$/nafos.iml" />
       <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />
       <module fileurl="file://$PROJECT_DIR$/remote/remote.iml" filepath="$PROJECT_DIR$/remote/remote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample-eurekaServer/sample-eurekaServer.iml" filepath="$PROJECT_DIR$/sample/sample-eurekaServer/sample-eurekaServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample-xxlJob/sample-xxlJob.iml" filepath="$PROJECT_DIR$/sample/sample-xxlJob/sample-xxlJob.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample-zookeeper/sample-zookeeper.iml" filepath="$PROJECT_DIR$/sample/sample-zookeeper/sample-zookeeper.iml" />
       <module fileurl="file://$PROJECT_DIR$/security/security.iml" filepath="$PROJECT_DIR$/security/security.iml" />
     </modules>
   </component>
