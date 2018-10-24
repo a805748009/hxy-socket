@@ -15,7 +15,7 @@ nafos是一个基于netty的高性能服务器框架，其目的在于易上手�
 
 
 ## 文档
-- [文档](https://gitee.com/huangxinyu/BC-NETTYGO/wikis)
+- [文档](https://www.showdoc.cc/nafos?page_id=1033780133131417)
 
 
 
