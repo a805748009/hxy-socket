@@ -1,5 +1,4 @@
-
-package com.hxy.nettygo.result.base.tools;
+package nafos.core.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
