@@ -57,15 +57,17 @@ public class HttpRouteHandle {
         if(!ClassAndMethodHelper.httpCheckResultStatus(filter,ctx,request)) return;
 
         // 2.消息入口处理
-        Object contentObj = null;
+        Object[] contentObj = null;
         try {
             contentObj = getMessageObjOnContent(httpRouteClassAndMethod,request);
 //            if(ObjectUtil.isNull(contentObj)){
 //                NettyUtil.sendError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
 //                return;
 //            }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            NettyUtil.sendError(ctx, HttpResponseStatus.NO_CONTENT);
             e.printStackTrace();
+            return;
         }
 
         // 3.寻找路由成功,返回结果
@@ -73,7 +75,7 @@ public class HttpRouteHandle {
         if(httpRouteClassAndMethod.isPrintLog()){
                 startTime=System.currentTimeMillis();
             }
-        contentObj = routeMethod(httpRouteClassAndMethod,contentObj,ctx,request);
+        Object returnObj = routeMethod(httpRouteClassAndMethod,contentObj,ctx,request);
         if(httpRouteClassAndMethod.isPrintLog()){
                 long endTime=System.currentTimeMillis();
                 logger.info("方法："+httpRouteClassAndMethod.getClazz().getName()+"."+httpRouteClassAndMethod.getMethod().getMethodNames()[httpRouteClassAndMethod.getIndex()]+
@@ -82,7 +84,7 @@ public class HttpRouteHandle {
 
 
         // 4.发送处理
-        sendMethod(httpRouteClassAndMethod,contentObj,ctx,request);
+        sendMethod(httpRouteClassAndMethod,returnObj,ctx,request);
     }
 
 
@@ -94,20 +96,20 @@ public class HttpRouteHandle {
      * @param
      * @return java.lang.Object
      */
-    private Object getMessageObjOnContent(HttpRouteClassAndMethod route, FullHttpRequest request) throws IOException {
+    private Object[] getMessageObjOnContent(HttpRouteClassAndMethod route, FullHttpRequest request) throws Exception {
         if("JSON".equals(route.getType())){
-            return RequestHelper.getRequestParamsForJson(request,route); //json传输方式 不支持任何处理，基本难用到
+            return RequestHelper.getRequestParams(request,route,null); //json传输方式 不支持任何处理，基本难用到
         }else{
-            if(ObjectUtil.isNull(route.getParamType()))//不需要任何参数
-                return false;
+            if(route.getParameters().length==0)//不需要任何参数
+                return null;
             byte[] content = RequestHelper.getRequestParamsObj(request);
             if(ObjectUtil.isNull(content))
-                return null;
+                throw new Exception("客户端发过来的数据为空");
             content = zlibMessageHandle.unZlibByteMessage(content);//解压
             content = crc32MessageHandle.checkCrc32IntBefore(content);//CRC32校验
             if(ObjectUtil.isNull(content))
-                return null;
-            return ProtoUtil.deserializeFromByte(content,route.getParamType());
+                throw new Exception("客户端发过来的数据处理后为空");
+            return RequestHelper.getRequestParams(request,route,content);
         }
     }
 
@@ -118,16 +120,14 @@ public class HttpRouteHandle {
      * @param
      * @return java.lang.Object
      */
-    private Object routeMethod (HttpRouteClassAndMethod route,Object object,ChannelHandlerContext ctx, FullHttpRequest request){
+    private Object routeMethod (HttpRouteClassAndMethod route,Object[] object,ChannelHandlerContext ctx, FullHttpRequest request){
         try {
-            if(object instanceof  Boolean){
-                if(!(boolean)object){
-                    return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
+            if(ObjectUtil.isNull(object)){
+                return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
                             new Object[]{});
-                }
             }
             return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
-                    route.isRequest()?new Object[]{object,request,ctx}:new Object[]{object});
+                    object);
         }catch (Exception e){
             e.printStackTrace();
             return HttpResponseStatus.INTERNAL_SERVER_ERROR;

@@ -14,8 +14,12 @@ import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -145,6 +149,7 @@ public class RouteFactory {
         //检查方法所属的类有没有@Nuri注解
         Handle classNuri = AnnotationUtils.findAnnotation(handlerType,Handle.class);
         RemoteCall RemoteCall = AnnotationUtils.findAnnotation(method,RemoteCall.class);
+        RemoteCall handRemoteCall = AnnotationUtils.findAnnotation(handlerType,RemoteCall.class);
 
         String methodType = handle.method()+":";
         if (classNuri != null) {
@@ -158,6 +163,11 @@ public class RouteFactory {
             uri = REMOTE_CALL_URI + uri;
             isRemote = true;
         }
+
+        if (handRemoteCall != null) {
+            uri = REMOTE_CALL_URI + uri;
+            isRemote = true;
+        }
         uri = methodType+uri;
 
         //如果是远程调用就直接加入免登录访问
@@ -165,8 +175,8 @@ public class RouteFactory {
 //            ConfigForSecurityMode.EXCEPTIONVALIDATE.add(uri);
 //        }
         HTTPMETHODHANDLEMAP.put(uri,new HttpRouteClassAndMethod(handlerType, ma,
-                ma.getIndex(method.getName()),method.getParameterTypes().length>0?method.getParameterTypes()[0]:null,
-                handle.printLog(),handle.type(),handle.runOnWorkGroup(),method.getParameterTypes().length==1?false:true));
+                ma.getIndex(method.getName()),null,
+                handle.printLog(),handle.type(),handle.runOnWorkGroup(),method.getParameters()));
 
     }
 }

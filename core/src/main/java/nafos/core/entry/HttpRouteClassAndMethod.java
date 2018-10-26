@@ -2,6 +2,8 @@ package nafos.core.entry;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
 
+import java.lang.reflect.Parameter;
+
 /** 
 * @author 作者 huangxinyu 
 * @version 创建时间：2018年1月9日 下午5:17:02 
@@ -9,18 +11,18 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 */
 public class HttpRouteClassAndMethod extends  RouteClassAndMethod {
 
-	protected boolean isRequest;//是否需要request
+	protected Parameter[] parameters;//是否需要request
 
-	public HttpRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, String type, boolean runOnWorkGroup, boolean isRequest) {
+	public HttpRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, String type, boolean runOnWorkGroup, Parameter[] parameters) {
 		super(clazz, method, index, paramType, printLog, type, runOnWorkGroup);
-		this.isRequest = isRequest;
+		this.parameters = parameters;
 	}
 
-	public boolean isRequest() {
-		return isRequest;
+	public Parameter[] getParameters() {
+		return parameters;
 	}
 
-	public void setRequest(boolean request) {
-		isRequest = request;
+	public void setParameters(Parameter[] parameters) {
+		this.parameters = parameters;
 	}
 }

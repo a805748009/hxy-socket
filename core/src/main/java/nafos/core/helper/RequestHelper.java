@@ -8,13 +8,23 @@ import io.netty.handler.codec.http.multipart.Attribute;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.util.CharsetUtil;
+import nafos.core.annotation.controller.Request;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.mode.RouteFactory;
+import nafos.core.util.CastUtil;
 import nafos.core.util.JsonUtil;
+import nafos.core.util.ObjectUtil;
+import nafos.core.util.ProtoUtil;
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestParam;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,61 +35,180 @@ import java.util.Map;
  **/
 public class RequestHelper {
 
+	private static final Logger logger = LoggerFactory.getLogger(RequestHelper.class);
 
+
+
+
+	public static Object[] getRequestParams(FullHttpRequest req, HttpRouteClassAndMethod route,byte[] content) {
+		Map<String, String>requestParams = decodeUriToMap(req);
+
+		LinkedList linkedList = new LinkedList();
+		for (Parameter parameter : route.getParameters()) {
+			Object fieldObj = null;
+			RequestParam requestParam = parameter.getDeclaredAnnotation(RequestParam.class);
+			if(ObjectUtil.isNotNull(requestParam)){
+				Object object = requestParams.get(requestParam.value());
+				if(ObjectUtil.isNull(object)&&requestParam.required()){
+					logger.error("======{},参数{}不能为空 ",route.getMethod().toString(),requestParam.value());
+					return null;
+				}
+				fieldObj = requestParams.get(requestParam.value());
+				fieldObj = castClass(fieldObj,parameter.getType());
+				linkedList.add(fieldObj);
+				continue;
+			}
+
+			Request request = parameter.getDeclaredAnnotation(Request.class);
+			if(ObjectUtil.isNotNull(request)){
+				linkedList.add(req);
+				continue;
+			}
+
+			if(ObjectUtil.isNull(content)){
+				getRequestParamsForJson(req,requestParams,parameter,linkedList,fieldObj);
+				continue;
+			}else{
+				getRequestParamsForByte(parameter ,linkedList,content);
+				continue;
+			}
+
+		}
+
+		return linkedList.toArray();
+	}
 
 	/**
 	 * 获取参数 ->  JSON方式
-	 * @param req
 	 * @return
 	 * @throws IOException
 	 */
-	public static Object getRequestParamsForJson(FullHttpRequest req, HttpRouteClassAndMethod route) throws IOException {
-		Object obj = null;
-		if (req.uri().length()>16&&req.uri().substring(0,16).equals(RouteFactory.REMOTE_CALL_URI)) {
-			//远程调用的restful-json处理
-			ByteBuf jsonBuf = req.content();
-			String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
-			if(Map.class.isAssignableFrom(route.getParamType())){
-				obj = JsonUtil.jsonToMap(jsonStr);
-			}else{
-				obj = JsonUtil.json2Object(jsonStr,route.getParamType());
+	public static void getRequestParamsForJson(FullHttpRequest req,Map<String, String>requestParams, Parameter parameter ,LinkedList linkedList,Object fieldObj) {
+			//GET请求
+			if (req.method() == HttpMethod.GET) {
+				if(Map.class.isAssignableFrom(parameter.getType())){
+					linkedList.add(requestParams);
+				}else{
+					try {
+						BeanUtils.populate(fieldObj, requestParams);
+						linkedList.add(fieldObj);
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+				}
+				return;
 			}
-			return obj;
+
+			// 处理POST请求
+			if (req.method() == HttpMethod.POST) {
+				//restful
+				if (req.uri().length()>16&&req.uri().substring(0,16).equals(RouteFactory.REMOTE_CALL_URI)) {
+					//远程调用的restful-json处理
+					linkedList.add(restfulJsonEncode(req,parameter.getType()));
+					return;
+				}
+				//xmlhttp
+				linkedList.add(xmlJsonEncode(req,parameter.getType()));
+				return;
+			}
+    }
+
+
+	public static void getRequestParamsForByte(Parameter parameter ,LinkedList linkedList,byte[] content){
+		linkedList.add(ProtoUtil.deserializeFromByte(content,parameter.getType()));
+	}
+
+	/**
+	 * uri的参数转map
+	 * @param req
+	 * @return
+	 */
+	private static Map<String,String> decodeUriToMap(FullHttpRequest req){
+		Map<String, String> requestParams = new HashMap<>();
+		QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
+		for(Map.Entry<String, List<String>> entry:decoder.parameters().entrySet()){
+			requestParams.put(entry.getKey(), entry.getValue().get(0));
 		}
+		return requestParams;
+	}
 
-        Map<String, String>requestParams=new HashMap<>();
-        // 处理get请求
-        if (req.method() == HttpMethod.GET) {
-            QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
-            for(Map.Entry<String, List<String>> entry:decoder.parameters().entrySet()){
-				requestParams.put(entry.getKey(), entry.getValue().get(0));
-			}
-        }
+	/**
+	 * restful风格的postJSON解析
+	 * @param req
+	 * @param clazz
+	 * @return
+	 */
+	private static Object restfulJsonEncode(FullHttpRequest req,Class<?> clazz){
+		ByteBuf jsonBuf = req.content();
+		String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
+		if(Map.class.isAssignableFrom(clazz)){
+			return JsonUtil.jsonToMap(jsonStr);
+		}else{
+			return JsonUtil.json2Object(jsonStr,clazz);
+		}
+	}
 
-         // 处理POST请求
-        if (req.method() == HttpMethod.POST) {
-        	// 是POST请求
-            HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
-            decoder.offer(req);
-            List<InterfaceHttpData> parmList = decoder.getBodyHttpDatas();
-            for (InterfaceHttpData parm : parmList) {
-                Attribute data = (Attribute) parm;
-                requestParams.put(data.getName(), data.getValue());
-            }
-        }
-		if(!Map.class.isAssignableFrom(route.getParamType())){
+	/**
+	 * xml风格的postJSON解析
+	 * @param req
+	 * @param clazz
+	 * @return
+	 */
+	private static Object xmlJsonEncode(FullHttpRequest req,Class<?> clazz){
+		Object fieldObj = null;
+		Map<String, String> postMap =new HashMap<>();
+		HttpPostRequestDecoder httpPostRequestDecoder = new HttpPostRequestDecoder(req);
+		httpPostRequestDecoder.offer(req);
+		List<InterfaceHttpData> parmList = httpPostRequestDecoder.getBodyHttpDatas();
+		for (InterfaceHttpData parm : parmList) {
+			Attribute data = (Attribute) parm;
 			try {
-				BeanUtils.populate(obj, requestParams);
+				postMap.put(data.getName(), data.getValue());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(!Map.class.isAssignableFrom(clazz)){
+			try {
+				BeanUtils.populate(fieldObj, postMap);
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}else{
-			obj = requestParams;
+			fieldObj = postMap;
 		}
-        return obj;
-    }
+		return fieldObj;
+	}
+
+	/**
+	 * 把Object 变成对应的calssObj
+	 * @param object
+	 * @param clazz
+	 * @return
+	 */
+    private static Object castClass(Object object,Class<?> clazz){
+
+		if(clazz.equals(String.class))
+			object = CastUtil.castString(object);
+
+		if(clazz.equals(int.class)||clazz.equals(Integer.class))
+			object = CastUtil.castInt(object);
+
+		if(clazz.equals(boolean.class))
+			object = CastUtil.castBoolean(object);
+
+		if(clazz.equals(double.class))
+			object = CastUtil.castDouble(object);
+
+		if(clazz.equals(long.class))
+			object = CastUtil.castLong(object);
+
+		return object;
+	}
 
 
 
@@ -91,13 +220,17 @@ public class RequestHelper {
     * @param
     * @return byte[]
     */
-	public static byte[] getRequestParamsObj(FullHttpRequest req) throws IOException{
+	public static byte[] getRequestParamsObj(FullHttpRequest req) {
 		byte[] payloadBytes = null;
 		// 处理get请求
 		if (req.method() == HttpMethod.GET) {
 			QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
 			String params = (String)decoder.parameters().get("params").get(0);
-			payloadBytes = params.getBytes("ISO8859-1");
+			try {
+				payloadBytes = params.getBytes("ISO8859-1");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 		}
 		// 处理POST请求
 		if (req.method() == HttpMethod.POST) {
@@ -110,20 +243,6 @@ public class RequestHelper {
 	}
 
 
-	//如果前端采用BASE64
-//			if("BASE64".equals(ConfigForNettyMode.ENCODEDTYPE)){
-//		HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(req);
-//		decoder.offer(req);
-//		List<InterfaceHttpData> parmList = decoder.getBodyHttpDatas();
-//		if(parmList.isEmpty())return null;
-//		Attribute data = (Attribute) parmList.get(0);
-//		String str = data.getValue();
-//		if(ObjectUtil.isNull(str))
-//			return null;
-//		str = str.replaceAll("-", "+");
-//		str = str.replaceAll("_", "/");
-//		payloadBytes = Base64.decodeFast(str);
-//	}
 
 
 }
