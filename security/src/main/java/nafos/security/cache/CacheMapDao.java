@@ -67,7 +67,7 @@ public class CacheMapDao {
      */
     public static void saveCache(String sessionId,Object obj) {
         if (obj == null) {
-            logger.error("要存入的session为空");  
+            logger.error("要存入的session-velue为空");
             return;
         }
         exMap.put(RedisKey.CACHEKEY+sessionId,obj);

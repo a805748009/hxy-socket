@@ -96,7 +96,7 @@ public class RedisSessionDao {
      */
     public static void saveSession(String sessionId,Object obj) {
         if (obj == null) {
-            logger.error("要存入的session为空");  
+            logger.error("要存入的session-value为空");
             return;
         }
         //设置过期时间

@@ -143,15 +143,16 @@ public class HttpRouteHandle {
      */
     private void sendMethod (HttpRouteClassAndMethod route,Object object,ChannelHandlerContext context, FullHttpRequest request){
         try {
+            //error处理
+            if(object instanceof  HttpResponseStatus){
+                NettyUtil.sendError(context, (HttpResponseStatus) object);
+                return;
+            }
 
             if("JSON".equals(route.getType())){
                 send(context, JsonUtil.toJson(object),request,HttpResponseStatus.OK);
             }else{
-                //error处理
-                if(object instanceof  HttpResponseStatus){
-                    NettyUtil.sendError(context, (HttpResponseStatus) object);
-                    return;
-                }
+
                 //如果回传为null，则直接返回
                 if(object==null){
                     send(context,null,request,HttpResponseStatus.OK);
@@ -200,11 +201,11 @@ public class HttpRouteHandle {
             response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/octet-stream");
         }else if(context instanceof String){
             response.content().writeBytes(((String) context).getBytes());
-            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/json; charset=UTF-8");
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
         }else {
             //为null的时候
             response.content().writeBytes("".getBytes());
-            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/json; charset=UTF-8");
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
         }
         ThreadLocalHelper.threadLocalRemove();
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
