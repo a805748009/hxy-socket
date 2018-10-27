@@ -4,6 +4,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import nafos.core.Thread.ThreadLocalHelper;
+import nafos.core.entry.BusinessException;
 import nafos.core.entry.ClassAndMethod;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.entry.http.NafosRequest;
@@ -128,6 +129,8 @@ public class HttpRouteHandle {
             }
             return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
                     object);
+        }catch (BusinessException e){
+            return new HttpResponseStatus(e.getCode(),e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
             return HttpResponseStatus.INTERNAL_SERVER_ERROR;
