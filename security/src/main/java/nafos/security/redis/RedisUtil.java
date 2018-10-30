@@ -674,15 +674,15 @@ public class RedisUtil {
 	/**
 	 * incr(key)：名称为key的string增1操作
 	 */
-	public static boolean incr(String key){
+	public static long  incr(String key){
 		Jedis jedis = null;
 		try {
 			jedis = getJedis();
-			jedis.incr(key);
-			return true;
+			return jedis.incr(key);
 		} catch (Exception e) {
 			logger.error(e.toString());
-			return false;
+			e.printStackTrace();
+			return 0;
 		} finally {
 			returnResource(jedis);
 		}
@@ -691,15 +691,14 @@ public class RedisUtil {
 	/**
 	 * incrby(key, integer)：名称为key的string增加integer
 	 */
-	public static boolean incrBy(String key, int value){
+	public static long incrBy(String key, int value){
 		Jedis jedis = null;
 		try {
 			jedis = getJedis();
-			jedis.incrBy(key, value);
-			return true;
+			return jedis.incrBy(key, value);
 		} catch (Exception e) {
 			logger.error(e.toString());
-			return false;
+			return 0;
 		} finally {
 			returnResource(jedis);
 		}
@@ -1112,6 +1111,8 @@ public class RedisUtil {
 		}
 	}
 
+
+
 	/**
 	 * smembers(key) ：返回名称为key的set的所有元素
 	 * 
@@ -1133,4 +1134,18 @@ public class RedisUtil {
 	}
 	
 	//***********************Redis Set集合操作****************************end
+
+
+	public static long hincrBy(String key,String field, int value){
+		Jedis jedis = null;
+		try {
+			jedis = getJedis();
+			return jedis.hincrBy(key,field,value);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			return 0;
+		} finally {
+			returnResource(jedis);
+		}
+	}
 }

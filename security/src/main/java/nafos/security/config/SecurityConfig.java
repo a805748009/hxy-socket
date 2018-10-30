@@ -55,6 +55,19 @@ public class SecurityConfig {
     private String password;
 
 
+    @Value("${nafos.security.iplimitTimeout:2}")
+    private int iplimitTimeout;
+
+    @Value("${nafos.security.iplimitCount:0}")
+    private int iplimitCount;
+
+    @Value("${nafos.security.alllimitTimeout:2}")
+    private int alllimitTimeout;
+
+    @Value("${nafos.security.alllimitCount:0}")
+    private int alllimitCount;
+
+
     public boolean getIsUseRedis(){
         return isUseRedis;
     }
@@ -115,5 +128,37 @@ public class SecurityConfig {
 
     public String getPassword() {
         return password;
+    }
+
+    public int getIplimitTimeout() {
+        return iplimitTimeout;
+    }
+
+    public void setIplimitTimeout(int iplimitTimeout) {
+        this.iplimitTimeout = iplimitTimeout;
+    }
+
+    public int getIplimitCount() {
+        return iplimitCount;
+    }
+
+    public void setIplimitCount(int iplimitCount) {
+        this.iplimitCount = iplimitCount;
+    }
+
+    public int getAlllimitTimeout() {
+        return alllimitTimeout;
+    }
+
+    public void setAlllimitTimeout(int alllimitTimeout) {
+        this.alllimitTimeout = alllimitTimeout;
+    }
+
+    public int getAlllimitCount() {
+        return alllimitCount;
+    }
+
+    public void setAlllimitCount(int alllimitCount) {
+        this.alllimitCount = alllimitCount;
     }
 }

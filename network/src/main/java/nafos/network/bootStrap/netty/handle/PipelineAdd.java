@@ -8,6 +8,7 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketFrameAggregator;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import nafos.network.bootStrap.netty.handle.currency.HttpLimitingHandle;
 import nafos.network.bootStrap.netty.handle.http.HttpServerHandler;
 import nafos.network.bootStrap.netty.handle.websocket.BytebufToBinaryFrameHandle;
 import nafos.network.bootStrap.netty.handle.websocket.WsHandShakeHandle;
@@ -30,6 +31,8 @@ public class PipelineAdd {
     WsPacketHandle wsPacketHandle;
     @Autowired
     BytebufToBinaryFrameHandle bytebufToBinaryFrameHandle;
+    @Autowired
+    HttpLimitingHandle httpLimitingHandle;
 
 
 
@@ -68,6 +71,8 @@ public class PipelineAdd {
      * @param pipeline
      */
     public  void httpAdd(ChannelPipeline pipeline){
+
+        pipeline.addLast("http-limiting", httpLimitingHandle);
 
         pipeline.addLast("http-decoder", new HttpRequestDecoder());
 
