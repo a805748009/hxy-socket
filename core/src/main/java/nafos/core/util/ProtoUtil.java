@@ -7,6 +7,7 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -77,6 +78,17 @@ public class ProtoUtil {
     }
 
     public static <T> T deserializeFromByte(byte[] data, Class<T> cls) {
+        try {
+            T message = (T) objenesis.newInstance(cls);
+            Schema<T> schema = getSchema(cls);
+            ProtobufIOUtil.mergeFrom(data, message, schema);
+            return message;
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+    }
+
+    public static <T> T deserializeFromByte(InputStream data, Class<T> cls) {
         try {
             T message = (T) objenesis.newInstance(cls);
             Schema<T> schema = getSchema(cls);

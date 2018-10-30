@@ -201,7 +201,7 @@ public class HttpRouteHandle {
         //
         if(context instanceof byte[]){
             response.content().writeBytes((byte[])context);
-            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/octet-stream");
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/x-protobuf");
         }else if(context instanceof String){
             response.content().writeBytes(((String) context).getBytes());
             response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
