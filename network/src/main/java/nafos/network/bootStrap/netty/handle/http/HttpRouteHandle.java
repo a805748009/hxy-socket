@@ -103,6 +103,11 @@ public class HttpRouteHandle {
         }else{
             if(route.getParameters().length==0)//不需要任何参数
                 return null;
+
+            if (request.method() == HttpMethod.GET) {
+                return RequestHelper.getRequestParams(request,route);
+            }
+
             byte[] content = RequestHelper.getRequestParamsObj(request);
             if(ObjectUtil.isNull(content))
                 throw new Exception("客户端发过来的数据为空");

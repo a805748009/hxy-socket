@@ -41,6 +41,14 @@ public class RequestHelper {
 
 
 	public static Object[] getRequestParams(FullHttpRequest req, HttpRouteClassAndMethod route,byte[] content) {
+		return getRequestParams(req,route,content,false);
+	}
+
+	public static Object[] getRequestParams(FullHttpRequest req, HttpRouteClassAndMethod route) {
+		return getRequestParams(req,route,null,true);
+	}
+
+	public static Object[] getRequestParams(FullHttpRequest req, HttpRouteClassAndMethod route,byte[] content,boolean isProtoGet) {
 		Map<String, String>requestParams = decodeUriToMap(req);
 
 		LinkedList linkedList = new LinkedList();
@@ -65,12 +73,14 @@ public class RequestHelper {
 				continue;
 			}
 
-			if(ObjectUtil.isNull(content)){
-				getRequestParamsForJson(req,requestParams,parameter,linkedList,fieldObj);
-				continue;
-			}else{
-				getRequestParamsForByte(parameter ,linkedList,content);
-				continue;
+			if(!isProtoGet){
+				if(ObjectUtil.isNull(content)){
+					getRequestParamsForJson(req,requestParams,parameter,linkedList,fieldObj);
+					continue;
+				}else{
+					getRequestParamsForByte(parameter ,linkedList,content);
+					continue;
+				}
 			}
 
 		}
