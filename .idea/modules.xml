@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo/demo-entry/demo-entry.iml" filepath="$PROJECT_DIR$/demo/demo-entry/demo-entry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo/demo-network/demo-network.iml" filepath="$PROJECT_DIR$/demo/demo-network/demo-network.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo/demo-service/demo-service.iml" filepath="$PROJECT_DIR$/demo/demo-service/demo-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/eurekaServer.iml" filepath="$PROJECT_DIR$/sample/eurekaServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/game/game.iml" filepath="$PROJECT_DIR$/game/game.iml" />
       <module fileurl="file://$PROJECT_DIR$/nafos.iml" filepath="$PROJECT_DIR$/nafos.iml" />
