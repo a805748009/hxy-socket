@@ -2,6 +2,7 @@ package nafos.network.bootStrap.netty.handle.socket;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
+import nafos.core.Thread.Processors;
 import nafos.core.entry.AsyncTaskMode;
 import nafos.core.entry.ClassAndMethod;
 import nafos.core.entry.SocketRouteClassAndMethod;
@@ -55,7 +56,7 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
         boolean isRunOnWork = socketRouteClassAndMethod.isRunOnWorkGroup();
 
         String cookieId = ctx.channel().id().toString();
-        int queuecCode = cookieId.hashCode()%200;
+        int queuecCode = cookieId.hashCode()% Processors.getProcess();
 
         if(!isRunOnWork){
             SocketRouteRunnable runnable = new SocketRouteRunnable(ctx, socketRouteClassAndMethod,messageBody,idByte);

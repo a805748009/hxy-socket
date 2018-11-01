@@ -1,5 +1,7 @@
 package com;
 
+import nafos.core.Thread.Processors;
+import nafos.core.util.SnowflakeIdWorker;
 import nafos.network.bootStrap.NafosServer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,7 +33,9 @@ public class BootRun {
 
 
     public static void main(String[] args) {
-        System.out.println(new Date().getTime());
+        System.out.println(Processors.getProcess());
+
+
     }
 
 }

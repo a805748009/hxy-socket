@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.util.ReferenceCountUtil;
+import nafos.core.Thread.Processors;
 import nafos.core.entry.AsyncTaskMode;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.entry.http.NafosRequest;
@@ -51,7 +52,7 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
 
         String cookieId = new NafosRequest(request).getNafosCookieId();
         cookieId = ObjectUtil.isNotNull(cookieId)?cookieId: CastUtil.castString(new Random().nextInt(10));
-        int queuecCode = cookieId.hashCode()%200;
+        int queuecCode = cookieId.hashCode()% Processors.getProcess();
 
         if(!isRunOnWork){
             HttpRouteRunnable runnable = new HttpRouteRunnable(ctx, request,httpRouteClassAndMethod);
