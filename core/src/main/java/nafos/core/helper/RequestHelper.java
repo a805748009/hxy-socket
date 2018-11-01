@@ -50,7 +50,6 @@ public class RequestHelper {
 
 	public static Object[] getRequestParams(FullHttpRequest req, HttpRouteClassAndMethod route,byte[] content,boolean isProtoGet) {
 		Map<String, String>requestParams = decodeUriToMap(req);
-
 		LinkedList linkedList = new LinkedList();
 		for (Parameter parameter : route.getParameters()) {
 			Object fieldObj = null;
@@ -58,8 +57,13 @@ public class RequestHelper {
 			if(ObjectUtil.isNotNull(requestParam)){
 				Object object = requestParams.get(requestParam.value());
 				if(ObjectUtil.isNull(object)&&requestParam.required()){
-					logger.error("======{},参数{}不能为空 ",route.getMethod().toString(),requestParam.value());
-					return null;
+					if(requestParam.required()){
+						logger.error("======{},参数{}不能为空 ",route.getMethod().toString(),requestParam.value());
+						return null;
+					}else{
+						linkedList.add(null);
+						continue;
+					}
 				}
 				fieldObj = requestParams.get(requestParam.value());
 				fieldObj = castClass(fieldObj,parameter.getType());
