@@ -89,8 +89,8 @@ public class RouteTaskQueue extends TaskQueue{
 						SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
 								.route(mode.getCtx(), mode.getRequest(),mode.getHttpRouteClassAndMethod());
 					}else{
-						SpringApplicationContextHolder.getSpringBeanForClass(AbstractSocketRouteHandle.class)
-								.route(mode.getCtx(), mode.getSocketRouteClassAndMethod(),mode.getBody(),mode.getId());
+						SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(),AbstractSocketRouteHandle.class)
+								.route(mode.getCtx(), mode.getSocketRouteClassAndMethod(), mode.getBody(), mode.getId());
 					}
 				}
 
