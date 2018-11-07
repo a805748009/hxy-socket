@@ -11,6 +11,7 @@
         <module name="demo-network" />
         <module name="demo-service" />
         <module name="game" />
+        <module name="msgQueue" />
         <module name="nafos" />
         <module name="network" />
         <module name="remote" />
@@ -22,23 +23,18 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="core" target="1.8" />
-      <module name="demo" target="1.5" />
       <module name="demo-entry" target="1.8" />
       <module name="demo-network" target="1.8" />
       <module name="demo-service" target="1.8" />
-      <module name="eurekaServer" target="1.5" />
-      <module name="example" target="1.5" />
       <module name="game" target="1.8" />
+      <module name="msgQueue" target="1.8" />
       <module name="nafos" target="1.5" />
       <module name="network" target="1.8" />
       <module name="remote" target="1.8" />
-      <module name="sample" target="1.5" />
       <module name="sample-eurekaServer" target="1.8" />
-      <module name="sample-network-demo" target="1.8" />
       <module name="sample-xxlJob" target="1.8" />
       <module name="sample-zookeeper" target="1.5" />
       <module name="security" target="1.8" />
-      <module name="xxlJob" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
