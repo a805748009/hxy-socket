@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/nafos.iml" filepath="$PROJECT_DIR$/nafos.iml" />
       <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />
       <module fileurl="file://$PROJECT_DIR$/remote/remote.iml" filepath="$PROJECT_DIR$/remote/remote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample-dubbo/sample-dubbo.iml" filepath="$PROJECT_DIR$/sample/sample-dubbo/sample-dubbo.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample-eurekaServer/sample-eurekaServer.iml" filepath="$PROJECT_DIR$/sample/sample-eurekaServer/sample-eurekaServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample-xxlJob/sample-xxlJob.iml" filepath="$PROJECT_DIR$/sample/sample-xxlJob/sample-xxlJob.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample-zookeeper/sample-zookeeper.iml" filepath="$PROJECT_DIR$/sample/sample-zookeeper/sample-zookeeper.iml" />

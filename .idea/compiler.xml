@@ -15,6 +15,7 @@
         <module name="nafos" />
         <module name="network" />
         <module name="remote" />
+        <module name="sample-dubbo" />
         <module name="sample-eurekaServer" />
         <module name="sample-xxlJob" />
         <module name="sample-zookeeper" />
@@ -31,6 +32,7 @@
       <module name="nafos" target="1.5" />
       <module name="network" target="1.8" />
       <module name="remote" target="1.8" />
+      <module name="sample-dubbo" target="1.8" />
       <module name="sample-eurekaServer" target="1.8" />
       <module name="sample-xxlJob" target="1.8" />
       <module name="sample-zookeeper" target="1.5" />

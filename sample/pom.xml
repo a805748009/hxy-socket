@@ -14,6 +14,7 @@
         <module>sample-eurekaServer</module>
         <module>sample-xxlJob</module>
         <module>sample-zookeeper</module>
+        <module>sample-dubbo</module>
     </modules>
 
 
