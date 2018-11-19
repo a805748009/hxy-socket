@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.eclipse.jetty:jetty-client:9.2.26.v20180806">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-client/9.2.26.v20180806/jetty-client-9.2.26.v20180806.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-client/9.2.26.v20180806/jetty-client-9.2.26.v20180806-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-client/9.2.26.v20180806/jetty-client-9.2.26.v20180806-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
