@@ -19,7 +19,7 @@ public class RedisLock {
     /**
      * 加锁
      * @param locaName  锁的key
-     * @param acquireTimeout  获取超时时间
+     * @param acquireTimeout  获取锁的等待时间，超过这个时间就放弃，返回null
      * @param timeout   锁的超时时间
      * @return 锁标识
      */
