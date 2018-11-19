@@ -18,7 +18,6 @@
         <module name="sample-dubbo" />
         <module name="sample-eurekaServer" />
         <module name="sample-xxlJob" />
-        <module name="sample-zookeeper" />
         <module name="security" />
       </profile>
     </annotationProcessing>

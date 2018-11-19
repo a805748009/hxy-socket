@@ -15,7 +15,6 @@
       <module fileurl="file://$PROJECT_DIR$/sample/sample-dubbo/sample-dubbo.iml" filepath="$PROJECT_DIR$/sample/sample-dubbo/sample-dubbo.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample-eurekaServer/sample-eurekaServer.iml" filepath="$PROJECT_DIR$/sample/sample-eurekaServer/sample-eurekaServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample-xxlJob/sample-xxlJob.iml" filepath="$PROJECT_DIR$/sample/sample-xxlJob/sample-xxlJob.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sample/sample-zookeeper/sample-zookeeper.iml" filepath="$PROJECT_DIR$/sample/sample-zookeeper/sample-zookeeper.iml" />
       <module fileurl="file://$PROJECT_DIR$/security/security.iml" filepath="$PROJECT_DIR$/security/security.iml" />
     </modules>
   </component>

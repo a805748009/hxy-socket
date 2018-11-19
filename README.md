@@ -1,9 +1,8 @@
-<p align="center">
-    <img src="http://thyrsi.com/t6/394/1540300684x-1404795810.png" width="150">
-    <h3 align="center">NAFOS</h3>
-    <p align="center">
-        一个基于netty的轻量级高性能服务端框架。
-        <br>
+<p align="center">  
+   <h3 align="center">NAFOS</h3>
+   <p align="center">
+    一个基于netty的轻量级高性能服务端框架。
+     <br>
 </p>
 
 
@@ -15,7 +14,9 @@ nafos是一个基于netty的高性能服务器框架，其目的在于易上手�
 
 
 ## 文档
-- [文档](https://www.showdoc.cc/nafos?page_id=1033780133131417)
+- [文档-请点击此处](https://www.showdoc.cc/nafos?page_id=1033780133131417)
+- [demo-请点击此处](https://gitee.com/huangxinyu/nafos-demo)
+
 
 
 
