@@ -2,7 +2,6 @@ package nafos.game.relation;
 
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
-import nafos.core.mode.InitMothods;
 import nafos.core.util.ObjectUtil;
 import nafos.core.util.SendUtil;
 import nafos.game.entry.BaseUser;

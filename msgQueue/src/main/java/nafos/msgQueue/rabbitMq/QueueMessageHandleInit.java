@@ -8,10 +8,10 @@ import nafos.core.util.SpringApplicationContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.web.method.HandlerMethodSelector;
 import java.util.HashMap;
 import java.util.Set;
 import java.lang.reflect.Method;
@@ -68,7 +68,7 @@ public class QueueMessageHandleInit {
         //获取类的父类，此处没有，返回的本身类
         final Class<?> userType = ClassUtils.getUserClass(handlerType);
         //把所有实现RabbitListener的类方法放置到set中
-        Set<Method> methods = HandlerMethodSelector.selectMethods(userType, new ReflectionUtils.MethodFilter(){
+        Set<Method> methods = MethodIntrospector.selectMethods(userType, new ReflectionUtils.MethodFilter(){
             public boolean matches(Method method) {
                 return method.isAnnotationPresent(Handle.class);
             }
