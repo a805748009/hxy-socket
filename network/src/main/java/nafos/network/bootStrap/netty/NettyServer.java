@@ -10,8 +10,7 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
 import nafos.core.nafosEnum.ConnectEnum;
 import nafos.core.ssl.SslFactory;
-import nafos.core.util.ShowLogo;
-import nafos.network.bootStrap.netty.handle.PipelineAdd;
+import nafos.network.bootStrap.netty.handle.HttpPipelineAdd;
 import nafos.network.bootStrap.netty.handle.socket.ByteArrayOutboundHandle;
 import nafos.network.bootStrap.netty.handle.currency.SocketChooseHandle;
 import nafos.network.bootStrap.netty.handle.socket.BytebufToByteHandle;
@@ -23,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,7 +47,7 @@ public class NettyServer {
     private long readerIdleTime;
 
     @Autowired
-    PipelineAdd pipelineAdd;
+    HttpPipelineAdd httpAdd;
     @Autowired
     ProtocolResolveHandle protocolResolveHandle;
     @Autowired
@@ -136,7 +134,7 @@ public class NettyServer {
 
         // 2.判断协议类型
         if(connectType.equals(ConnectEnum.HTTP.getType())){
-            pipelineAdd.httpAdd(pipeline);
+            httpAdd.handAdd(pipeline);
         }else{
             // 1.socket方式服务
             // 设置N秒没有读到数据，则触发一个READER_IDLE事件。
@@ -157,7 +155,7 @@ public class NettyServer {
 
             //因为接收类型的泛型不对，所以在websocket握手的时候不会进入该handle
             //此handle为最后的socket消息分解，web和tcp通用
-            pipeline.addLast("byteToBuf",byteToByteBufHandle);
+            pipeline.addLast("out-byteToBuf",byteToByteBufHandle);
             pipeline.addLast("protocolResolve",protocolResolveHandle);
 
         }

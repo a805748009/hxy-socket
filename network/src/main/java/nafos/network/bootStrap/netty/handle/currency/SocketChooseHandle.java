@@ -6,7 +6,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import nafos.core.util.SpringApplicationContextHolder;
-import nafos.network.bootStrap.netty.handle.PipelineAdd;
+import nafos.network.bootStrap.netty.handle.WebsocketPipelineAdd;
 import nafos.network.bootStrap.netty.handle.socket.BytebufToByteHandle;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class SocketChooseHandle extends ByteToMessageDecoder {
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		String protocol = getBufStart(in);
 		if (protocol.startsWith(WEBSOCKET_PREFIX)) {
-			SpringApplicationContextHolder.getSpringBeanForClass(PipelineAdd.class).websocketAdd(ctx);
+			SpringApplicationContextHolder.getSpringBeanForClass(WebsocketPipelineAdd.class).handAdd(ctx.pipeline());
 
 			ctx.pipeline().remove(LengthFieldBasedFrameDecoder.class);
 			ctx.pipeline().remove(LengthFieldPrepender.class);
