@@ -9,10 +9,7 @@ import nafos.core.entry.AsyncTaskMode;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.entry.http.NafosRequest;
 import nafos.core.mode.InitMothods;
-import nafos.core.util.CastUtil;
-import nafos.core.util.NettyUtil;
-import nafos.core.util.ObjectUtil;
-import nafos.core.util.UriUtil;
+import nafos.core.util.*;
 import nafos.network.bootStrap.netty.handle.ExecutorPoolChoose;
 import nafos.network.bootStrap.netty.handle.currency.AsyncSessionHandle;
 import nafos.network.entry.RouteTaskQueue;
@@ -55,14 +52,14 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
         int queuecCode = cookieId.hashCode()% Processors.getProcess();
 
         if(!isRunOnWork){
-            HttpRouteRunnable runnable = new HttpRouteRunnable(ctx, request,httpRouteClassAndMethod);
-            AsyncSessionHandle.runTask(queuecCode,runnable);
+            AsyncSessionHandle.runTask(queuecCode,new AsyncTaskMode(ctx,request,httpRouteClassAndMethod));
             return;
         }
 
 
-        ReferenceCountUtil.retain(msg);
-        ( AsyncSessionHandle.getTask(queuecCode)).submitHttpOnWork(new AsyncTaskMode(ctx,request,httpRouteClassAndMethod));
+
+        SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
+							.route(ctx,request,httpRouteClassAndMethod);
 
 
     }

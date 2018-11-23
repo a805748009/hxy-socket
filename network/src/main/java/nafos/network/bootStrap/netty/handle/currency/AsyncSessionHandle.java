@@ -1,13 +1,11 @@
 package nafos.network.bootStrap.netty.handle.currency;
 
 import nafos.core.Thread.ExecutorPool;
-import nafos.core.cache.CaffenineCache;
+import nafos.core.entry.AsyncTaskMode;
 import nafos.core.task.LineTask;
-import nafos.core.task.TaskQueue;
-import nafos.network.bootStrap.netty.handle.RouteRunnable;
 import nafos.network.entry.RouteTaskQueue;
-
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author 黄新宇
@@ -15,18 +13,27 @@ import java.util.concurrent.TimeUnit;
  * @Description TODO
  **/
 public class AsyncSessionHandle implements LineTask {
-    private  static CaffenineCache<Integer,RouteTaskQueue> caffenineCache ;
+//    private  static CaffenineCache<Integer,RouteTaskQueue> caffenineCache ;
 
-    static{
-        caffenineCache = new CaffenineCache<>(20, TimeUnit.SECONDS,()-> new RouteTaskQueue(ExecutorPool.getInstance()));
-    }
+    private final static Map<Integer,RouteTaskQueue> map = new ConcurrentHashMap<>();
 
-    public static void runTask(Integer hashCode,RouteRunnable routeRunnable){
-        ( caffenineCache.get(hashCode)).submit(routeRunnable);
+//    static{
+//        caffenineCache = new CaffenineCache<>(20, TimeUnit.SECONDS,()-> new RouteTaskQueue(ExecutorPool.getInstance()));
+//    }
+
+    public static void runTask(Integer hashCode, AsyncTaskMode asyncTaskMode){
+
+        if(!map.containsKey(hashCode)){
+            map.put(hashCode,new RouteTaskQueue(ExecutorPool.getInstance()));
+        }
+        map.get(hashCode).submit(asyncTaskMode);
+//        caffenineCache.get(hashCode).submit(asyncTaskMode);
     }
 
     public static RouteTaskQueue getTask(Integer hashCode){
-       return  caffenineCache.get(hashCode);
+        if(!map.containsKey(hashCode))
+            map.put(hashCode,new RouteTaskQueue(ExecutorPool.getInstance()));
+       return  map.get(hashCode);
     }
 
 }

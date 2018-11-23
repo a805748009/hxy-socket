@@ -10,6 +10,7 @@ import nafos.core.helper.ClassAndMethodHelper;
 import nafos.core.mode.InitMothods;
 import nafos.core.util.ArrayUtil;
 import nafos.core.util.ObjectUtil;
+import nafos.core.util.SpringApplicationContextHolder;
 import nafos.network.bootStrap.netty.handle.ExecutorPoolChoose;
 import nafos.network.bootStrap.netty.handle.currency.AsyncSessionHandle;
 import org.slf4j.Logger;
@@ -59,12 +60,12 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
         int queuecCode = cookieId.hashCode()% Processors.getProcess();
 
         if(!isRunOnWork){
-            SocketRouteRunnable runnable = new SocketRouteRunnable(ctx, socketRouteClassAndMethod,messageBody,idByte);
-            AsyncSessionHandle.runTask(queuecCode,runnable);
+            AsyncSessionHandle.runTask(queuecCode,new AsyncTaskMode(ctx, socketRouteClassAndMethod,messageBody,idByte));
             return;
         }
 
-        ( AsyncSessionHandle.getTask(queuecCode)).submitSocketOnWork(new AsyncTaskMode(ctx, socketRouteClassAndMethod,messageBody,idByte));
+        SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(),AbstractSocketRouteHandle.class)
+							.route(ctx, socketRouteClassAndMethod,messageBody,idByte);
 
     }
 }

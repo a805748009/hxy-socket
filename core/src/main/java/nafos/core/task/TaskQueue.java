@@ -1,50 +1,48 @@
 package nafos.core.task;
 
-import java.util.LinkedList;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 任务处理队列.
  */
-public class TaskQueue {
+public abstract class TaskQueue implements Runnable{
 	protected final ExecutorService threadPool;
 	/** 任务处理队列 */
-	protected LinkedList<Object> queue;
+	protected final BlockingQueue<Object> queue = new LinkedBlockingQueue<Object>();
+
+
 
 	public TaskQueue(ExecutorService threadPool) {
 		this.threadPool = threadPool;
-		this.queue = new LinkedList<>();
+        threadPool.execute(this);
 	}
 
 	/**
 	 * 往任务队列里提交一个任务。
 	 * 
-	 * @param task 任务
+	 * @param object 任务
 	 */
-	public void submit(Runnable task) {
-		synchronized (this) {
-			queue.add(task);
-			// 只有一个任务，那就是刚刚加的，直接开始执行...
-			if (queue.size() == 1) {
-				threadPool.execute(task);
-			}
-		}
+	public void submit(Object object) {
+			queue.add(object);
 	}
 
 
 
-	/**
-	 * 完成一个任务后续处理
-	 */
-	public void complete() {
-		synchronized (this) {
-			// 移除已经完成的任务。
-			queue.removeFirst();
+	@Override
+	public void run(){
+        for(;;){
+            try {
+                this.complete(queue.take());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-			// 完成一个任务后，如果还有任务，则继续执行。
-			if (!queue.isEmpty()) {
-				this.threadPool.submit((Runnable) queue.getFirst());
-			}
-		}
-	}
+    /**
+     * 完成一个任务后续处理
+     */
+    public abstract void complete(Object object);
 }

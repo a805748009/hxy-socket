@@ -194,7 +194,7 @@ public class HttpRouteHandle {
      * @throws UnsupportedEncodingException
      */
     private <T> void send(ChannelHandlerContext ctx, T context,FullHttpRequest request, HttpResponseStatus status) throws UnsupportedEncodingException {
-        request.release();
+//        request.release();
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status);
         //设置允许跨域
         response.headers().set("Access-Control-Allow-Origin", "*");
