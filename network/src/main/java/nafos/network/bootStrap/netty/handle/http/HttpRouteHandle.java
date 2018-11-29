@@ -3,6 +3,7 @@ package nafos.network.bootStrap.netty.handle.http;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
+import io.netty.util.ReferenceCountUtil;
 import nafos.core.Thread.ThreadLocalHelper;
 import nafos.core.entry.BusinessException;
 import nafos.core.entry.ClassAndMethod;
@@ -61,10 +62,6 @@ public class HttpRouteHandle {
         Object[] contentObj = null;
         try {
             contentObj = getMessageObjOnContent(httpRouteClassAndMethod,request);
-//            if(ObjectUtil.isNull(contentObj)){
-//                NettyUtil.sendError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
-//                return;
-//            }
         } catch (Exception e) {
             NettyUtil.sendError(ctx, HttpResponseStatus.NO_CONTENT);
             e.printStackTrace();
@@ -194,7 +191,8 @@ public class HttpRouteHandle {
      * @throws UnsupportedEncodingException
      */
     private <T> void send(ChannelHandlerContext ctx, T context,FullHttpRequest request, HttpResponseStatus status) throws UnsupportedEncodingException {
-//        request.release();
+        request.release();
+        System.out.println(request.uri()+"===="+ ReferenceCountUtil.refCnt(request));
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status);
         //设置允许跨域
         response.headers().set("Access-Control-Allow-Origin", "*");

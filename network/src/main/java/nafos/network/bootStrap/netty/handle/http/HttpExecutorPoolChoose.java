@@ -52,11 +52,10 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
         int queuecCode = cookieId.hashCode()% Processors.getProcess();
 
         if(!isRunOnWork){
+            ReferenceCountUtil.retain(request);
             AsyncSessionHandle.runTask(queuecCode,new AsyncTaskMode(ctx,request,httpRouteClassAndMethod));
             return;
         }
-
-
 
         SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
 							.route(ctx,request,httpRouteClassAndMethod);
