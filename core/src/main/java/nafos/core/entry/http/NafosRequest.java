@@ -60,7 +60,7 @@ public class NafosRequest {
                 !request.headers().get(cookieStart).equals("[object Null]"))
         {
             try {
-                securityCookieId = AESUtil.decrypt(request.headers().get("cookieStart"));
+                securityCookieId = AESUtil.decrypt(request.headers().get(cookieStart));
                 return securityCookieId;
             } catch (Exception e) {
                 e.printStackTrace();
