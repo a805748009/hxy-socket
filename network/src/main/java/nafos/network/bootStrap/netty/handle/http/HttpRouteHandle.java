@@ -150,6 +150,7 @@ public class HttpRouteHandle {
         try {
             //error处理
             if(object instanceof  HttpResponseStatus){
+                request.release();
                 NettyUtil.sendError(context, (HttpResponseStatus) object);
                 return;
             }

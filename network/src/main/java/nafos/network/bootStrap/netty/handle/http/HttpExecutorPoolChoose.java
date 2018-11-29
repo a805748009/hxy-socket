@@ -57,6 +57,7 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
             return;
         }
 
+        ReferenceCountUtil.retain(request);
         SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
 							.route(ctx,request,httpRouteClassAndMethod);
 
