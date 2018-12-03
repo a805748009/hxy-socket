@@ -2,6 +2,7 @@ package nafos.security.currentLimiting;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import nafos.core.util.CastUtil;
 import nafos.core.util.NettyUtil;
 import nafos.core.util.ObjectUtil;
 import nafos.core.util.SpringApplicationContextHolder;
@@ -14,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 import java.net.InetSocketAddress;
+import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @Author 黄新宇
@@ -29,30 +33,73 @@ public class SecurityHttpLimitingHandle extends HttpLimitingHandle {
 
     private static String IPLimitingkey = "ipLimit";
 
+    private LinkedList<Long> tcpCount = new LinkedList();
+
+    private ConcurrentHashMap<String,LinkedList<Long>> ipLimitMap = new ConcurrentHashMap();
 
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
-        if (!SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getIsUseRedis())
+    public void channelActive(ChannelHandlerContext ctx) {
+        if("NO".equals(SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getLimitOnType()))
             return;
 
-        //大于0的时候开启IP限流
-        if (SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getIplimitCount() > 0) {
-            ipLimiting(ctx);
+        //单机限流
+        if ("LOCAL".equals(SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getLimitOnType())){
+            //全限流状态
+            allLimitingForLinkedList(ctx);
+            //IP限流状态
+            ipLimitingForMap(ctx);
+        }else{
+
+            //------------集群限流---基于redis
+
+            //大于0的时候开启IP限流
+            if (SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getIplimitCount() > 0) {
+                ipLimitingForRedis(ctx);
+            }
+
+            //总限流
+            if (SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getAlllimitCount() > 0) {
+                if(allLimitingForRedis(SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getAlllimitTimeout()*1000l,
+                        SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getAlllimitCount()))
+                    return;
+
+                logger.info("总访问次数超过最大访问次数，已经限制了访问");
+                NettyUtil.sendError(ctx,HttpResponseStatus.GATEWAY_TIMEOUT);
+            }
+
         }
-
-        //总限流
-        if (SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getAlllimitCount() > 0) {
-            if(allLimiting(SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getAlllimitTimeout()*1000l,
-                    SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getAlllimitCount()))
-                return;
-
-            logger.info("总访问次数超过最大访问次数，已经限制了访问");
-            NettyUtil.sendError(ctx,HttpResponseStatus.GATEWAY_TIMEOUT);
-        }
-
     }
+
+
+
+    /**
+     * 获取限流权限
+     * @param ctx
+     */
+    public  void allLimitingForLinkedList(ChannelHandlerContext ctx){
+        int allLimitCount = SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getAlllimitCount();
+        if (allLimitCount > 0) {
+            synchronized ("tcpCount"){
+                if(tcpCount.size()>allLimitCount){
+                    //超过限额，看看时间在不在限定时间内
+                    if(System.currentTimeMillis() - tcpCount.getFirst() >
+                            SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getAlllimitTimeout()*1000l){
+                        tcpCount.add(System.currentTimeMillis());
+                        tcpCount.removeFirst();
+                    }else{
+                        logger.info("总访问次数超过最大访问次数，已经限制了访问");
+                        NettyUtil.sendError(ctx,HttpResponseStatus.GATEWAY_TIMEOUT);
+                    }
+
+                }else{
+                    tcpCount.add(System.currentTimeMillis());
+                }
+            }
+        }
+    }
+
+
 
     /**
      * 获取限流权限
@@ -60,7 +107,7 @@ public class SecurityHttpLimitingHandle extends HttpLimitingHandle {
      * @param limitCount 限流次数
      * @return
      */
-    public  boolean allLimiting(Long millisecond, Integer limitCount){
+    public  boolean allLimitingForRedis(Long millisecond, Integer limitCount){
         String currentLimitingLock = RedisLock.lockWithTimeout(allLimitingKey,300,1000);
         Jedis jedis = null;
         try {
@@ -86,11 +133,45 @@ public class SecurityHttpLimitingHandle extends HttpLimitingHandle {
         return false;
     }
 
+
+
     /**
      * ip限流策略
      * @param ctx
      */
-    private void ipLimiting(ChannelHandlerContext ctx){
+    private void ipLimitingForMap(ChannelHandlerContext ctx){
+        if (SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getIplimitCount() > 0) {
+            InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
+            String clientIP = insocket.getAddress().getHostAddress();
+            int timeOut = SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getIplimitTimeout();
+            LinkedList<Long> ipTcpList = ipLimitMap.get(clientIP);
+            long count = ipTcpList.size();
+            //超出了单个IP限制访问次数
+            synchronized (clientIP) {
+                if (count > SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getIplimitCount()) {
+                    //超过限额，看看时间在不在限定时间内
+                    if (System.currentTimeMillis() - ipTcpList.getFirst() > timeOut * 1000l) {
+                        ipTcpList.add(System.currentTimeMillis());
+                        ipTcpList.removeFirst();
+                    } else {
+                        logger.info("总访问次数超过最大访问次数，已经限制了访问");
+                        NettyUtil.sendError(ctx, HttpResponseStatus.GATEWAY_TIMEOUT);
+                    }
+                } else {
+                    ipTcpList.add(System.currentTimeMillis());
+                }
+            }
+        }
+    }
+
+
+
+
+    /**
+     * ip限流策略
+     * @param ctx
+     */
+    private void ipLimitingForRedis(ChannelHandlerContext ctx){
         InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
         String clientIP = insocket.getAddress().getHostAddress();
         int timeOut = SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getIplimitTimeout();
@@ -101,6 +182,8 @@ public class SecurityHttpLimitingHandle extends HttpLimitingHandle {
             NettyUtil.sendError(ctx,HttpResponseStatus.GATEWAY_TIMEOUT);
         }
     }
+
+
 
     /**
      * 增加一次IP访问次数
@@ -121,5 +204,11 @@ public class SecurityHttpLimitingHandle extends HttpLimitingHandle {
         }
         return count;
     }
+
+
+
+
+
+
 
 }

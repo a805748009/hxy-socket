@@ -54,6 +54,8 @@ public class SecurityConfig {
     @Value("${redis.password}")
     private String password;
 
+    @Value("${nafos.security.limitOnType:NO}") //NO 不开启限流  LOCAL 本地单机限流   REDIS redis集群限流
+    private String limitOnType;
 
     @Value("${nafos.security.iplimitTimeout:2}")
     private int iplimitTimeout;
@@ -70,6 +72,10 @@ public class SecurityConfig {
 
     public boolean getIsUseRedis(){
         return isUseRedis;
+    }
+
+    public String getLimitOnType() {
+        return limitOnType;
     }
 
     public String getIsValidate(){
