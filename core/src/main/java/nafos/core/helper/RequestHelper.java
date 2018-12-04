@@ -124,8 +124,11 @@ public class RequestHelper {
 					linkedList.add(restfulJsonEncode(req,parameter.getType()));
 					return;
 				}
+				Object obj = xmlJsonEncode(req,parameter.getType());
+				if(ObjectUtil.isNull(obj))
+					obj = restfulJsonEncode(req,parameter.getType());
 				//xmlhttp
-				linkedList.add(xmlJsonEncode(req,parameter.getType()));
+				linkedList.add(obj);
 				return;
 			}
     }
