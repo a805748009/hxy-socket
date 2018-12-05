@@ -118,17 +118,8 @@ public class RequestHelper {
 
 			// 处理POST请求
 			if (req.method() == HttpMethod.POST) {
-				//restful
-				if (req.uri().length()>16&&req.uri().substring(0,16).equals(RouteFactory.REMOTE_CALL_URI)) {
-					//远程调用的restful-json处理
-					linkedList.add(restfulJsonEncode(req,parameter.getType()));
-					return;
-				}
-				Object obj = xmlJsonEncode(req,parameter.getType());
-				if(ObjectUtil.isNull(obj))
-					obj = restfulJsonEncode(req,parameter.getType());
-				//xmlhttp
-				linkedList.add(obj);
+				//远程调用的restful-json处理
+				linkedList.add(restfulJsonEncode(req,parameter.getType()));
 				return;
 			}
     }
