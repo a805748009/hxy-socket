@@ -73,7 +73,7 @@ public class HttpRouteHandle {
         if(httpRouteClassAndMethod.isPrintLog()){
                 startTime=System.currentTimeMillis();
             }
-        Object returnObj = routeMethod(httpRouteClassAndMethod,contentObj,ctx,request);
+        Object returnObj = routeMethod(httpRouteClassAndMethod,contentObj);
         if(httpRouteClassAndMethod.isPrintLog()){
                 long endTime=System.currentTimeMillis();
                 logger.info("方法："+httpRouteClassAndMethod.getClazz().getName()+"."+httpRouteClassAndMethod.getMethod().getMethodNames()[httpRouteClassAndMethod.getIndex()]+
@@ -123,7 +123,7 @@ public class HttpRouteHandle {
      * @param
      * @return java.lang.Object
      */
-    private Object routeMethod (HttpRouteClassAndMethod route,Object[] object,ChannelHandlerContext ctx, FullHttpRequest request){
+    private Object routeMethod (HttpRouteClassAndMethod route,Object[] object){
         try {
             if(ObjectUtil.isNull(object)){
                 return route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
@@ -147,7 +147,6 @@ public class HttpRouteHandle {
      * @return void
      */
     private void sendMethod (HttpRouteClassAndMethod route,Object object,ChannelHandlerContext context, FullHttpRequest request){
-        try {
             //error处理
             if(object instanceof  HttpResponseStatus){
                 request.release();
@@ -172,14 +171,6 @@ public class HttpRouteHandle {
                 bytes = zlibMessageHandle.zlibByteMessage(bytes);
                 send(context,bytes,request,HttpResponseStatus.OK);
             }
-
-        } catch (IllegalArgumentException | IOException e) {
-            NettyUtil.sendError(context, HttpResponseStatus.SERVICE_UNAVAILABLE);
-            logger.error(e.toString());
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -191,7 +182,7 @@ public class HttpRouteHandle {
      * @param status 状态
      * @throws UnsupportedEncodingException
      */
-    private <T> void send(ChannelHandlerContext ctx, T context,FullHttpRequest request, HttpResponseStatus status) throws UnsupportedEncodingException {
+    private <T> void send(ChannelHandlerContext ctx, T context,FullHttpRequest request, HttpResponseStatus status)  {
         request.release();
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status);
         //设置允许跨域

@@ -12,7 +12,6 @@ import nafos.core.mode.InitMothods;
 import nafos.core.util.*;
 import nafos.network.bootStrap.netty.handle.ExecutorPoolChoose;
 import nafos.network.bootStrap.netty.handle.currency.AsyncSessionHandle;
-import nafos.network.entry.RouteTaskQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
