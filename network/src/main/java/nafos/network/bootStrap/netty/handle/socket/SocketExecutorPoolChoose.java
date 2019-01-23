@@ -44,9 +44,14 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
             System.arraycopy(contentBytes, 8, messageBody, 0, contentBytes.length-8);
         }
 
+        logger.debug("收到socket消息，id: "+code );
+
         // 安全验证filter
         ClassAndMethod filter = InitMothods.getSocketSecurityFilter();
-        if(!ClassAndMethodHelper.socketCheckResultStatus(filter,ctx,code)) return;
+        if(!ClassAndMethodHelper.socketCheckResultStatus(filter,ctx,code)){
+            logger.debug("不安全的消息，已经屏蔽" );
+            return;
+        }
 
         SocketRouteClassAndMethod socketRouteClassAndMethod = InitMothods.getSocketHandler(code);
         if(ObjectUtil.isNull(socketRouteClassAndMethod)){

@@ -21,16 +21,21 @@ public class RouteTaskQueue extends TaskQueue{
 
 	@Override
 	public void complete(Object object) {
-		if(object instanceof AsyncTaskMode){
-			AsyncTaskMode mode = (AsyncTaskMode) object;
-			if(ObjectUtil.isNotNull(mode.getHttpRouteClassAndMethod())){
-				SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
-						.route(mode.getCtx(), mode.getRequest(),mode.getHttpRouteClassAndMethod());
-			}else{
-				SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(),AbstractSocketRouteHandle.class)
-						.route(mode.getCtx(), mode.getSocketRouteClassAndMethod(), mode.getBody(), mode.getId());
+		try{
+			if(object instanceof AsyncTaskMode){
+				AsyncTaskMode mode = (AsyncTaskMode) object;
+				if(ObjectUtil.isNotNull(mode.getHttpRouteClassAndMethod())){
+					SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
+							.route(mode.getCtx(), mode.getRequest(),mode.getHttpRouteClassAndMethod());
+				}else{
+					SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(),AbstractSocketRouteHandle.class)
+							.route(mode.getCtx(), mode.getSocketRouteClassAndMethod(), mode.getBody(), mode.getId());
+				}
 			}
+		}catch (Exception e){
+			e.printStackTrace();
 		}
+
 	}
 
 }

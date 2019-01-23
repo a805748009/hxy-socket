@@ -21,7 +21,7 @@ public class AsyncSessionHandle implements LineTask {
 //        caffenineCache = new CaffenineCache<>(20, TimeUnit.SECONDS,()-> new RouteTaskQueue(ExecutorPool.getInstance()));
 //    }
 
-    public static void runTask(Integer hashCode, AsyncTaskMode asyncTaskMode){
+    public static void  runTask(Integer hashCode, AsyncTaskMode asyncTaskMode){
 
         if(!map.containsKey(hashCode)){
             map.put(hashCode,new RouteTaskQueue(ExecutorPool.getInstance()));

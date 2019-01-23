@@ -20,7 +20,7 @@
         <dependency>
             <groupId>hxy</groupId>
             <artifactId>nafos-core</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
