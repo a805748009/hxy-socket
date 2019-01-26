@@ -2,11 +2,7 @@ package nafos.core.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
+import java.util.*;
 
 import nafos.core.util.CastUtil;
 import nafos.core.util.ObjectUtil;
@@ -25,25 +21,49 @@ import org.slf4j.LoggerFactory;
 public class DateUtil {
     private static final Logger log = LoggerFactory.getLogger(DateUtil.class);
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static Map<String, ThreadLocal<SimpleDateFormat>> sdfMap = new HashMap<String, ThreadLocal<SimpleDateFormat>>();
 
-    private static final SimpleDateFormat sdf_mm = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private static final Object lockObj = new Object();
 
-    private static final SimpleDateFormat sdf_day = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat getInstace(String key){
+        ThreadLocal<SimpleDateFormat> tl = sdfMap.get(key);
+        if(tl == null){
+            synchronized (lockObj) {
+                tl = sdfMap.get(key);
+                if (tl == null) {
+                    // 这里是关键,使用ThreadLocal<SimpleDateFormat>替代原来直接new SimpleDateFormat
+                    tl = new ThreadLocal<SimpleDateFormat>() {
+                        @Override
+                        protected SimpleDateFormat initialValue() {
+                            return new SimpleDateFormat(key);
+                        }
+                    };
+                    sdfMap.put(key, tl);
+                }
+            }
+        }
+        return tl.get();
+    }
 
-    private static final SimpleDateFormat sdf_format = new SimpleDateFormat("yyyyMMddHHmmss");
+    private static final String sdf = "yyyy-MM-dd HH:mm:ss";
 
-    private static final SimpleDateFormat sdf_yyyymm = new SimpleDateFormat("yyyyMM");
+    private static final String sdf_mm = "yyyy-MM-dd HH:mm";
 
-    private static final SimpleDateFormat sdf_format_month = new SimpleDateFormat("yyyy-MM");
+    private static final String sdf_day ="yyyy-MM-dd";
 
-    private static final SimpleDateFormat sdf_format_hm = new SimpleDateFormat("HH:mm");
+    private static final String sdf_format = "yyyyMMddHHmmss";
 
-    private static final SimpleDateFormat sdf_utc = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final String sdf_yyyymm = "yyyyMM";
 
-    private static final SimpleDateFormat sdf_yymmdd = new SimpleDateFormat("yyMMdd");
+    private static final String sdf_format_month = "yyyy-MM";
 
-    private static final SimpleDateFormat sdf_yyyymmdd = new SimpleDateFormat("yyyyMMdd");
+    private static final String sdf_format_hm = "HH:mm";
+
+    private static final String sdf_utc = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
+    private static final String sdf_yymmdd = "yyMMdd";
+
+    private static final String sdf_yyyymmdd = "yyyyMMdd";
 
     /**
      * 将字符串类型的时间转化为yyyy-MM-dd的格式（结果同时字符串）
@@ -53,7 +73,7 @@ public class DateUtil {
      */
     public static String formatTime(String time) {
         try {
-            return sdf_day.format(sdf_day.parse(time));
+            return getInstace(sdf_day).format(getInstace(sdf_day).parse(time));
         } catch (ParseException e) {
             log.warn("{}", e);
 
@@ -69,8 +89,8 @@ public class DateUtil {
      */
     public static String formatHmsTime(String time) {
         try {
-            Date date = sdf.parse(time);
-            return sdf_format_hm.format(date) + ":00";
+            Date date = getInstace(sdf).parse(time);
+            return getInstace(sdf_format_hm).format(date) + ":00";
         } catch (ParseException e) {
             log.warn("{}", e);
         }
@@ -245,7 +265,7 @@ public class DateUtil {
      * @return yyyy-MM-dd HH:mm:ss 字符串
      */
     public static String getNowTime() {
-        return sdf.format(new Date());
+        return getInstace(sdf).format(new Date());
     }
 
     /**
@@ -254,7 +274,7 @@ public class DateUtil {
      * @return yyyy-MM-dd HH:mm 字符串
      */
     public static String getNowTimemm() {
-        return sdf_mm.format(new Date());
+        return getInstace(sdf_mm).format(new Date());
     }
 
     /**
@@ -263,7 +283,7 @@ public class DateUtil {
      * @return yyyy-MM-dd 字符串
      */
     public static String getNowTimeDay() {
-        return sdf_day.format(new Date());
+        return getInstace(sdf_day).format(new Date());
     }
 
     /**
@@ -272,7 +292,7 @@ public class DateUtil {
      * @return yyyyMMddHHmmss 字符串
      */
     public static String getNowFormat() {
-        return sdf_format.format(new Date());
+        return getInstace(sdf_format).format(new Date());
     }
 
     /**
@@ -281,7 +301,7 @@ public class DateUtil {
      * @return yyyyMM 字符串
      */
     public static String getNowYYYYMM() {
-        return sdf_yyyymm.format(new Date());
+        return getInstace(sdf_yyyymm).format(new Date());
     }
 
     /**
@@ -290,7 +310,7 @@ public class DateUtil {
      * @return yyyy-MM 字符串
      */
     public static String getNowYearAndMonth() {
-        return sdf_format_month.format(new Date());
+        return getInstace(sdf_format_month).format(new Date());
     }
 
     /**
@@ -299,7 +319,7 @@ public class DateUtil {
      * @return yyMMdd 字符串
      */
     public static String getNowYYMMDD() {
-        return sdf_yymmdd.format(new Date());
+        return getInstace(sdf_yymmdd).format(new Date());
     }
 
     /**
@@ -308,7 +328,7 @@ public class DateUtil {
      * @return yyyyMMdd 字符串
      */
     public static String getNowYYYYMMDD() {
-        return sdf_yyyymmdd.format(new Date());
+        return getInstace(sdf_yyyymmdd).format(new Date());
     }
 
     /**
@@ -317,7 +337,7 @@ public class DateUtil {
      * @return HH:mm 字符串
      */
     public static String getNowHm() {
-        return sdf_format_hm.format(new Date());
+        return getInstace(sdf_format_hm).format(new Date());
     }
 
     /**
@@ -337,7 +357,7 @@ public class DateUtil {
         long min = 0;
         long sec = 0;
         try {
-            one = sdf.parse(time);
+            one = getInstace(sdf).parse(time);
             long time1 = one.getTime();
             long time2 = two.getTime();
             long diff;
@@ -374,8 +394,8 @@ public class DateUtil {
         Date two;
         double min = 0;
         try {
-            one = sdf.parse(str1);
-            two = sdf.parse(str2);
+            one = getInstace(sdf).parse(str1);
+            two = getInstace(sdf).parse(str2);
             Calendar dateOne = Calendar.getInstance(), dateTwo = Calendar.getInstance();
             dateOne.setTime(one);
             dateTwo.setTime(two);
@@ -396,8 +416,8 @@ public class DateUtil {
         Date two;
         long diff = 0;
         try {
-            one = sdf.parse(str1);
-            two = sdf.parse(str2);
+            one = getInstace(sdf).parse(str1);
+            two = getInstace(sdf).parse(str2);
             long time1 = one.getTime();
             long time2 = two.getTime();
             if(time1 < time2) {
@@ -428,8 +448,8 @@ public class DateUtil {
         long min = 0;
         long sec = 0;
         try {
-            one = sdf.parse(str1);
-            two = sdf.parse(str2);
+            one = getInstace(sdf).parse(str1);
+            two = getInstace(sdf).parse(str2);
             long time1 = one.getTime();
             long time2 = two.getTime();
             long diff;
@@ -465,8 +485,8 @@ public class DateUtil {
         long min = 0;
         long sec = 0;
         try {
-            one = sdf.parse(str1);
-            two = sdf.parse(str2);
+            one = getInstace(sdf).parse(str1);
+            two = getInstace(sdf).parse(str2);
             long time1 = one.getTime();
             long time2 = two.getTime();
             long diff;
@@ -554,9 +574,9 @@ public class DateUtil {
     public static String addHour(String s, int n) {
         try {
             Calendar cd = Calendar.getInstance();
-            cd.setTime(sdf_format.parse(s));
+            cd.setTime(getInstace(sdf_format).parse(s));
             cd.add(Calendar.HOUR, n);// 增加小时
-            return sdf_format.format(cd.getTime());
+            return getInstace(sdf_format).format(cd.getTime());
         } catch (Exception e) {
             return null;
         }
@@ -577,9 +597,9 @@ public class DateUtil {
     public static String addHourFormatSDF(String s, int n) {
         try {
             Calendar cd = Calendar.getInstance();
-            cd.setTime(sdf.parse(s));
+            cd.setTime(getInstace(sdf).parse(s));
             cd.add(Calendar.HOUR, n);// 增加小时
-            return sdf.format(cd.getTime());
+            return getInstace(sdf).format(cd.getTime());
         } catch (Exception e) {
             return null;
         }
@@ -588,9 +608,9 @@ public class DateUtil {
     public static String addMonth(String s, int n) {
         try {
             Calendar cd = Calendar.getInstance();
-            cd.setTime(sdf_day.parse(s));
+            cd.setTime(getInstace(sdf_day).parse(s));
             cd.add(Calendar.MONTH, n);// 增加一个月
-            return sdf_day.format(cd.getTime());
+            return getInstace(sdf_day).format(cd.getTime());
         } catch (Exception e) {
             return null;
         }
@@ -599,9 +619,9 @@ public class DateUtil {
     public static String addMillis(String s, int n) {
         try {
             Calendar cd = Calendar.getInstance();
-            cd.setTime(sdf_mm.parse(s));
+            cd.setTime(getInstace(sdf_mm).parse(s));
             cd.add(Calendar.MINUTE, n);// 增加分钟
-            return sdf_mm.format(cd.getTime());
+            return getInstace(sdf_mm).format(cd.getTime());
         } catch (Exception e) {
             return null;
         }
@@ -619,9 +639,9 @@ public class DateUtil {
     public static String reduceMillis(String time, int n) {
         try {
             Calendar cd = Calendar.getInstance();
-            cd.setTime(sdf.parse(time));
+            cd.setTime(getInstace(sdf).parse(time));
             cd.add(Calendar.MINUTE, -n); // 分钟
-            return sdf.format(cd.getTime());
+            return getInstace(sdf).format(cd.getTime());
         } catch (Exception e) {
             return time;
         }
@@ -639,9 +659,9 @@ public class DateUtil {
     public static String delayMillis(String time, int n) {
         try {
             Calendar cd = Calendar.getInstance();
-            cd.setTime(sdf.parse(time));
+            cd.setTime(getInstace(sdf).parse(time));
             cd.add(Calendar.MINUTE, n); // 分钟
-            return sdf.format(cd.getTime());
+            return getInstace(sdf).format(cd.getTime());
         } catch (Exception e) {
             return time;
         }
@@ -650,9 +670,9 @@ public class DateUtil {
     public static boolean checkDobleTime(String time1, String time2) {
         try {
             Calendar c1 = Calendar.getInstance();
-            c1.setTime(sdf_day.parse(time1));
+            c1.setTime(getInstace(sdf_day).parse(time1));
             Calendar c2 = Calendar.getInstance();
-            c2.setTime(sdf_day.parse(time2));
+            c2.setTime(getInstace(sdf_day).parse(time2));
             if(c1.equals(c2)) {
                 return true;
             } else {
@@ -667,9 +687,9 @@ public class DateUtil {
     public static boolean checkDobleDay(String time1, String time2) {
         try {
             Calendar c1 = Calendar.getInstance();
-            c1.setTime(sdf_day.parse(time1));
+            c1.setTime(getInstace(sdf_day).parse(time1));
             Calendar c2 = Calendar.getInstance();
-            c2.setTime(sdf_day.parse(time2));
+            c2.setTime(getInstace(sdf_day).parse(time2));
             return c1.before(c2);
         } catch (ParseException e) {
             log.warn("{}", e);
@@ -680,9 +700,9 @@ public class DateUtil {
     public static boolean checkDobleTimeMM(String time1, String time2) {
         try {
             Calendar c1 = Calendar.getInstance();
-            c1.setTime(sdf_mm.parse(time1));
+            c1.setTime(getInstace(sdf_mm).parse(time1));
             Calendar c2 = Calendar.getInstance();
-            c2.setTime(sdf_mm.parse(time2));
+            c2.setTime(getInstace(sdf_mm).parse(time2));
             if(c1.equals(c2)) {
                 return false;
             } else {
@@ -697,9 +717,9 @@ public class DateUtil {
     public static boolean checkAfterTimeMM(String time1, String time2) {
         try {
             Calendar c1 = Calendar.getInstance();
-            c1.setTime(sdf_mm.parse(time1));
+            c1.setTime(getInstace(sdf_mm).parse(time1));
             Calendar c2 = Calendar.getInstance();
-            c2.setTime(sdf_mm.parse(time2));
+            c2.setTime(getInstace(sdf_mm).parse(time2));
             return c1.after(c2);
         } catch (ParseException e) {
             log.warn("{}", e);
@@ -721,7 +741,7 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         cal.add(Calendar.MONTH, -1);
-        return sdf_yyyymm.format(cal.getTime());
+        return getInstace(sdf_yyyymm).format(cal.getTime());
     }
 
     public static boolean isDateBefore(Date date2) {
@@ -738,7 +758,7 @@ public class DateUtil {
 
     public static String formatDayTime(String time) {
         try {
-            time = sdf_day.format(sdf_day.parse(time));
+            time = getInstace(sdf_day).format(getInstace(sdf_day).parse(time));
             return time.split("-")[1] + "-" + time.split("-")[2];
         } catch (ParseException e) {
             log.warn("{}", e);
@@ -748,7 +768,7 @@ public class DateUtil {
 
     public static String formatMonthTime(String time) {
         try {
-            return sdf_format_month.format(sdf_format_month.parse(time));
+            return getInstace(sdf_format_month).format(getInstace(sdf_format_month).parse(time));
         } catch (ParseException e) {
             log.warn("{}", e);
         }
@@ -758,7 +778,7 @@ public class DateUtil {
     public static String usMonth(String time) {
         SimpleDateFormat sdf_sign_month = new SimpleDateFormat("MM");
         try {
-            time = sdf_day.format(sdf_day.parse(time));
+            time = getInstace(sdf_day).format(getInstace(sdf_day).parse(time));
             time = time.split("-")[1];
             Date date = sdf_sign_month.parse(time);
             sdf_sign_month = new SimpleDateFormat("MMMMM", Locale.US);
@@ -772,7 +792,7 @@ public class DateUtil {
 
     public static String formatDay(String time) {
         try {
-            time = sdf_day.format(sdf_day.parse(time));
+            time = getInstace(sdf_day).format(getInstace(sdf_day).parse(time));
             return time.split("-")[2];
         } catch (ParseException e) {
             log.warn("{}", e);
@@ -784,7 +804,7 @@ public class DateUtil {
         String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
         Calendar cal = Calendar.getInstance();
         try {
-            cal.setTime(sdf_day.parse(time));
+            cal.setTime(getInstace(sdf_day).parse(time));
             int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
             if(w < 0) {
                 w = 0;
@@ -814,7 +834,7 @@ public class DateUtil {
      */
     public static String getTimeStr(String timestamp) {
         Date date = new Date(new Long(timestamp));
-        return sdf.format(date);
+        return getInstace(sdf).format(date);
     }
 
     /**
@@ -825,7 +845,7 @@ public class DateUtil {
      */
     public static long getTimeStamp(String time) {
         try {
-            Date date = sdf.parse(time);
+            Date date = getInstace(sdf).parse(time);
             return date.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -842,11 +862,11 @@ public class DateUtil {
      */
     public static String getDateOfLastMonth(String dateStr) {
         try {
-            Date date = sdf_day.parse(dateStr);
+            Date date = getInstace(sdf_day).parse(dateStr);
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             c.add(Calendar.MONTH, -1);
-            return sdf_day.format(c.getTime());
+            return getInstace(sdf_day).format(c.getTime());
         } catch (Exception e) {
             e.printStackTrace();
             return "";
@@ -861,12 +881,12 @@ public class DateUtil {
      */
     public static String getLastDayOfMonth(String dateStr) {
         try {
-            Date date = sdf_day.parse(dateStr);
+            Date date = getInstace(sdf_day).parse(dateStr);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.MONTH, 1);
             cal.set(Calendar.DAY_OF_MONTH, 0);
-            return sdf_day.format(cal.getTime());
+            return getInstace(sdf_day).format(cal.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
             return "";
@@ -880,8 +900,8 @@ public class DateUtil {
      * @return yyyy-MM-dd'T'HH:mm:ss'Z'
      */
     public static String formatUtcDate(Date date) {
-        sdf_utc.setTimeZone(new SimpleTimeZone(0, "GMT"));
-        return sdf_utc.format(date);
+        getInstace(sdf_utc).setTimeZone(new SimpleTimeZone(0, "GMT"));
+        return getInstace(sdf_utc).format(date);
     }
 
     /**
@@ -892,9 +912,9 @@ public class DateUtil {
      */
     public static String formatUtcDateStr(String dateStr) {
         try {
-            Date d = sdf.parse(dateStr);
-            sdf_utc.setTimeZone(new SimpleTimeZone(0, "GMT"));
-            return sdf_utc.format(d);
+            Date d = getInstace(sdf).parse(dateStr);
+            getInstace(sdf_utc).setTimeZone(new SimpleTimeZone(0, "GMT"));
+            return getInstace(sdf_utc).format(d);
         } catch (ParseException e) {
             e.printStackTrace();
             return "";
@@ -911,10 +931,10 @@ public class DateUtil {
         Date utcDate = null;
         String localTimeStr = null;
         try {
-            sdf_utc.setTimeZone(TimeZone.getTimeZone("UTC"));
-            utcDate = sdf_utc.parse(UTCTime);
-            sdf.setTimeZone(TimeZone.getDefault());
-            localTimeStr = sdf.format(utcDate);
+            getInstace(sdf_utc).setTimeZone(TimeZone.getTimeZone("UTC"));
+            utcDate = getInstace(sdf_utc).parse(UTCTime);
+            getInstace(sdf).setTimeZone(TimeZone.getDefault());
+            localTimeStr = getInstace(sdf).format(utcDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -986,7 +1006,7 @@ public class DateUtil {
      */
     public static String formatDate(Date date) {
         if(date == null) return null;
-        return sdf.format(date);
+        return getInstace(sdf).format(date);
     }
 
     /**
@@ -1000,7 +1020,7 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         /* HOUR_OF_DAY 指示一天中的小时 */
         calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
-        return sdf.format(calendar.getTime());
+        return getInstace(sdf).format(calendar.getTime());
     }
 
     /**
@@ -1016,7 +1036,7 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         // calendar.add(Calendar.YEAR, nYear);
         calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + nYear);
-        return sdf.format(calendar.getTime());
+        return getInstace(sdf).format(calendar.getTime());
     }
 
     /**
@@ -1179,13 +1199,13 @@ public class DateUtil {
     public static String getFirstDay(String dateStr) throws Exception {
         Date date = null;
         String day_first = null;
-        date = sdf_day.parse(dateStr);
+        date = getInstace(sdf_day).parse(dateStr);
 
         // 创建日历
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
-        day_first = sdf_day.format(calendar.getTime());
+        day_first = getInstace(sdf_day).format(calendar.getTime());
         return day_first;
     }
 
@@ -1202,7 +1222,7 @@ public class DateUtil {
     public static String getLastDay(String dateStr) throws Exception {
         Date date = null;
         String day_last = null;
-        date = sdf_day.parse(dateStr);
+        date = getInstace(sdf_day).parse(dateStr);
 
         // 创建日历
         Calendar calendar = Calendar.getInstance();
@@ -1210,7 +1230,7 @@ public class DateUtil {
         calendar.add(Calendar.MONTH, 1); // 加一个月
         calendar.set(Calendar.DATE, 1); // 设置为该月第一天
         calendar.add(Calendar.DATE, -1); // 再减一天即为上个月最后一天
-        day_last = sdf_day.format(calendar.getTime());
+        day_last = getInstace(sdf_day).format(calendar.getTime());
         return day_last;
     }
 
@@ -1225,7 +1245,7 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + time);
         Date day = calendar.getTime();
-        return sdf_day.format(day);
+        return getInstace(sdf_day).format(day);
     }
 
     /**
@@ -1238,7 +1258,7 @@ public class DateUtil {
         // x分钟之前或之后的时间
         calendar.add(Calendar.MINUTE, minutes);
         Date day = calendar.getTime();
-        return sdf.format(day);
+        return getInstace(sdf).format(day);
     }
 
 
