@@ -4,19 +4,15 @@ import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.QueryStringDecoder;
-import io.netty.handler.codec.http.multipart.Attribute;
-import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import io.netty.handler.codec.http.multipart.*;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 import nafos.core.annotation.controller.Request;
 import nafos.core.annotation.controller.RequestParam;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.mode.RouteFactory;
-import nafos.core.util.CastUtil;
-import nafos.core.util.JsonUtil;
-import nafos.core.util.ObjectUtil;
-import nafos.core.util.ProtoUtil;
+import nafos.core.util.*;
+import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,13 +139,49 @@ public class RequestHelper {
 		return requestParams;
 	}
 
+
 	/**
 	 * restful风格的postJSON解析
-	 * @param req
+	 * @param request
 	 * @param clazz
 	 * @return
 	 */
-	private static Object restfulJsonEncode(FullHttpRequest req,Class<?> clazz){
+	private static Object restfulJsonEncode(FullHttpRequest request,Class<?> clazz){
+		// 处理POST请求
+		String strContentType = request.headers().get("Content-Type").trim();
+		if (strContentType.contains("application/json")) {
+			return getJSONParams(request,clazz);
+		} else{
+			return getFormParams(request,clazz);
+		}
+	}
+
+
+	/**
+	 * 解析from表单数据（Content-Type = x-www-form-urlencoded）,默认格式
+	 */
+	private static Object getFormParams(FullHttpRequest fullHttpRequest,Class<?> clazz) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(new DefaultHttpDataFactory(false), fullHttpRequest);
+		List<InterfaceHttpData> postData = decoder.getBodyHttpDatas();
+		for (InterfaceHttpData data : postData) {
+			if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
+				MemoryAttribute attribute = (MemoryAttribute) data;
+				params.put(attribute.getName(), attribute.getValue());
+			}
+		}
+		if(Map.class.isAssignableFrom(clazz)){
+			return params;
+		}else{
+			return BeanToMapUtil.mapToObject(params,clazz);
+		}
+
+	}
+
+	/**
+	 * 解析json数据（Content-Type = application/json）
+	 */
+	private static Object getJSONParams(FullHttpRequest req,Class<?> clazz) {
 		ByteBuf jsonBuf = req.content();
 		String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
 		if(Map.class.isAssignableFrom(clazz)){
@@ -158,6 +190,8 @@ public class RequestHelper {
 			return JsonUtil.json2Object(jsonStr,clazz);
 		}
 	}
+
+
 
 	/**
 	 * xml风格的postJSON解析

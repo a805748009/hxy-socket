@@ -7,7 +7,10 @@ import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 import nafos.core.util.SendUtil;
+import nafos.network.bootStrap.netty.NettyServer;
 import nafos.network.bootStrap.netty.handle.socket.ProtocolResolveHandle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ChannelHandler.Sharable
 public class WsHandShakeHandle extends SimpleChannelInboundHandler<Object> {
+    private static final Logger logger = LoggerFactory.getLogger(WsHandShakeHandle.class);
 
     @Autowired
     WsPacketHandle wsPacketHandle;
@@ -69,6 +73,7 @@ public class WsHandShakeHandle extends SimpleChannelInboundHandler<Object> {
                 "ws://" + req.headers().get(HttpHeaderNames.HOST) + req.uri(), null, false);
         WebSocketServerHandshaker handshaker = wsFactory.newHandshaker(req);
         if (handshaker == null) {
+            logger.info("不支持的连接类型");
             // 版本不支持
             WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
         } else {
