@@ -145,7 +145,8 @@ public class RequestHelper {
      */
     private static Object restfulJsonEncode(FullHttpRequest request, Class<?> clazz) {
         // 处理POST请求
-        String strContentType = request.headers().get("Content-Type").trim();
+        String strContentType = request.headers().get("Content-Type");
+        strContentType = ObjectUtil.isNotNull(strContentType)?strContentType.trim():"";
         if (strContentType.contains("application/json")) {
             return getJSONParams(request, clazz);
         } else {
