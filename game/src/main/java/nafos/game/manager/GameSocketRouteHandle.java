@@ -15,11 +15,16 @@ import org.springframework.stereotype.Service;
  **/
 @Service("GameSocketRouteHandle")
 public  class GameSocketRouteHandle extends AbstractSocketRouteHandle {
-
+    private static final Logger logger = LoggerFactory.getLogger(GameSocketRouteHandle.class);
     @Override
     public void invokeRoute(ChannelHandlerContext ctx, SocketRouteClassAndMethod route, Object obj, byte[] idByte) {
         Object client = ctx.channel().attr(AttributeKey.valueOf("client")).get();
-        route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
-                new Object[]{ObjectUtil.isNull(client)?ctx.channel():client,obj,idByte});
+        try{
+            route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
+                    new Object[]{ObjectUtil.isNull(client)?ctx.channel():client,obj,idByte});
+        }catch (ClassCastException e){
+            logger.error();
+        }
+
     }
 }
