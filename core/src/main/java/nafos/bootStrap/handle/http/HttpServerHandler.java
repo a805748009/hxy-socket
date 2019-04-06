@@ -28,7 +28,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
     HttpExecutorPoolChoose httpExecutorPoolChoose;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg)  {
         if (!(msg instanceof FullHttpRequest)) {
             NettyUtil.sendError(ctx, BAD_REQUEST);
             return;

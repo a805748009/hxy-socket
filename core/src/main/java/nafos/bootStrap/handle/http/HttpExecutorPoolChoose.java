@@ -8,7 +8,6 @@ import nafos.core.Thread.Processors;
 import nafos.bootStrap.handle.ExecutorPoolChoose;
 import nafos.core.entry.AsyncTaskMode;
 import nafos.core.entry.HttpRouteClassAndMethod;
-import nafos.core.entry.http.NafosRequest;
 import nafos.core.helper.SpringApplicationContextHolder;
 import nafos.core.mode.InitMothods;
 import nafos.core.util.*;
@@ -46,7 +45,7 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
 
         boolean isRunOnWork = httpRouteClassAndMethod.isRunOnWorkGroup();
 
-        String cookieId = new NafosRequest(request).getNafosCookieId();
+        String cookieId = request.getNafosCookieId();
         cookieId = ObjectUtil.isNotNull(cookieId) ? cookieId : CastUtil.castString(new Random().nextInt(10));
         int queuecCode = cookieId.hashCode() % Processors.getProcess();
 
