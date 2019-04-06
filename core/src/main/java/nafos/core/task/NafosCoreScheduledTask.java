@@ -1,11 +1,10 @@
 package nafos.core.task;
 
-import nafos.core.monitor.SystemMonitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import nafos.core.monitor.RunWatch;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 /** 
 * @author 作者 huangxinyu 
@@ -15,21 +14,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class NafosCoreScheduledTask {
 
-	@Value("${nafos.monnitor.showSystem:false}")
-	private boolean showSystem;
-	
-	private static Logger logger = LoggerFactory.getLogger(NafosCoreScheduledTask.class);
-
-
-
-	@Scheduled(cron="0 0/2 * * * *")
-	public void systemMonitor() throws Exception {
-	 	if(showSystem){
-			logger.info("============开始打印系统信息日志============");
-			Thread.currentThread().setName( "SystemMonitor");
-			SystemMonitor.gcLog();
-			SystemMonitor.memoryLog();
-			SystemMonitor.threadLog();
-		}
+	@Scheduled(cron="0 0 1 ? * MON")
+	public void runWatchMonitor() {
+		ArrayList<RunWatch.RunInfo> infoList =  RunWatch.info();
+		RunWatch.addCurWeekInfo(infoList);
+		RunWatch.resetInfo();
 	}
+
 }

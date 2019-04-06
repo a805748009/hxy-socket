@@ -2,46 +2,50 @@ package nafos.core.entry;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
 
-/** 
-* @author 作者 huangxinyu 
-* @version 创建时间：2018年4月9日 下午5:49:12 
-* 类说明 
-*/
+/**
+ * @author 作者 huangxinyu
+ * @version 创建时间：2018年4月9日 下午5:49:12
+ * 类说明
+ */
 public class ResultStatus {
 
-	@Override
-	public String toString() {
-		return "ResultStatus{" +
-				"success=" + success +
-				", ResponseStatus=" + ResponseStatus +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "ResultStatus{" +
+                "success=" + success +
+                ", ResponseStatus=" + ResponseStatus +
+                '}';
+    }
 
-	private boolean success;
-	
-	private HttpResponseStatus ResponseStatus;
+    private boolean success;
 
-	public ResultStatus() {
-	}
+    private HttpResponseStatus ResponseStatus;
 
-	public ResultStatus(boolean success, HttpResponseStatus responseStatus) {
-		this.success = success;
-		ResponseStatus = responseStatus;
-	}
+    public ResultStatus() {
+    }
 
-	public boolean isSuccess() {
-		return success;
-	}
+    public ResultStatus(boolean success) {
+        this.success = success;
+    }
 
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
+    public ResultStatus(boolean success, HttpResponseStatus responseStatus) {
+        this.success = success;
+        ResponseStatus = responseStatus;
+    }
 
-	public HttpResponseStatus getResponseStatus() {
-		return ResponseStatus;
-	}
+    public boolean isSuccess() {
+        return success;
+    }
 
-	public void setResponseStatus(HttpResponseStatus responseStatus) {
-		ResponseStatus = responseStatus;
-	}
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public HttpResponseStatus getResponseStatus() {
+        return ResponseStatus;
+    }
+
+    public void setResponseStatus(HttpResponseStatus responseStatus) {
+        ResponseStatus = responseStatus;
+    }
 }

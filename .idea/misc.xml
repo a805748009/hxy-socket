@@ -5,14 +5,13 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/nafosnetwork/pom.xml" />
-        <option value="$PROJECT_DIR$/core/pom.xml" />
-        <option value="$PROJECT_DIR$/security/pom.xml" />
-        <option value="$PROJECT_DIR$/network/pom.xml" />
-        <option value="$PROJECT_DIR$/game/pom.xml" />
-        <option value="$PROJECT_DIR$/remote/pom.xml" />
         <option value="$PROJECT_DIR$/sample/pom.xml" />
         <option value="$PROJECT_DIR$/demo/pom.xml" />
+        <option value="$PROJECT_DIR$/core/pom.xml" />
+        <option value="$PROJECT_DIR$/game/pom.xml" />
         <option value="$PROJECT_DIR$/msgQueue/pom.xml" />
+        <option value="$PROJECT_DIR$/security/pom.xml" />
+        <option value="$PROJECT_DIR$/remote/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

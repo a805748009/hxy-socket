@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-/** 
-* @author 作者 huangxinyu 
-* @version 创建时间：2018年1月9日 下午7:41:24 
-* Protostuff序列化工具
-*/
+/**
+ * @author 作者 huangxinyu
+ * @version 创建时间：2018年1月9日 下午7:41:24
+ * Protostuff序列化工具
+ */
 public class ProtoUtil {
-	private static Map<Class<?>, Schema<?>> cachedSchema = new ConcurrentHashMap<>();
+    private static Map<Class<?>, Schema<?>> cachedSchema = new ConcurrentHashMap<>();
 
     private static Objenesis objenesis = new ObjenesisStd(true);
 
@@ -61,7 +61,7 @@ public class ProtoUtil {
             throw new IllegalStateException(e.getMessage(), e);
         }
     }
-    
+
 
     @SuppressWarnings("unchecked")
     public static <T> byte[] serializeToByte(T obj) {

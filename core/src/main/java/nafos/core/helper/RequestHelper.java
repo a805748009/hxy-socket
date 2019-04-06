@@ -1,29 +1,23 @@
 package nafos.core.helper;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.QueryStringDecoder;
-import io.netty.handler.codec.http.multipart.*;
-import io.netty.util.CharsetUtil;
-import io.netty.util.ReferenceCountUtil;
-import nafos.core.annotation.controller.Request;
-import nafos.core.annotation.controller.RequestParam;
+import nafos.core.Thread.ThreadLocalHelper;
+import nafos.core.annotation.http.RequestParam;
+import nafos.bootStrap.handle.http.NsRequest;
 import nafos.core.entry.HttpRouteClassAndMethod;
-import nafos.core.mode.RouteFactory;
-import nafos.core.util.*;
-import net.sf.json.JSONObject;
-import org.apache.commons.beanutils.BeanUtils;
+import nafos.bootStrap.handle.http.NsRespone;
+import nafos.core.util.BeanToMapUtil;
+import nafos.core.util.CastUtil;
+import nafos.core.util.ObjectUtil;
+import nafos.core.util.ProtoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,19 +30,19 @@ public class RequestHelper {
     private static final Logger logger = LoggerFactory.getLogger(RequestHelper.class);
 
 
-
-    public static Object[] getRequestParams(FullHttpRequest req, HttpRouteClassAndMethod route) {
+    public static Object[] getRequestParams(NsRequest req, HttpRouteClassAndMethod route) {
         return getRequestParams(req, route, null);
     }
 
-    public static Object[] getRequestParams(FullHttpRequest req, HttpRouteClassAndMethod route, byte[] content) {
-        Map<String, String> requestParams = decodeUriToMap(req);
+    public static Object[] getRequestParams(NsRequest nsRequest, HttpRouteClassAndMethod route, byte[] content) {
+        Map<String, String> requestParams = nsRequest.getRequestParams();
         LinkedList linkedList = new LinkedList();
         for (Parameter parameter : route.getParameters()) {
             Object fieldObj = null;
             RequestParam requestParam = parameter.getDeclaredAnnotation(RequestParam.class);
+            //url 参数
             if (ObjectUtil.isNotNull(requestParam)) {
-                Object object = requestParams.get(requestParam.value());
+                Object object = nsRequest.objectQueryParam(requestParam.value());
                 if (ObjectUtil.isNull(object) && requestParam.required()) {
                     if (requestParam.required()) {
                         logger.error("======{},参数{}不能为空 ", route.getMethod().toString(), requestParam.value());
@@ -58,20 +52,37 @@ public class RequestHelper {
                         continue;
                     }
                 }
-                fieldObj = requestParams.get(requestParam.value());
-                fieldObj = castClass(fieldObj, parameter.getType());
+                fieldObj = castClass(object, parameter.getType());
                 linkedList.add(fieldObj);
                 continue;
             }
 
-            Request request = parameter.getDeclaredAnnotation(Request.class);
-            if (ObjectUtil.isNotNull(request)) {
-                linkedList.add(req);
+            //request
+            if (NsRequest.class.isAssignableFrom(parameter.getType())) {
+                linkedList.add(nsRequest);
+                continue;
+            }
+
+            //respone
+            if (NsRespone.class.isAssignableFrom(parameter.getType())) {
+                linkedList.add(ThreadLocalHelper.getRespone());
                 continue;
             }
 
             if (ObjectUtil.isNull(content)) {
-                getRequestParamsForJson(req, requestParams, parameter, linkedList, fieldObj);
+                //JSON传输的方法
+                if (nsRequest.method() == HttpMethod.GET) {
+                    if (Map.class.isAssignableFrom(parameter.getType())) {
+                        linkedList.add(requestParams);
+                    }
+                } else {
+                    //远程调用的restful-json处理
+                    if (Map.class.isAssignableFrom(parameter.getType())) {
+                        linkedList.add(nsRequest.getBodyParams());
+                    } else {
+                        linkedList.add(BeanToMapUtil.mapToObject(nsRequest.getBodyParams(), parameter.getType()));
+                    }
+                }
                 continue;
             } else {
                 getRequestParamsForByte(parameter, linkedList, content);
@@ -83,147 +94,11 @@ public class RequestHelper {
         return linkedList.toArray();
     }
 
-    /**
-     * 获取参数 ->  JSON方式
-     *
-     * @return
-     * @throws IOException
-     */
-    public static void getRequestParamsForJson(FullHttpRequest req, Map<String, String> requestParams, Parameter parameter, LinkedList linkedList, Object fieldObj) {
-        //GET请求
-        if (req.method() == HttpMethod.GET) {
-            if (Map.class.isAssignableFrom(parameter.getType())) {
-                linkedList.add(requestParams);
-            } else {
-                try {
-                    BeanUtils.populate(fieldObj, requestParams);
-                    linkedList.add(fieldObj);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            }
-            return;
-        }
-
-        // 处理POST请求
-        if (req.method() == HttpMethod.POST) {
-            //远程调用的restful-json处理
-            linkedList.add(restfulJsonEncode(req, parameter.getType()));
-            return;
-        }
-    }
-
 
     public static void getRequestParamsForByte(Parameter parameter, LinkedList linkedList, byte[] content) {
         linkedList.add(ProtoUtil.deserializeFromByte(content, parameter.getType()));
     }
 
-    /**
-     * uri的参数转map
-     *
-     * @param req
-     * @return
-     */
-    private static Map<String, String> decodeUriToMap(FullHttpRequest req) {
-        Map<String, String> requestParams = new HashMap<>();
-        QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
-        for (Map.Entry<String, List<String>> entry : decoder.parameters().entrySet()) {
-            requestParams.put(entry.getKey(), entry.getValue().get(0));
-        }
-        return requestParams;
-    }
-
-
-    /**
-     * restful风格的postJSON解析
-     *
-     * @param request
-     * @param clazz
-     * @return
-     */
-    private static Object restfulJsonEncode(FullHttpRequest request, Class<?> clazz) {
-        // 处理POST请求
-        String strContentType = request.headers().get("Content-Type");
-        strContentType = ObjectUtil.isNotNull(strContentType)?strContentType.trim():"";
-        if (strContentType.contains("application/json")) {
-            return getJSONParams(request, clazz);
-        } else {
-            return getFormParams(request, clazz);
-        }
-    }
-
-
-    /**
-     * 解析from表单数据（Content-Type = x-www-form-urlencoded）,默认格式
-     */
-    private static Object getFormParams(FullHttpRequest fullHttpRequest, Class<?> clazz) {
-        Map<String, Object> params = new HashMap<String, Object>();
-        HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(new DefaultHttpDataFactory(false), fullHttpRequest);
-        List<InterfaceHttpData> postData = decoder.getBodyHttpDatas();
-        for (InterfaceHttpData data : postData) {
-            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
-                MemoryAttribute attribute = (MemoryAttribute) data;
-                params.put(attribute.getName(), attribute.getValue());
-            }
-        }
-        if (Map.class.isAssignableFrom(clazz)) {
-            return params;
-        } else {
-            return BeanToMapUtil.mapToObject(params, clazz);
-        }
-
-    }
-
-    /**
-     * 解析json数据（Content-Type = application/json）
-     */
-    private static Object getJSONParams(FullHttpRequest req, Class<?> clazz) {
-        ByteBuf jsonBuf = req.content();
-        String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
-        if (Map.class.isAssignableFrom(clazz)) {
-            return JsonUtil.jsonToMap(jsonStr);
-        } else {
-            return JsonUtil.json2Object(jsonStr, clazz);
-        }
-    }
-
-
-    /**
-     * xml风格的postJSON解析
-     *
-     * @param req
-     * @param clazz
-     * @return
-     */
-    private static Object xmlJsonEncode(FullHttpRequest req, Class<?> clazz) {
-        Object fieldObj = null;
-        Map<String, String> postMap = new HashMap<>();
-        HttpPostRequestDecoder httpPostRequestDecoder = new HttpPostRequestDecoder(req);
-        httpPostRequestDecoder.offer(req);
-        List<InterfaceHttpData> parmList = httpPostRequestDecoder.getBodyHttpDatas();
-        for (InterfaceHttpData parm : parmList) {
-            Attribute data = (Attribute) parm;
-            try {
-                postMap.put(data.getName(), data.getValue());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if (!Map.class.isAssignableFrom(clazz)) {
-            try {
-                BeanUtils.populate(fieldObj, postMap);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        } else {
-            fieldObj = postMap;
-        }
-        return fieldObj;
-    }
 
     /**
      * 把Object 变成对应的calssObj
@@ -265,7 +140,7 @@ public class RequestHelper {
         // 处理get请求
         if (req.method() == HttpMethod.GET) {
             QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
-            String params = (String) decoder.parameters().get("params").get(0);
+            String params = decoder.parameters().get("params").get(0);
             try {
                 payloadBytes = params.getBytes("ISO8859-1");
             } catch (UnsupportedEncodingException e) {

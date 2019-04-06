@@ -10,13 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
-
 /**
  * ClassName:DateUtil
  * Function: TODO ADD FUNCTION.
  * Date:     2017年8月23日 下午1:52:45
- * @author   HXY
+ *
+ * @author HXY
  */
 public class DateUtil {
     private static final Logger log = LoggerFactory.getLogger(DateUtil.class);
@@ -25,9 +24,9 @@ public class DateUtil {
 
     private static final Object lockObj = new Object();
 
-    private static SimpleDateFormat getInstace(String key){
+    private static SimpleDateFormat getInstace(String key) {
         ThreadLocal<SimpleDateFormat> tl = sdfMap.get(key);
-        if(tl == null){
+        if (tl == null) {
             synchronized (lockObj) {
                 tl = sdfMap.get(key);
                 if (tl == null) {
@@ -49,7 +48,7 @@ public class DateUtil {
 
     private static final String sdf_mm = "yyyy-MM-dd HH:mm";
 
-    private static final String sdf_day ="yyyy-MM-dd";
+    private static final String sdf_day = "yyyy-MM-dd";
 
     private static final String sdf_format = "yyyyMMddHHmmss";
 
@@ -105,7 +104,7 @@ public class DateUtil {
      */
     public static String formatTimeHms(int learnTime) {
 
-        if(learnTime == 0) {
+        if (learnTime == 0) {
             return "0小时0分0秒";
         } else {
             int hour = learnTime / 3600;
@@ -114,10 +113,10 @@ public class DateUtil {
 
             String m = minutes + "";
             String s = seconds + "";
-            if(minutes < 10) {
+            if (minutes < 10) {
                 m = "0" + minutes;
             }
-            if(seconds < 10) {
+            if (seconds < 10) {
                 s = "0" + seconds;
             }
             return hour + "小时" + m + "分" + s + "秒";
@@ -132,7 +131,7 @@ public class DateUtil {
      * @return
      */
     public static String formatTimeHmsEng(int learnTime) {
-        if(learnTime == 0) {
+        if (learnTime == 0) {
             return "0h 0m 0秒";
         } else {
             int hour = learnTime / 3600;
@@ -141,10 +140,10 @@ public class DateUtil {
 
             String m = minutes + "";
             String s = seconds + "";
-            if(minutes < 10) {
+            if (minutes < 10) {
                 m = "0" + minutes;
             }
-            if(seconds < 10) {
+            if (seconds < 10) {
                 s = "0" + seconds;
             }
             return hour + "h " + m + "m " + s + "s";
@@ -156,7 +155,7 @@ public class DateUtil {
      */
     public static String formatKMGB(long data) {
         // 如果字节数少于1024，则直接以B为单位，否则先除于1024，后3位因太少无意义
-        if(data < 1024) {
+        if (data < 1024) {
             return CastUtil.castString(data) + "B";
         } else {
             data = data / 1024;
@@ -164,12 +163,12 @@ public class DateUtil {
         // 如果原字节数除于1024之后，少于1024，则可以直接以KB作为单位
         // 因为还没有到达要使用另一个单位的时候
         // 接下去以此类推
-        if(data < 1024) {
+        if (data < 1024) {
             return CastUtil.castString(data) + "KB";
         } else {
             data = data / 1024;
         }
-        if(data < 1024) {
+        if (data < 1024) {
             // 因为如果以MB为单位的话，要保留最后1位小数，
             // 因此，把此数乘以100之后再取余
             data = data * 100;
@@ -185,14 +184,14 @@ public class DateUtil {
      * long型数据 (B)转化为(MB),四舍五入
      */
     public static long formatMB(long data) {
-        if(data < 1024) {
+        if (data < 1024) {
             return 0;
         } else {
             // 转化为KB
             data = data / 1024;
         }
-        if(data < 1024) {
-            if(1024 / data <= 2) {
+        if (data < 1024) {
+            if (1024 / data <= 2) {
                 return 1;
             } else {
                 return 0;
@@ -200,7 +199,7 @@ public class DateUtil {
         } else {
             // 转为MB
             long result = data / 1024;
-            if(data % 1024 > 512) {
+            if (data % 1024 > 512) {
                 result = result + 1;
             }
             return result;
@@ -215,14 +214,10 @@ public class DateUtil {
     /**
      * 分类总排序算法2： 1级:10100 2级:10101
      *
-     * @param prank
-     *            上次总排序
-     * @param order
-     *            当前排序
-     * @param level
-     *            当前层级
-     * @param total
-     *            总层级
+     * @param prank 上次总排序
+     * @param order 当前排序
+     * @param level 当前层级
+     * @param total 总层级
      * @return
      */
     public static long getRank2(long prank, long order, int level, int total) {
@@ -230,8 +225,8 @@ public class DateUtil {
     }
 
     public static long getMaxId(long maxId, long Pid) {
-        if(maxId <= 0) {
-            if(Pid == 0) {
+        if (maxId <= 0) {
+            if (Pid == 0) {
                 maxId = 10;
             } else {
                 maxId = Pid * 100;
@@ -249,9 +244,9 @@ public class DateUtil {
     }
 
     public static Object[] getObj(Object[] objArray, int len) {
-        if(objArray == null) {
+        if (objArray == null) {
             objArray = new Object[len];
-            for(int i = 0; i < len; i++) {
+            for (int i = 0; i < len; i++) {
                 objArray[i] = "";
             }
         }
@@ -347,7 +342,7 @@ public class DateUtil {
      * @return
      */
     public static String getVideoCommentDistanceTime(String time) {
-        if(ObjectUtil.isNull(time)) {
+        if (ObjectUtil.isNull(time)) {
             return "";
         }
         Date one;
@@ -361,7 +356,7 @@ public class DateUtil {
             long time1 = one.getTime();
             long time2 = two.getTime();
             long diff;
-            if(time1 < time2) {
+            if (time1 < time2) {
                 diff = time2 - time1;
             } else {
                 diff = time1 - time2;
@@ -374,10 +369,10 @@ public class DateUtil {
             return "";
         }
         String timeStr = "";
-        if(day == 0 && hour < 24) {
-            if(hour == 0 && min == 0) {
+        if (day == 0 && hour < 24) {
+            if (hour == 0 && min == 0) {
                 timeStr = sec + "秒";
-            } else if(hour == 0) {
+            } else if (hour == 0) {
                 timeStr = min + "分钟";
             } else {
                 timeStr = hour + "小时";
@@ -420,7 +415,7 @@ public class DateUtil {
             two = getInstace(sdf).parse(str2);
             long time1 = one.getTime();
             long time2 = two.getTime();
-            if(time1 < time2) {
+            if (time1 < time2) {
                 diff = time2 - time1;
             } else {
                 diff = time1 - time2;
@@ -434,10 +429,8 @@ public class DateUtil {
     /**
      * 两个时间相差距离多少天多少小时多少分多少秒
      *
-     * @param str1
-     *            时间参数 1 格式：1990-01-01 12:00:00
-     * @param str2
-     *            时间参数 2 格式：2009-01-01 12:00:00
+     * @param str1 时间参数 1 格式：1990-01-01 12:00:00
+     * @param str2 时间参数 2 格式：2009-01-01 12:00:00
      * @return String 返回值为：xx天xx小时xx分xx秒
      */
     public static String getDistanceTime(String str1, String str2) {
@@ -453,7 +446,7 @@ public class DateUtil {
             long time1 = one.getTime();
             long time2 = two.getTime();
             long diff;
-            if(time1 < time2) {
+            if (time1 < time2) {
                 diff = time2 - time1;
             } else {
                 diff = time1 - time2;
@@ -471,10 +464,8 @@ public class DateUtil {
     /**
      * 两个时间相差距离多少小时多少分多少秒
      *
-     * @param str1
-     *            时间参数 1 格式：1990-01-01 12:00:00
-     * @param str2
-     *            时间参数 2 格式：2009-01-01 12:00:00
+     * @param str1 时间参数 1 格式：1990-01-01 12:00:00
+     * @param str2 时间参数 2 格式：2009-01-01 12:00:00
      * @return String 返回值为：xx小时xx分xx秒
      */
     public static String getHourDistanceTime(String str1, String str2) {
@@ -490,7 +481,7 @@ public class DateUtil {
             long time1 = one.getTime();
             long time2 = two.getTime();
             long diff;
-            if(time1 < time2) {
+            if (time1 < time2) {
                 diff = time2 - time1;
             } else {
                 diff = time1 - time2;
@@ -507,10 +498,8 @@ public class DateUtil {
     /**
      * 两个时间相差距离多少小时多少分多少秒
      *
-     * @param time1
-     *            时间参数 1 格式：1478163361309 时间戳
-     * @param time2
-     *            时间参数 2 格式：1478163361309 时间戳
+     * @param time1 时间参数 1 格式：1478163361309 时间戳
+     * @param time2 时间参数 2 格式：1478163361309 时间戳
      * @return String 返回值为：xx小时xx分xx秒
      */
     public static String getHourDistanceTimestamp(long time1, long time2) {
@@ -520,7 +509,7 @@ public class DateUtil {
         long sec = 0;
         try {
             long diff;
-            if(time1 < time2) {
+            if (time1 < time2) {
                 diff = time2 - time1;
             } else {
                 diff = time1 - time2;
@@ -630,10 +619,8 @@ public class DateUtil {
     /**
      * 提前分钟计算
      *
-     * @param time
-     *            yyyy-MM-dd HH:mm:ss
-     * @param n
-     *            1
+     * @param time yyyy-MM-dd HH:mm:ss
+     * @param n    1
      * @return yyyy-MM-dd HH:mm:ss
      */
     public static String reduceMillis(String time, int n) {
@@ -650,10 +637,8 @@ public class DateUtil {
     /**
      * 推迟分钟计算
      *
-     * @param time
-     *            yyyy-MM-dd HH:mm:ss
-     * @param n
-     *            1
+     * @param time yyyy-MM-dd HH:mm:ss
+     * @param n    1
      * @return yyyy-MM-dd HH:mm:ss
      */
     public static String delayMillis(String time, int n) {
@@ -673,7 +658,7 @@ public class DateUtil {
             c1.setTime(getInstace(sdf_day).parse(time1));
             Calendar c2 = Calendar.getInstance();
             c2.setTime(getInstace(sdf_day).parse(time2));
-            if(c1.equals(c2)) {
+            if (c1.equals(c2)) {
                 return true;
             } else {
                 return c1.before(c2);
@@ -703,7 +688,7 @@ public class DateUtil {
             c1.setTime(getInstace(sdf_mm).parse(time1));
             Calendar c2 = Calendar.getInstance();
             c2.setTime(getInstace(sdf_mm).parse(time2));
-            if(c1.equals(c2)) {
+            if (c1.equals(c2)) {
                 return false;
             } else {
                 return c1.before(c2);
@@ -801,12 +786,12 @@ public class DateUtil {
     }
 
     public static String getWeekOfDate(String time) {
-        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         Calendar cal = Calendar.getInstance();
         try {
             cal.setTime(getInstace(sdf_day).parse(time));
             int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-            if(w < 0) {
+            if (w < 0) {
                 w = 0;
             }
             return weekDays[w];
@@ -819,7 +804,7 @@ public class DateUtil {
     public static String getMaxYearDay(String st2) {
         Calendar cal = Calendar.getInstance();
         String st3 = cal.get(Calendar.YEAR) + "-12-31";
-        if(checkDobleDay(st2, st3)) {
+        if (checkDobleDay(st2, st3)) {
             return st2;
         } else {
             return st3;
@@ -856,8 +841,7 @@ public class DateUtil {
     /**
      * 获取上一个月的今天(如果是2017-03-30 则获取的是2017-02-29或者28)
      *
-     * @param dateStr
-     *            yyyy-MM-dd
+     * @param dateStr yyyy-MM-dd
      * @return
      */
     public static String getDateOfLastMonth(String dateStr) {
@@ -944,15 +928,12 @@ public class DateUtil {
     /**
      * Java判断一个时间是否在另一个时间段内 比如：当时间在凌晨0点至0点5分之间程序不执行 也就是实现判断当前时间点是否在00:00:00至00:05:00之间
      *
+     * @param strDate      当前时间 yyyy-MM-dd HH:mm:ss
+     * @param strDateBegin 开始时间 00:00:00
+     * @param strDateEnd   结束时间 00:05:00
+     * @return boolean
      * @author lisheng
      * @date 2017年5月4日 上午10:30:03
-     * @return boolean
-     * @param strDate
-     *            当前时间 yyyy-MM-dd HH:mm:ss
-     * @param strDateBegin
-     *            开始时间 00:00:00
-     * @param strDateEnd
-     *            结束时间 00:05:00
      */
     public static boolean isInDate(String strDate, String strDateBegin, String strDateEnd) {
         // 截取当前时间时分秒
@@ -970,23 +951,23 @@ public class DateUtil {
         int strDateEndM = Integer.parseInt(strDateEnd.substring(3, 5));
         int strDateEndS = Integer.parseInt(strDateEnd.substring(6, 8));
         // 当前时间小时数在开始时间和结束时间小时数之间
-        if((strDateH >= strDateBeginH && strDateH <= strDateEndH)) {
-            if(strDateH > strDateBeginH && strDateH < strDateEndH) {
+        if ((strDateH >= strDateBeginH && strDateH <= strDateEndH)) {
+            if (strDateH > strDateBeginH && strDateH < strDateEndH) {
                 return true;
-            } else if(strDateH == strDateBeginH && strDateM > strDateBeginM && strDateH < strDateEndH) {
+            } else if (strDateH == strDateBeginH && strDateM > strDateBeginM && strDateH < strDateEndH) {
 
                 return true;
-            } else if(strDateH == strDateBeginH
+            } else if (strDateH == strDateBeginH
                     && strDateM == strDateBeginM && strDateS > strDateBeginS && strDateH < strDateEndH) {
                 return true;
-            } else if(strDateH == strDateBeginH
+            } else if (strDateH == strDateBeginH
                     && strDateM == strDateBeginM && strDateS == strDateBeginS && strDateH < strDateEndH) {
                 return true;
-            } else if(strDateH > strDateBeginH && strDateH == strDateEndH && strDateM < strDateEndM) {
+            } else if (strDateH > strDateBeginH && strDateH == strDateEndH && strDateM < strDateEndM) {
                 return true;
-            } else if(strDateH > strDateBeginH && strDateH == strDateEndH && strDateM == strDateEndM && strDateS < strDateEndS) {
+            } else if (strDateH > strDateBeginH && strDateH == strDateEndH && strDateM == strDateEndM && strDateS < strDateEndS) {
                 return true;
-            } else if(strDateH > strDateBeginH && strDateH == strDateEndH && strDateM == strDateEndM && strDateS == strDateEndS) {
+            } else if (strDateH > strDateBeginH && strDateH == strDateEndH && strDateM == strDateEndM && strDateS == strDateEndS) {
                 return true;
             } else {
                 return false;
@@ -999,22 +980,22 @@ public class DateUtil {
     /**
      * 将日期转换成字符串，格式为yyyy-MM-dd HH:mm:ss
      *
+     * @param date
+     * @return String
      * @author lisheng
      * @date 2017年7月11日 下午3:45:36
-     * @return String
-     * @param date
      */
     public static String formatDate(Date date) {
-        if(date == null) return null;
+        if (date == null) return null;
         return getInstace(sdf).format(date);
     }
 
     /**
      * 获取当前时间前一个小时的时间
      *
+     * @return String 2017-07-12 16:56:30
      * @author lisheng
      * @date 2017年7月12日 下午5:52:31
-     * @return String 2017-07-12 16:56:30
      */
     public static String getBeforeOneHourFromNowDate() {
         Calendar calendar = Calendar.getInstance();
@@ -1026,11 +1007,10 @@ public class DateUtil {
     /**
      * 获取当前时间n年后的时间
      *
-     * @author lisheng
-     * @date 2017年7月12日 下午10:28:45
-     * @return String
      * @param nYear
      * @return
+     * @author lisheng
+     * @date 2017年7月12日 下午10:28:45
      */
     public static String getNYearFromNowDate(int nYear) {
         Calendar calendar = Calendar.getInstance();
@@ -1042,15 +1022,14 @@ public class DateUtil {
     /**
      * 将日期转换成字符串，格式为自定义
      *
-     * @author lisheng
-     * @date 2017年7月12日 下午5:58:01
-     * @return String
      * @param date
      * @param formatStyle
      * @return
+     * @author lisheng
+     * @date 2017年7月12日 下午5:58:01
      */
     public static String formatDate(Date date, String formatStyle) {
-        if(date == null || ObjectUtil.isNull(formatStyle)) return null;
+        if (date == null || ObjectUtil.isNull(formatStyle)) return null;
         return new SimpleDateFormat(formatStyle).format(date);
     }
 
@@ -1058,15 +1037,15 @@ public class DateUtil {
      * 将日期字符串转换成日期，只支持如下格式： yyyy-MM-dd 或 yyyy-MM-dd HH:mm:ss
      */
     public static Date parseDate(String str) {
-        if(str == null) return null;
+        if (str == null) return null;
         try {
             String formatStyle = "yyyy-MM-dd HH:mm:ss";
 
-            if(str.length() == 10) {
+            if (str.length() == 10) {
                 formatStyle = "yyyy-MM-dd";
-            } else if(str.length() == 19) {
+            } else if (str.length() == 19) {
                 formatStyle = "yyyy-MM-dd HH:mm:ss";
-            } else if(str.length() == 13) {
+            } else if (str.length() == 13) {
                 formatStyle = "yyyy-MM-dd HH";
             }
             return new SimpleDateFormat(formatStyle).parse(str);
@@ -1079,11 +1058,11 @@ public class DateUtil {
     /**
      * 判断一个字符串日期是不是正确的格式
      *
-     * @author lisheng
-     * @date 2014年8月18日 下午2:47:43
-     * @return boolean
      * @param dateStr
      * @param format
+     * @return boolean
+     * @author lisheng
+     * @date 2014年8月18日 下午2:47:43
      */
     public static boolean checkDate(String dateStr, String format) {
         SimpleDateFormat df = new SimpleDateFormat(format);
@@ -1103,22 +1082,21 @@ public class DateUtil {
     /**
      * 获取两个日期间的小时和分钟数
      *
-     * @author lisheng
-     * @date 2015年7月24日 下午3:28:12
-     * @return String
      * @param startDate
      * @param endDate
      * @return
+     * @author lisheng
+     * @date 2015年7月24日 下午3:28:12
      */
     public static String getHoursAndMinutes(Date startDate, Date endDate) {
-        if(null == startDate || null == endDate) {
+        if (null == startDate || null == endDate) {
             return "0";
         }
 
         long startTime = startDate.getTime();// 得出来的是毫秒数
         long endTime = endDate.getTime();// 得出来的是毫秒数
 
-        if(endTime < startTime) {
+        if (endTime < startTime) {
             return "0";
         }
 
@@ -1135,21 +1113,21 @@ public class DateUtil {
     /**
      * 获取两个日期间的小时数
      *
-     * @author lisheng
-     * @date 2015年7月28日 下午4:42:53
-     * @return long
      * @param startDate
      * @param endDate
+     * @return long
+     * @author lisheng
+     * @date 2015年7月28日 下午4:42:53
      */
     public static long getHours(Date startDate, Date endDate) {
-        if(null == startDate || null == endDate) {
+        if (null == startDate || null == endDate) {
             return 0;
         }
 
         long startTime = startDate.getTime();// 得出来的是毫秒数
         long endTime = endDate.getTime();// 得出来的是毫秒数
 
-        if(endTime < startTime) {
+        if (endTime < startTime) {
             return 0;
         }
 
@@ -1162,21 +1140,21 @@ public class DateUtil {
     /**
      * 获取两个日期间的分钟数
      *
-     * @author lisheng
-     * @date 2015年7月28日 下午4:42:53
-     * @return long
      * @param startDate
      * @param endDate
+     * @return long
+     * @author lisheng
+     * @date 2015年7月28日 下午4:42:53
      */
     public static long getMinutes(Date startDate, Date endDate) {
-        if(null == startDate || null == endDate) {
+        if (null == startDate || null == endDate) {
             return 0;
         }
 
         long startTime = startDate.getTime();// 得出来的是毫秒数
         long endTime = endDate.getTime();// 得出来的是毫秒数
 
-        if(endTime < startTime) {
+        if (endTime < startTime) {
             return 0;
         }
 
@@ -1189,12 +1167,11 @@ public class DateUtil {
     /**
      * 获取指定日期的第一天
      *
-     * @author Nick
-     * @date 2016年9月25日 下午12:33:41
-     * @return String
      * @param dateStr
      * @return
      * @throws Exception
+     * @author Nick
+     * @date 2016年9月25日 下午12:33:41
      */
     public static String getFirstDay(String dateStr) throws Exception {
         Date date = null;
@@ -1212,12 +1189,11 @@ public class DateUtil {
     /**
      * 获取指定日期的最后一天
      *
-     * @author Nick
-     * @date 2016年9月25日 下午12:34:28
-     * @return String
      * @param dateStr
      * @return
      * @throws Exception
+     * @author Nick
+     * @date 2016年9月25日 下午12:34:28
      */
     public static String getLastDay(String dateStr) throws Exception {
         Date date = null;
@@ -1237,8 +1213,7 @@ public class DateUtil {
     /**
      * 获取过去或将来第几天的日期
      *
-     * @param time
-     *            (负数为过去，正数为将来)
+     * @param time (负数为过去，正数为将来)
      * @return yyyy-MM-dd
      */
     public static String getPastOrFetureDate(int time) {
@@ -1250,6 +1225,7 @@ public class DateUtil {
 
     /**
      * 获取过去或将来多少分钟之后的时间
+     *
      * @param minutes
      * @return
      */

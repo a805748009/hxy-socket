@@ -23,6 +23,7 @@ public class ArrayUtil {
 
     /**
      * 合并数组
+     *
      * @param array1
      * @param array2
      * @return
@@ -33,7 +34,7 @@ public class ArrayUtil {
         } else if (array2 == null) {
             return clone(array1);
         } else {
-            Object[] joinedArray = (Object[])((Object[]) Array.newInstance(array1.getClass().getComponentType(), array1.length + array2.length));
+            Object[] joinedArray = (Object[]) ((Object[]) Array.newInstance(array1.getClass().getComponentType(), array1.length + array2.length));
             System.arraycopy(array1, 0, joinedArray, 0, array1.length);
 
             try {
@@ -54,6 +55,7 @@ public class ArrayUtil {
 
     /**
      * 合并数组
+     *
      * @param data1
      * @param data2
      * @return
@@ -83,6 +85,7 @@ public class ArrayUtil {
 
     /**
      * 判断数组中是否包含某个元素
+     *
      * @author HXY
      * @date 2017年8月29日下午1:21:02
      */
@@ -128,7 +131,7 @@ public class ArrayUtil {
 
 
     public static Object[] clone(Object[] array) {
-        return array == null ? null : (Object[])((Object[])array.clone());
+        return array == null ? null : (Object[]) ((Object[]) array.clone());
     }
 
     public static int indexOf(Object[] array, Object objectToFind) {
@@ -145,13 +148,13 @@ public class ArrayUtil {
 
             int i;
             if (objectToFind == null) {
-                for(i = startIndex; i < array.length; ++i) {
+                for (i = startIndex; i < array.length; ++i) {
                     if (array[i] == null) {
                         return i;
                     }
                 }
             } else {
-                for(i = startIndex; i < array.length; ++i) {
+                for (i = startIndex; i < array.length; ++i) {
                     if (objectToFind.equals(array[i])) {
                         return i;
                     }

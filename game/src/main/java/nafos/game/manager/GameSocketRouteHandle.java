@@ -6,6 +6,8 @@ import nafos.core.entry.SocketRouteClassAndMethod;
 import nafos.core.util.ObjectUtil;
 import nafos.core.util.SpringApplicationContextHolder;
 import nafos.network.bootStrap.netty.handle.socket.AbstractSocketRouteHandle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,7 +25,7 @@ public  class GameSocketRouteHandle extends AbstractSocketRouteHandle {
             route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
                     new Object[]{ObjectUtil.isNull(client)?ctx.channel():client,obj,idByte});
         }catch (ClassCastException e){
-            logger.error();
+            logger.debug("error：channel-》client类型转换出错，可能原因：断线重连导致");
         }
 
     }

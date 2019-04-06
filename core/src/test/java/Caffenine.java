@@ -1,9 +1,16 @@
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import nafos.core.cache.CaffenineCache;
+import nafos.core.cache.LongAdderMap;
 import nafos.core.util.SnowflakeIdWorker;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Supplier;
 
 /**
  * @Author 黄新宇
@@ -14,49 +21,24 @@ public class Caffenine {
 
     public static void main(String[] args) {
 
+        CaffenineCache map = new CaffenineCache(5, TimeUnit.HOURS, () -> {
+            System.out.println(1);return new LongAdder();});
+//        Map map = new HashMap();
+        CountDownLatch countDownLatch = new CountDownLatch(1000);
+        for (int i = 0; i < 1000; i++) {
+            new Thread(() -> {
+                ((LongAdder) map.get("10")).add(1);
+                countDownLatch.countDown();
+            }).start();
 
-        ConcurrentHashMap<String,Object> map = new ConcurrentHashMap<>();
-        long startTime1 =System.currentTimeMillis();
-        map.put("2121","121");
-        for (int i =0;i<100000;i++){
-            String key = SnowflakeIdWorker.getStringId();
-            map.put(key,"22");
         }
-        long endTime1=System.currentTimeMillis();
-        System.out.println("       程序1耗时："+(endTime1-startTime1)+"ms");
-
-
-
-        LoadingCache<String, Object> loadingCache = Caffeine.newBuilder().expireAfterWrite(10, TimeUnit.SECONDS).build(key -> jj());
-
-        long startTime =System.currentTimeMillis();
-        loadingCache.put("2121","121");
-        for (int i =0;i<100000;i++){
-                String key = SnowflakeIdWorker.getStringId();
-                loadingCache.put(key,"22");
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        long endTime=System.currentTimeMillis();
-        System.out.println("       程序耗时："+(endTime-startTime)+"ms");
-
-
-
-
-
-        long startTime3 =System.currentTimeMillis();
-        loadingCache.get("2121");
-        long endTime3=System.currentTimeMillis();
-        System.out.println("       程序3耗时："+(endTime3-startTime3)+"ms");
-
-        long startTime2 =System.currentTimeMillis();
-        map.get("2121");
-        long endTime2=System.currentTimeMillis();
-        System.out.println("       程序2耗时："+(endTime3-startTime3)+"ms");
-
-
-
+        System.out.println(map.get("10"));
     }
 
-    public static String  jj(){
-        return "222";
-    }
+
 }

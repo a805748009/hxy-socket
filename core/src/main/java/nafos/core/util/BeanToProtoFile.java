@@ -17,46 +17,46 @@ import java.util.List;
 public class BeanToProtoFile {
 
 
-    public static void run(String packPath,String filePath) {
+    public static void run(String packPath, String filePath) {
         List<Class> classes = getClasssFromPackage(packPath);
-        for (Class clas :classes) {
-            castProto(clas,filePath);
+        for (Class clas : classes) {
+            castProto(clas, filePath);
         }
     }
 
 
-    public static void castProto(Class clazz,String filePath) {
+    public static void castProto(Class clazz, String filePath) {
         try {
-            File file = new File(filePath+clazz.getSimpleName()+".proto");
+            File file = new File(filePath + clazz.getSimpleName() + ".proto");
             PrintStream ps = new PrintStream(new FileOutputStream(file));
 
 
-            List<Field> fieldList = new ArrayList<>() ;
+            List<Field> fieldList = new ArrayList<>();
             Class tempClass = clazz;
 //        while (tempClass != null) {//当父类为null的时候说明到达了最上层的父类(Object类).
-            fieldList.addAll(Arrays.asList(tempClass .getDeclaredFields()));
+            fieldList.addAll(Arrays.asList(tempClass.getDeclaredFields()));
 //            tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
 //        }
-            ps.println("message "+tempClass.getSimpleName()+"{");
-            int i =1;
+            ps.println("message " + tempClass.getSimpleName() + "{");
+            int i = 1;
             for (Field f : fieldList) {
-                if(f.getType().getName().equals("java.lang.Integer") ){
-                    ps.append("    optional int32 "+f.getName()+ " = "+i+";"+"\n");
+                if (f.getType().getName().equals("java.lang.Integer")) {
+                    ps.append("    optional int32 " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if(f.getType().getName().equals("java.lang.Boolean") ){
-                    ps.append("    optional bool "+f.getName()+ " = "+i+";"+"\n");
+                if (f.getType().getName().equals("java.lang.Boolean")) {
+                    ps.append("    optional bool " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if(f.getType().getName().equals("java.lang.String") ){
-                    ps.append("    optional string "+f.getName()+ " = "+i+";"+"\n");
+                if (f.getType().getName().equals("java.lang.String")) {
+                    ps.append("    optional string " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if(f.getType().getName().equals("int") ){
-                    ps.append("    optional int32 "+f.getName()+ " = "+i+";"+"\n");
+                if (f.getType().getName().equals("int")) {
+                    ps.append("    optional int32 " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if(f.getType().getName().equals("java.util.List") ){
-                    ps.append("    repeated int32 "+f.getName()+ " = "+i+";"+"\n");
+                if (f.getType().getName().equals("java.util.List")) {
+                    ps.append("    repeated int32 " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if(f.getType().getName().equals("long") ){
-                    ps.append("    optional int64 "+f.getName()+ " = "+i+";"+"n");
+                if (f.getType().getName().equals("long")) {
+                    ps.append("    optional int64 " + f.getName() + " = " + i + ";" + "n");
                 }
                 i++;
             }
@@ -107,14 +107,10 @@ public class BeanToProtoFile {
     /**
      * 在package对应的路径下找到所有的class
      *
-     * @param packageName
-     *            package名称
-     * @param filePath
-     *            package对应的路径
-     * @param recursive
-     *            是否查找子package
-     * @param clazzs
-     *            找到class以后存放的集合
+     * @param packageName package名称
+     * @param filePath    package对应的路径
+     * @param recursive   是否查找子package
+     * @param clazzs      找到class以后存放的集合
      */
     public static void findClassInPackageByFile(String packageName, String filePath, final boolean recursive, List<Class> clazzs) {
         File dir = new File(filePath);

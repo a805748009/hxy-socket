@@ -1,37 +1,37 @@
 package nafos.core.Thread;
 
 
-import nafos.core.entry.http.NafosRequest;
-import nafos.core.entry.http.NafosRespone;
-import nafos.core.entry.http.NafosThreadInfo;
+import nafos.bootStrap.handle.http.NsRequest;
+import nafos.bootStrap.handle.http.NsRespone;
+import nafos.core.entry.http.ReqResBean;
 
 /**
-* @author 作者 huangxinyu 
-* @version 创建时间：2018年1月26日 下午3:47:32 
-* 类说明 
-*/
+ * @author 作者 huangxinyu
+ * @version 创建时间：2018年1月26日 下午3:47:32
+ * 类说明
+ */
 public class ThreadLocalHelper {
-    private static java.lang.ThreadLocal<NafosThreadInfo> map = new java.lang.ThreadLocal<NafosThreadInfo>();
-	
-    
-	public static void setThreadInfo(NafosThreadInfo nafosThreadInfo){
-		map.set(nafosThreadInfo);
-	}
-	
-	public static NafosThreadInfo getThreadInfo(){
-		return map.get();
-	}
-	
-	public static NafosRequest getRequest(){
-		return map.get().getNafosRequest();
-	}
-	     
-	public static NafosRespone getRespone(){
-		return map.get().getNafosRespone();
-	}
+    private static java.lang.ThreadLocal<ReqResBean> map = new java.lang.ThreadLocal<ReqResBean>();
 
-	public static void threadLocalRemove(){
-		map.remove();
-	}
-	    
+
+    public static void setThreadInfo(ReqResBean reqResBean) {
+        map.set(reqResBean);
+    }
+
+    public static ReqResBean getThreadInfo() {
+        return map.get();
+    }
+
+    public static NsRequest getRequest() {
+        return map.get().getNafosRequest();
+    }
+
+    public static NsRespone getRespone() {
+        return map.get().getNafosRespone();
+    }
+
+    public static void threadLocalRemove() {
+        map.remove();
+    }
+
 }

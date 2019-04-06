@@ -1,12 +1,9 @@
 package nafos.core.monitor;
 
-import nafos.core.Thread.ExecutorPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.lang.management.*;
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @Author 黄新宇
@@ -24,24 +21,36 @@ public class SystemMonitor {
     * @param
     */
     public static long getMemoryUseForJvm(){
-        MemoryMXBean mm =(MemoryMXBean) ManagementFactory.getMemoryMXBean();
+        MemoryMXBean mm = ManagementFactory.getMemoryMXBean();
         return mm.getHeapMemoryUsage().getUsed();
     }
 
 
-
-    /**
-    * @Author 黄新宇
-    * @date 2018/5/22 上午10:56
-    * @Description(获取并发量)
-    * @param
-    * @return int
-    */
-    public static int getConcurrency(){
-        return ((ThreadPoolExecutor) ExecutorPool.getInstance()).getActiveCount();
+    public static void allLog(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("============开始打印系统信息日志============\n");
+        sb.append( "                                                    " );
+        sb.append(getGcLog()+"\n");
+        sb.append( "                                                    " );
+        sb.append(getMmemoryLog()+"\n");
+        sb.append( "                                                    " );
+        sb.append(getThreadLog()+"\n");
+        logger.info(sb.toString());
     }
 
-
+    public static void cronAllLog(long millisecond){
+        new Thread(()->{
+            Thread.currentThread().setName( "SystemMonitor");
+            for(;;){
+                try {
+                    Thread.sleep(millisecond);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                allLog();
+            }
+        }).start();
+    }
 
     /**
     * @Author 黄新宇
@@ -50,11 +59,13 @@ public class SystemMonitor {
     * @param
     * @return void
     */
-    public static void gcLog() throws Exception {
+    public static String getGcLog() {
         List<GarbageCollectorMXBean> beans = ManagementFactory.getGarbageCollectorMXBeans();
+        String log = "";
         for (GarbageCollectorMXBean bean : beans) {
-            logger.info("{} 发生 {} 次 gc, gc 总共消耗 {} 毫秒", bean.getName(), bean.getCollectionCount(), bean.getCollectionTime());
+            log += "{"+bean.getName()+"} 发生 {"+bean.getCollectionCount()+"} 次 gc, gc 总共消耗 {"+bean.getCollectionTime()+"} 毫秒";
         }
+        return log;
     }
 
     /**
@@ -64,7 +75,7 @@ public class SystemMonitor {
     * @param
     * @return void
     */
-    public static void threadLog() throws Exception {
+    public static String getThreadLog(){
         final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         int run = 0;
         int blocked = 0;
@@ -87,7 +98,7 @@ public class SystemMonitor {
                     break;
             }
         }
-        logger.info("运行状态线程数：{}, 阻塞状态线程数:{}, 等待状态线程数：{}", run, blocked, waiting);
+        return "运行状态线程数：{"+run+"}, 阻塞状态线程数:{"+blocked+"}, 等待状态线程数：{"+waiting+"}";
     }
 
 
@@ -98,7 +109,7 @@ public class SystemMonitor {
     * @param
     * @return void
     */
-    public static void memoryLog() throws Exception {
+    public static String getMmemoryLog()  {
         Runtime runtime = Runtime.getRuntime();
         // 最大可用内存
         long maxMemory = runtime.maxMemory();
@@ -108,6 +119,6 @@ public class SystemMonitor {
         long useMemory = totalMemory - runtime.freeMemory();
         // 最大可用内存
         long usableMemory = maxMemory - useMemory;
-        logger.info("最大堆内存={}, 已分配={}, 已使用={}, 还可用={}", maxMemory/1024/1024, totalMemory/1024/1024, useMemory/1024/1024, usableMemory/1024/1024);
+        return  "最大堆内存={"+maxMemory/1024/1024+"}, 已分配={"+totalMemory/1024/1024+"}, 已使用={"+useMemory/1024/1024+"}, 还可用={"+usableMemory/1024/1024+"}";
     }
 }

@@ -91,7 +91,7 @@ public class AESUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        for (int i = 0 ;i<100000;i++){
+        for (int i = 0; i < 100000; i++) {
             AESUtil.encrypt("443367599145746432");
             AESUtil.decrypt(AESUtil.encrypt("443367599145746432"));
         }

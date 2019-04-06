@@ -2,20 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/demo/demo-entry/demo-entry.iml" filepath="$PROJECT_DIR$/demo/demo-entry/demo-entry.iml" />
-      <module fileurl="file://$PROJECT_DIR$/demo/demo-network/demo-network.iml" filepath="$PROJECT_DIR$/demo/demo-network/demo-network.iml" />
-      <module fileurl="file://$PROJECT_DIR$/demo/demo-service/demo-service.iml" filepath="$PROJECT_DIR$/demo/demo-service/demo-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sample/eurekaServer.iml" filepath="$PROJECT_DIR$/sample/eurekaServer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/game/game.iml" filepath="$PROJECT_DIR$/game/game.iml" />
-      <module fileurl="file://$PROJECT_DIR$/msgQueue/msgQueue.iml" filepath="$PROJECT_DIR$/msgQueue/msgQueue.iml" />
       <module fileurl="file://$PROJECT_DIR$/nafos.iml" filepath="$PROJECT_DIR$/nafos.iml" />
-      <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />
-      <module fileurl="file://$PROJECT_DIR$/remote/remote.iml" filepath="$PROJECT_DIR$/remote/remote.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sample/sample-dubbo/sample-dubbo.iml" filepath="$PROJECT_DIR$/sample/sample-dubbo/sample-dubbo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sample/sample-eurekaServer/sample-eurekaServer.iml" filepath="$PROJECT_DIR$/sample/sample-eurekaServer/sample-eurekaServer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sample/sample-xxlJob/sample-xxlJob.iml" filepath="$PROJECT_DIR$/sample/sample-xxlJob/sample-xxlJob.iml" />
-      <module fileurl="file://$PROJECT_DIR$/security/security.iml" filepath="$PROJECT_DIR$/security/security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/nafos.core.iml" filepath="$PROJECT_DIR$/core/nafos.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/game/nafos.game.iml" filepath="$PROJECT_DIR$/game/nafos.game.iml" />
+      <module fileurl="file://$PROJECT_DIR$/msgQueue/nafos.msgQueue.iml" filepath="$PROJECT_DIR$/msgQueue/nafos.msgQueue.iml" />
+      <module fileurl="file://$PROJECT_DIR$/remote/nafos.remote.iml" filepath="$PROJECT_DIR$/remote/nafos.remote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/security/nafos.security.iml" filepath="$PROJECT_DIR$/security/nafos.security.iml" />
     </modules>
   </component>
 </project>

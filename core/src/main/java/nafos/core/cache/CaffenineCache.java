@@ -2,6 +2,7 @@ package nafos.core.cache;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 

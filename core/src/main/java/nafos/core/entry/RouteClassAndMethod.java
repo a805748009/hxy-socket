@@ -2,81 +2,101 @@ package nafos.core.entry;
 
 
 import com.esotericsoftware.reflectasm.MethodAccess;
+import nafos.core.Enums.Protocol;
 
 /**
-* @author 作者 huangxinyu 
-* @version 创建时间：2018年1月9日 下午5:17:02 
-* 类说明 
-*/
-public class RouteClassAndMethod  extends  ClassAndMethod{
+ * @author 作者 huangxinyu
+ * @version 创建时间：2018年1月9日 下午5:17:02
+ * 类说明
+ */
+public class RouteClassAndMethod extends ClassAndMethod {
 
 
-	protected boolean printLog;//是否打印方法时间
+    protected boolean printLog;//是否打印方法时间
 
-	protected String type; //JSON 或者 PRO[TOBUFF]
+    protected Protocol type; //JSON 或者 PRO[TOBUFF]
 
-	protected boolean runOnWorkGroup;
+    protected boolean runOnWorkGroup;
 
-	public RouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, String type, boolean runOnWorkGroup) {
-		super(clazz,method,index,paramType);
-		this.printLog = printLog;
-		this.type = type;
-		this.runOnWorkGroup = runOnWorkGroup;
-	}
+    protected Class[] interceptors;//拦截器
 
-	public Class<?> getClazz() {
-		return clazz;
-	}
+    public RouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, Protocol type, boolean runOnWorkGroup, Class[] interceptors) {
+        super(clazz, method, index, paramType);
+        this.printLog = printLog;
+        this.type = type;
+        this.runOnWorkGroup = runOnWorkGroup;
+        this.interceptors = interceptors;
+    }
 
-	public void setClazz(Class<?> clazz) {
-		this.clazz = clazz;
-	}
+    public RouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, boolean printLog, Protocol type, boolean runOnWorkGroup, Class[] interceptors) {
+        super(clazz, method, index);
+        this.printLog = printLog;
+        this.type = type;
+        this.runOnWorkGroup = runOnWorkGroup;
+        this.interceptors = interceptors;
+    }
 
-	public MethodAccess getMethod() {
-		return method;
-	}
+    public Class<?> getClazz() {
+        return clazz;
+    }
 
-	public void setMethod(MethodAccess method) {
-		this.method = method;
-	}
+    public void setClazz(Class<?> clazz) {
+        this.clazz = clazz;
+    }
 
-	public Integer getIndex() {
-		return index;
-	}
+    public MethodAccess getMethod() {
+        return method;
+    }
 
-	public void setIndex(Integer index) {
-		this.index = index;
-	}
+    public void setMethod(MethodAccess method) {
+        this.method = method;
+    }
 
-	public Class<?> getParamType() {
-		return paramType;
-	}
+    public Integer getIndex() {
+        return index;
+    }
 
-	public void setParamType(Class<?> paramType) {
-		this.paramType = paramType;
-	}
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
 
-	public boolean isPrintLog() {
-		return printLog;
-	}
+    public Class<?> getParamType() {
+        return paramType;
+    }
 
-	public void setPrintLog(boolean printLog) {
-		this.printLog = printLog;
-	}
+    public void setParamType(Class<?> paramType) {
+        this.paramType = paramType;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public boolean isPrintLog() {
+        return printLog;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setPrintLog(boolean printLog) {
+        this.printLog = printLog;
+    }
 
-	public boolean isRunOnWorkGroup() {
-		return runOnWorkGroup;
-	}
+    public Protocol getType() {
+        return type;
+    }
 
-	public void setRunOnWorkGroup(boolean runOnWorkGroup) {
-		this.runOnWorkGroup = runOnWorkGroup;
-	}
+    public void setType(Protocol type) {
+        this.type = type;
+    }
+
+    public boolean isRunOnWorkGroup() {
+        return runOnWorkGroup;
+    }
+
+    public void setRunOnWorkGroup(boolean runOnWorkGroup) {
+        this.runOnWorkGroup = runOnWorkGroup;
+    }
+
+    public Class[] getInterceptors() {
+        return interceptors;
+    }
+
+    public void setInterceptors(Class[] interceptors) {
+        this.interceptors = interceptors;
+    }
 }

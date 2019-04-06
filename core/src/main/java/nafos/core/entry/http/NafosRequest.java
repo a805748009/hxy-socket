@@ -54,11 +54,10 @@ public class NafosRequest {
     public String getNafosCookieId() {
 
         //H5跨域不能设置cookie问题，暂用此方法解决
-        if (ObjectUtil.isNotNull(request.headers().get(cookieStart))&&
-                !request.headers().get(cookieStart).equals("undefined")&&
-                !request.headers().get(cookieStart).equals("null")&&
-                !request.headers().get(cookieStart).equals("[object Null]"))
-        {
+        if (ObjectUtil.isNotNull(request.headers().get(cookieStart)) &&
+                !request.headers().get(cookieStart).equals("undefined") &&
+                !request.headers().get(cookieStart).equals("null") &&
+                !request.headers().get(cookieStart).equals("[object Null]")) {
             try {
                 securityCookieId = AESUtil.decrypt(request.headers().get(cookieStart));
                 return securityCookieId;
@@ -84,7 +83,6 @@ public class NafosRequest {
 
         return securityCookieId;
     }
-
 
 
 }
