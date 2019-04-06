@@ -1,7 +1,6 @@
 package nafos.core.mode.filter.fInterface;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.FullHttpRequest;
 import nafos.bootStrap.handle.http.NsRequest;
 import nafos.core.entry.ResultStatus;
 

@@ -49,8 +49,8 @@ public class HttpRouteHandle {
         //  1.前置filter 拦截器
         for (Class interceptor : httpRouteClassAndMethod.getInterceptors()) {
             filter = InitMothods.getInterceptor(interceptor);
-            if(filter == null){
-                logger.warn("{} :拦截器没有实现InterceptorInterface,或者继承AbstractHttpInterceptor. 拦截无效",interceptor);
+            if (filter == null) {
+                logger.warn("{} :拦截器没有实现InterceptorInterface,或者继承AbstractHttpInterceptor. 拦截无效", interceptor);
                 continue;
             }
             filter.setIndex(0);
@@ -152,12 +152,12 @@ public class HttpRouteHandle {
         }
 
         if (route.getType() == Protocol.JSON) {
-            send(context, JsonUtil.toJson(object), request, HttpResponseStatus.OK);
+            send(context, JsonUtil.toJson(object), request);
         } else {
 
             //如果回传为null，则直接返回
             if (object == null) {
-                send(context, null, request, HttpResponseStatus.OK);
+                send(context, null, request);
                 return;
             }
             //如果传回的不是byte，那么必定是bean。
@@ -166,7 +166,7 @@ public class HttpRouteHandle {
             }
             byte[] bytes = crc32MessageHandle.addCrc32IntBefore((byte[]) object);
             bytes = zlibMessageHandle.zlibByteMessage(bytes);
-            send(context, bytes, request, HttpResponseStatus.OK);
+            send(context, bytes, request);
         }
     }
 
@@ -177,10 +177,9 @@ public class HttpRouteHandle {
      * @param <T>     context
      * @param ctx     返回
      * @param context 消息
-     * @param status  状态
      * @throws UnsupportedEncodingException
      */
-    private <T> void send(ChannelHandlerContext ctx, T context, FullHttpRequest request, HttpResponseStatus status) {
+    private <T> void send(ChannelHandlerContext ctx, T context, FullHttpRequest request) {
         request.release();
         NsRespone response = ThreadLocalHelper.getRespone();
         //设置允许跨域

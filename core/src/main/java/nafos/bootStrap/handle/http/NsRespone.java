@@ -32,6 +32,11 @@ public class NsRespone extends DefaultFullHttpResponse {
         return this;
     }
 
+    public NsRespone setNafosCookieId(String value) {
+        cookies.add(new DefaultCookie("nafosCookie", value));
+        return this;
+    }
+
     public List<Cookie> getCookies() {
         return cookies;
     }

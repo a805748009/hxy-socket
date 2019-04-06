@@ -5,7 +5,6 @@ import nafos.bootStrap.handle.http.NsRequest;
 import nafos.bootStrap.handle.socket.AbstractSocketRouteHandle;
 import nafos.bootStrap.handle.socket.IocBeanFactory;
 import nafos.core.entry.AsyncTaskMode;
-import nafos.core.task.TaskQueue;
 import nafos.core.util.ObjectUtil;
 import nafos.core.helper.SpringApplicationContextHolder;
 

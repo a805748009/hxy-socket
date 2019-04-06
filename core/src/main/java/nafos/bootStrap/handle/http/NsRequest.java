@@ -8,6 +8,8 @@ import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import io.netty.handler.codec.http.multipart.*;
 import io.netty.util.CharsetUtil;
+import nafos.bootStrap.handle.http.BuildHttpObjectAggregator;
+import nafos.core.util.AESUtil;
 import nafos.core.util.CastUtil;
 import nafos.core.util.JsonUtil;
 import nafos.core.util.ObjectUtil;
@@ -18,6 +20,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpRequest {
+
+    private final String cookieStart = "nafosCookie";
+
+    private String securityCookieId = null;//登陆的cookieId
+
+    private Set<Cookie> cookies = null;//cookieList
 
     private Map<String, String> requestParams;
 
@@ -76,12 +84,45 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
      * @return
      */
     public Set<Cookie> getCookies() {
-        Set<Cookie> cookies = new HashSet<>();
-        String cookieStr = headers().get("Cookie");
-        if (ObjectUtil.isNotNull(cookieStr)) {
-            cookies = ServerCookieDecoder.LAX.decode(cookieStr);
+        if (cookies == null) {
+            String cookieStr = headers().get("Cookie");
+            if (ObjectUtil.isNotNull(cookieStr)) {
+                cookies = ServerCookieDecoder.LAX.decode(cookieStr);
+            }
         }
         return cookies;
+    }
+
+
+    public String getNafosCookieId() {
+        //H5跨域不能设置cookie问题，暂用此方法解决
+        if (ObjectUtil.isNotNull(headers().get(cookieStart)) &&
+                !headers().get(cookieStart).equals("undefined") &&
+                !headers().get(cookieStart).equals("null") &&
+                !headers().get(cookieStart).equals("[object Null]")) {
+            try {
+                securityCookieId = AESUtil.decrypt(headers().get(cookieStart));
+                return securityCookieId;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        //其他模拟器，安卓正常走流程
+        Iterator<Cookie> it = getCookies().iterator();
+        while (it.hasNext()) {
+            Cookie cookie = it.next();
+            if (cookie.name().equals(cookieStart)) {
+                try {
+                    securityCookieId = AESUtil.decrypt(cookie.value());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
+
+        return securityCookieId;
     }
 
 
