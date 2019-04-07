@@ -77,7 +77,7 @@ public class SecurityHttpLimitingHandle extends ChannelInboundHandlerAdapter {
                         alllimitCount))
                     return;
 
-                logger.info("总访问次数超过最大访问次数，已经限制了访问");
+                logger.warn("总访问次数超过最大访问次数，已经限制了访问");
                 NettyUtil.sendError(ctx, HttpResponseStatus.SERVICE_UNAVAILABLE);
             }
 
@@ -100,7 +100,7 @@ public class SecurityHttpLimitingHandle extends ChannelInboundHandlerAdapter {
                         tcpCount.add(System.currentTimeMillis());
                         tcpCount.removeFirst();
                     } else {
-                        logger.info("总访问次数超过最大访问次数，已经限制了访问");
+                        logger.warn("总访问次数超过最大访问次数，已经限制了访问");
                         NettyUtil.sendError(ctx, HttpResponseStatus.SERVICE_UNAVAILABLE);
                     }
 
@@ -165,7 +165,7 @@ public class SecurityHttpLimitingHandle extends ChannelInboundHandlerAdapter {
                         ipTcpList.add(System.currentTimeMillis());
                         ipTcpList.removeFirst();
                     } else {
-                        logger.info("总访问次数超过最大访问次数，已经限制了访问");
+                        logger.warn("总访问次数超过最大访问次数，已经限制了访问");
                         NettyUtil.sendError(ctx, HttpResponseStatus.GATEWAY_TIMEOUT);
                     }
                 } else {
@@ -187,7 +187,7 @@ public class SecurityHttpLimitingHandle extends ChannelInboundHandlerAdapter {
         long count = incrIpProtocCount(clientIP, iplimitTimeout);
         //超出了单个IP限制访问次数
         if (count >= iplimitCount) {
-            logger.info("{}超过最大访问次数，已经限制其在{}秒时间内继续访问", clientIP, iplimitTimeout);
+            logger.warn("{}超过最大访问次数，已经限制其在{}秒时间内继续访问", clientIP, iplimitTimeout);
             NettyUtil.sendError(ctx, HttpResponseStatus.GATEWAY_TIMEOUT);
         }
     }

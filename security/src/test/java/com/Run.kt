@@ -16,7 +16,7 @@ class Run {
 
 fun main(args: Array<String>) {
     NafosServer(Run::class.java)
-            .registLimiting(LimitEnum.LOCALAll, 1, 2)
+            .registLimiting(LimitEnum.LOCALAll, 1, 1)
             .registDefaultProtocol(Protocol.JSON)
             .startupHttp(8050)
 

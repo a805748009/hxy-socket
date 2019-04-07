@@ -25,8 +25,6 @@ public class HttpPipelineAdd implements PipelineAdd {
 
     @Override
     public void handAdd(ChannelPipeline pipeline) {
-        if (channelInboundHandler != null)
-            pipeline.addLast("firstInbound", channelInboundHandler);
 
         pipeline.addLast("http-decoder", new HttpRequestDecoder());
 
@@ -36,6 +34,8 @@ public class HttpPipelineAdd implements PipelineAdd {
 
         //这个handler主要用于处理大数据流,比如一个1G大小的文件如果你直接传输肯定会撑暴jvm内存的,增加ChunkedWriteHandler 这个handler我们就不用考虑这个问题了,内部原理看源代码.
         pipeline.addLast("http-chunked", new ChunkedWriteHandler());
+
+        if (channelInboundHandler != null) pipeline.addLast("firstBusinessInbound", channelInboundHandler);
 
         // 真正处理用户级业务逻辑的地方
         pipeline.addLast("http-user-defined", httpServerHandler);
