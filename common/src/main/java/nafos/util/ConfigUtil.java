@@ -50,7 +50,7 @@ public class ConfigUtil {
             }
         } catch (Exception e) {
             logger.error("加载属性文件出错！", e);
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         } finally {
             try {
                 if (is != null) {

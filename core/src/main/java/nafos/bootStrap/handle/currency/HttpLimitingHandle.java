@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 @ChannelHandler.Sharable
-public class HttpLimitingHandle extends ChannelInboundHandlerAdapter {
+public class HttpLimitingHandle extends ChannelInboundHandlerAdapter{
     private static final Logger logger = LoggerFactory.getLogger(HttpLimitingHandle.class);
 
 

@@ -18,48 +18,34 @@ public class SecurityConfig {
     private int sessionTimeOut;
 
 
-    @Value("${redis.pool.maxActive}")
+    @Value("${redis.pool.maxActive:0}")
     private int maxActive;
-    @Value("${redis.pool.maxIdle}")
+    @Value("${redis.pool.maxIdle:0}")
     private int maxIdle;
-    @Value("${redis.pool.maxWait}")
+    @Value("${redis.pool.maxWait:0}")
     private int maxWait;
-    @Value("${redis.pool.testOnBorrow}")
+    @Value("${redis.pool.testOnBorrow:false}")
     private boolean testOnBorrow;
-    @Value("${redis.pool.testOnReturn}")
+    @Value("${redis.pool.testOnReturn:false}")
     private boolean testOnReturn;
-    @Value("${redis.ip}")
+    @Value("${redis.ip:}")
     private String ip;
-    @Value("${redis.port}")
+    @Value("${redis.port:0}")
     private int port;
-    @Value("${redis.port1}")
+    @Value("${redis.port1:0}")
     private int port1;
-    @Value("${redis.password}")
+    @Value("${redis.password:}")
     private String password;
 
-    @Value("${nafos.security.limitOnType:NO}") //NO 不开启限流  LOCAL 本地单机限流   REDIS redis集群限流
-    private String limitOnType;
 
-    @Value("${nafos.security.iplimitTimeout:2}")
-    private int iplimitTimeout;
-
-    @Value("${nafos.security.iplimitCount:0}")
-    private int iplimitCount;
-
-    @Value("${nafos.security.alllimitTimeout:2}")
-    private int alllimitTimeout;
-
-    @Value("${nafos.security.alllimitCount:0}")
-    private int alllimitCount;
 
 
     public boolean getIsUseRedis() {
         return isUseRedis;
     }
 
-    public String getLimitOnType() {
-        return limitOnType;
-    }
+
+
 
 
     public int getSessionTimeOut() {
@@ -103,35 +89,51 @@ public class SecurityConfig {
         return password;
     }
 
-    public int getIplimitTimeout() {
-        return iplimitTimeout;
+
+
+    public void setUseRedis(boolean useRedis) {
+        isUseRedis = useRedis;
     }
 
-    public void setIplimitTimeout(int iplimitTimeout) {
-        this.iplimitTimeout = iplimitTimeout;
+    public void setSessionTimeOut(int sessionTimeOut) {
+        this.sessionTimeOut = sessionTimeOut;
     }
 
-    public int getIplimitCount() {
-        return iplimitCount;
+    public void setMaxActive(int maxActive) {
+        this.maxActive = maxActive;
     }
 
-    public void setIplimitCount(int iplimitCount) {
-        this.iplimitCount = iplimitCount;
+    public void setMaxIdle(int maxIdle) {
+        this.maxIdle = maxIdle;
     }
 
-    public int getAlllimitTimeout() {
-        return alllimitTimeout;
+    public void setMaxWait(int maxWait) {
+        this.maxWait = maxWait;
     }
 
-    public void setAlllimitTimeout(int alllimitTimeout) {
-        this.alllimitTimeout = alllimitTimeout;
+    public void setTestOnBorrow(boolean testOnBorrow) {
+        this.testOnBorrow = testOnBorrow;
     }
 
-    public int getAlllimitCount() {
-        return alllimitCount;
+    public void setTestOnReturn(boolean testOnReturn) {
+        this.testOnReturn = testOnReturn;
     }
 
-    public void setAlllimitCount(int alllimitCount) {
-        this.alllimitCount = alllimitCount;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setPort1(int port1) {
+        this.port1 = port1;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
 }

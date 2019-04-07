@@ -26,7 +26,6 @@
       <module name="nafos.core" target="1.8" />
       <module name="nafos.game" target="1.8" />
       <module name="nafos.msgQueue" target="1.8" />
-      <module name="nafos.remote" target="1.8" />
       <module name="nafos.security" target="1.8" />
     </bytecodeTargetLevel>
   </component>

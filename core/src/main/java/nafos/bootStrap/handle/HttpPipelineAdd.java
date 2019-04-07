@@ -1,14 +1,19 @@
 package nafos.bootStrap.handle;
 
+import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import nafos.bootStrap.handle.currency.HttpLimitingHandle;
+import nafos.bootStrap.handle.currency.LimitInterface;
 import nafos.bootStrap.handle.http.BuildHttpObjectAggregator;
 import nafos.bootStrap.handle.http.HttpServerHandler;
+import nafos.core.helper.SpringApplicationContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @Author 黄新宇
@@ -19,13 +24,12 @@ import org.springframework.stereotype.Component;
 public class HttpPipelineAdd implements PipelineAdd {
     @Autowired
     HttpServerHandler httpServerHandler;
-    @Autowired
-    HttpLimitingHandle httpLimitingHandle;
 
 
     @Override
     public void handAdd(ChannelPipeline pipeline) {
-        pipeline.addLast("http-limiting", httpLimitingHandle);
+
+        pipeline.addLast("http-limiting", (ChannelInboundHandler) SpringApplicationContextHolder.getSpringBean("httpLimitingHandle"));
 
         pipeline.addLast("http-decoder", new HttpRequestDecoder());
 

@@ -1,10 +1,8 @@
-package nafos.security
+package nafos.security.cache
 
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import nafos.core.monitor.RunWatch
-import nafos.security.cache.CacheMapDao
 import org.slf4j.LoggerFactory
 
 class FiberDo {

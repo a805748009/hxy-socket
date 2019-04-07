@@ -56,7 +56,7 @@ public class NafosServer {
         ac = SpringApplicationContextHolder.getContext();
         if (ac == null) {
             if (AnnotationUtils.findAnnotation(clazz, ComponentScan.class) == null) {
-                throw new RuntimeException("startup class [" + clazz.getName() + "] must be Annotation ComponentScan and choose scan package");
+                throw new IllegalStateException("startup class [" + clazz.getName() + "] must be Annotation ComponentScan and choose scan package");
             }
             AnnotationConfigApplicationContext annoContext = new AnnotationConfigApplicationContext();
             annoContext.register(clazz);
@@ -177,7 +177,7 @@ public class NafosServer {
      */
     public NafosServer registRemoveUnSafeSocketChannel(long millisecond) {
         if (channelUnSafeConnectTime > 0) {
-            throw new RuntimeException("已在配置文件中注册，请勿反复注册");
+            throw new IllegalStateException("已在配置文件中注册，请勿反复注册");
         }
         new UnSafeSocketChannel(millisecond);
         return this;
