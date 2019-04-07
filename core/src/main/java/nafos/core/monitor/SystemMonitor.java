@@ -38,6 +38,11 @@ public class SystemMonitor {
         logger.info(sb.toString());
     }
 
+    /**
+     * 方法过期，采用协程打印
+     * @param millisecond
+     */
+    @Deprecated
     public static void cronAllLog(long millisecond){
         new Thread(()->{
             Thread.currentThread().setName( "SystemMonitor");

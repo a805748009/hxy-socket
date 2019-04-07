@@ -25,7 +25,7 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
 
     private String securityCookieId = null;//登陆的cookieId
 
-    private Set<Cookie> cookies = null;//cookieList
+    private Set<Cookie> cookies = new HashSet<>();//cookieList
 
     private Map<String, String> requestParams;
 
@@ -84,7 +84,7 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
      * @return
      */
     public Set<Cookie> getCookies() {
-        if (cookies == null) {
+        if (cookies.isEmpty()) {
             String cookieStr = headers().get("Cookie");
             if (ObjectUtil.isNotNull(cookieStr)) {
                 cookies = ServerCookieDecoder.LAX.decode(cookieStr);

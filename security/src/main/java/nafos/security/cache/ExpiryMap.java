@@ -8,218 +8,218 @@ import java.util.*;
  * @version 创建时间：2018年1月29日 上午10:31:50 类说明
  */
 public class ExpiryMap<K, V> extends HashMap<K, V> {
-	
-	
 
-	private static final long serialVersionUID = 1L;
 
-	/**
-	 * default expiry time 2m
-	 */
-	private long EXPIRY = 60*60*1000;
+    private static final long serialVersionUID = 1L;
 
-	private HashMap<K, Long> expiryMap = new HashMap<>();
+    /**
+     * default expiry time 2m
+     */
+    private long EXPIRY = 60 * 60 * 1000;
 
-	public ExpiryMap() {
-		super();
-	}
+    private HashMap<K, Long> expiryMap = new HashMap<>();
 
-	public ExpiryMap(long defaultExpiryTime) {
-		this(1 << 4, defaultExpiryTime);
-	}
+    public ExpiryMap() {
+        super();
+    }
 
-	public ExpiryMap(int initialCapacity, long defaultExpiryTime) {
-		super(initialCapacity);
-		this.EXPIRY = defaultExpiryTime;
-	}
+    public ExpiryMap(long defaultExpiryTime) {
+        this(1 << 4, defaultExpiryTime);
+    }
 
-	public V put(K key, V value) {
-		expiryMap.put(key, System.currentTimeMillis() + EXPIRY);
-		return super.put(key, value);
-	}
+    public ExpiryMap(int initialCapacity, long defaultExpiryTime) {
+        super(initialCapacity);
+        this.EXPIRY = defaultExpiryTime;
+    }
 
-	public boolean containsKey(Object key) {
-		return !checkExpiry(key, true) && super.containsKey(key);
-	}
+    public V put(K key, V value) {
+        expiryMap.put(key, System.currentTimeMillis() + EXPIRY);
+        return super.put(key, value);
+    }
 
-	/**
-	 * @param key
-	 * @param value
-	 * @param expiryTime
-	 *            键值对有效期 毫秒
-	 * @return
-	 */
-	public V put(K key, V value, long expiryTime) {
-		expiryMap.put(key, System.currentTimeMillis() + expiryTime);
-		return super.put(key, value);
-	}
+    public boolean containsKey(Object key) {
+        return !checkExpiry(key, true) && super.containsKey(key);
+    }
 
-	public int size() {
-		return entrySet().size();
-	}
+    /**
+     * @param key
+     * @param value
+     * @param expiryTime 键值对有效期 毫秒
+     * @return
+     */
+    public V put(K key, V value, long expiryTime) {
+        expiryMap.put(key, System.currentTimeMillis() + expiryTime);
+        return super.put(key, value);
+    }
 
-	public boolean isEmpty() {
-		return entrySet().size() == 0;
-	}
+    public int size() {
+        return entrySet().size();
+    }
 
-	public boolean containsValue(Object value) {
-		if (value == null)
-			return Boolean.FALSE;
-		Set<Entry<K, V>> set = super.entrySet();
-		Iterator<Entry<K, V>> iterator = set.iterator();
-		while (iterator.hasNext()) {
-			Entry<K, V> entry = iterator.next();
-			if (value.equals(entry.getValue())) {
-				if (checkExpiry(entry.getKey(), false)) {
-					iterator.remove();
-					return Boolean.FALSE;
-				} else
-					return Boolean.TRUE;
-			}
-		}
-		return Boolean.FALSE;
-	}
+    public boolean isEmpty() {
+        return entrySet().size() == 0;
+    }
 
-	public Collection<V> values() {
+    public boolean containsValue(Object value) {
+        if (value == null)
+            return Boolean.FALSE;
+        Set<Entry<K, V>> set = super.entrySet();
+        Iterator<Entry<K, V>> iterator = set.iterator();
+        while (iterator.hasNext()) {
+            Entry<K, V> entry = iterator.next();
+            if (value.equals(entry.getValue())) {
+                if (checkExpiry(entry.getKey(), false)) {
+                    iterator.remove();
+                    return Boolean.FALSE;
+                } else
+                    return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
+    }
 
-		Collection<V> values = super.values();
+    public Collection<V> values() {
 
-		if (values == null || values.size() < 1)
-			return values;
+        Collection<V> values = super.values();
 
-		Iterator<V> iterator = values.iterator();
+        if (values == null || values.size() < 1)
+            return values;
 
-		while (iterator.hasNext()) {
-			V next = iterator.next();
-			if (!containsValue(next))
-				iterator.remove();
-		}
-		return values;
-	}
+        Iterator<V> iterator = values.iterator();
 
-	public V get(Object key) {
-		if (key == null)
-			return null;
-		if (checkExpiry(key, true))
-			return null;
-		return super.get(key);
-	}
+        while (iterator.hasNext()) {
+            V next = iterator.next();
+            if (!containsValue(next))
+                iterator.remove();
+        }
+        return values;
+    }
 
-	/**
-	 * 
-	 * @Description: 是否过期
-	 * @param key
-	 * @return null:不存在或key为null -1:过期 存在且没过期返回value 因为过期的不是实时删除，所以稍微有点作用
-	 */
-	public Object isInvalid(Object key) {
-		if (key == null)
-			return null;
-		if (!expiryMap.containsKey(key)) {
-			return null;
-		}
-		long expiryTime = expiryMap.get(key);
+    public V get(Object key) {
+        if (key == null)
+            return null;
+        if (checkExpiry(key, true))
+            return null;
+        return super.get(key);
+    }
 
-		boolean flag = System.currentTimeMillis() > expiryTime;
+    /**
+     * @param key
+     * @return null:不存在或key为null -1:过期 存在且没过期返回value 因为过期的不是实时删除，所以稍微有点作用
+     * @Description: 是否过期
+     */
+    public Object isInvalid(Object key) {
+        if (key == null)
+            return null;
+        if (!expiryMap.containsKey(key)) {
+            return null;
+        }
+        long expiryTime = expiryMap.get(key);
 
-		if (flag) {
-			super.remove(key);
-			expiryMap.remove(key);
-			return -1;
-		}
-		return super.get(key);
-	}
+        boolean flag = System.currentTimeMillis() > expiryTime;
 
-	public void putAll(Map<? extends K, ? extends V> m) {
-		for (Entry<? extends K, ? extends V> e : m.entrySet())
-			expiryMap.put(e.getKey(), System.currentTimeMillis() + EXPIRY);
-		super.putAll(m);
-	}
+        if (flag) {
+            super.remove(key);
+            expiryMap.remove(key);
+            return -1;
+        }
+        return super.get(key);
+    }
 
-	public Set<Entry<K, V>> entrySet() {
-		Set<Entry<K, V>> set = super.entrySet();
-		Iterator<Entry<K, V>> iterator = set.iterator();
-		while (iterator.hasNext()) {
-			Entry<K, V> entry = iterator.next();
-			if (checkExpiry(entry.getKey(), false))
-				iterator.remove();
-		}
+    public void putAll(Map<? extends K, ? extends V> m) {
+        for (Entry<? extends K, ? extends V> e : m.entrySet())
+            expiryMap.put(e.getKey(), System.currentTimeMillis() + EXPIRY);
+        super.putAll(m);
+    }
 
-		return set;
-	}
+    public Set<Entry<K, V>> entrySet() {
+        Set<Entry<K, V>> set = super.entrySet();
+        Iterator<Entry<K, V>> iterator = set.iterator();
+        while (iterator.hasNext()) {
+            Entry<K, V> entry = iterator.next();
+            if (checkExpiry(entry.getKey(), false))
+                iterator.remove();
+        }
 
-	/**
-	 * 是否过期,过期是否删除
-	 * @param key
-	 * @param isRemoveSuper
-	 * @return
-	 */
-	private boolean checkExpiry(Object key, boolean isRemoveSuper) {
+        return set;
+    }
 
-		if (!expiryMap.containsKey(key)) {
-			return Boolean.FALSE;
-		}
-		long expiryTime = expiryMap.get(key);
+    /**
+     * 是否过期,过期是否删除
+     *
+     * @param key
+     * @param isRemoveSuper
+     * @return
+     */
+    private boolean checkExpiry(Object key, boolean isRemoveSuper) {
 
-		boolean flag = System.currentTimeMillis() > expiryTime;
+        if (!expiryMap.containsKey(key)) {
+            return Boolean.FALSE;
+        }
+        long expiryTime = expiryMap.get(key);
 
-		if (flag) {
-			if (isRemoveSuper)
-				super.remove(key);
-			expiryMap.remove(key);
-		}
-		return flag;
-	}
-	
-	/**
-	 * 删除
-	 * @param key
-	 */
-	public void del(Object key){
-		super.remove(key);
-		expiryMap.remove(key);
-	}
+        boolean flag = System.currentTimeMillis() > expiryTime;
 
-	
-	/**
-	 * 是否超过过期的一半时间
-	 * @param key
-	 * @return
-	 */
-	public boolean isFourFifthsExpiryTime(Object key ){
-		if (!expiryMap.containsKey(key)) {
-			return false;
-		}
-		long expiryTime = expiryMap.get(key);
-		
-		boolean flag = System.currentTimeMillis()-(expiryTime-EXPIRY)>=EXPIRY*4/5;
-		return flag;
-	}
-	
-	
-	//重新设置过期时间
-	public void setExpiryTime(K key ){
-		if (!expiryMap.containsKey(key)) {
-			return ;
-		}
-		expiryMap.put(key,EXPIRY);
-	}
-	
-	/**
-	 * 删除失效的key-value
-	 */
-	public void delTimeOut(){
-		Set<K> keys = expiryMap.keySet() ;// 得到全部的key
-		Iterator<K> iter = keys.iterator() ;
-		while(iter.hasNext()){
-		K key = iter.next() ;
-		
-		long expiryTime = expiryMap.get(key);
-		boolean flag = System.currentTimeMillis() > expiryTime;
+        if (flag) {
+            if (isRemoveSuper)
+                super.remove(key);
+            expiryMap.remove(key);
+        }
+        return flag;
+    }
 
-		if (flag) {
-			super.remove(key);
-			expiryMap.remove(key);
-		}
-		}
-	}
+    /**
+     * 删除
+     *
+     * @param key
+     */
+    public void del(Object key) {
+        super.remove(key);
+        expiryMap.remove(key);
+    }
+
+
+    /**
+     * 是否超过过期的一半时间
+     *
+     * @param key
+     * @return
+     */
+    public boolean isFourFifthsExpiryTime(Object key) {
+        if (!expiryMap.containsKey(key)) {
+            return false;
+        }
+        long expiryTime = expiryMap.get(key);
+
+        boolean flag = System.currentTimeMillis() - (expiryTime - EXPIRY) >= EXPIRY * 4 / 5;
+        return flag;
+    }
+
+
+    //重新设置过期时间
+    public void setExpiryTime(K key) {
+        if (!expiryMap.containsKey(key)) {
+            return;
+        }
+        expiryMap.put(key, EXPIRY);
+    }
+
+    /**
+     * 删除失效的key-value
+     */
+    public void delTimeOut() {
+        Set<K> keys = expiryMap.keySet();// 得到全部的key
+        Iterator<K> iter = keys.iterator();
+        while (iter.hasNext()) {
+            K key = iter.next();
+
+            long expiryTime = expiryMap.get(key);
+            boolean flag = System.currentTimeMillis() > expiryTime;
+
+            if (flag) {
+                super.remove(key);
+                expiryMap.remove(key);
+            }
+        }
+    }
 }

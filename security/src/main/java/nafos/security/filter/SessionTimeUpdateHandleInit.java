@@ -2,9 +2,9 @@ package nafos.security.filter;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
 import nafos.core.entry.ClassAndMethod;
+import nafos.core.helper.SpringApplicationContextHolder;
 import nafos.core.mode.InitMothods;
-import nafos.core.util.SpringApplicationContextHolder;
-import org.springframework.boot.CommandLineRunner;
+import nafos.core.mode.runner.NafosRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @Description 开机自动注册session到期附带更改方法
  **/
 @Component
-public class SessionTimeUpdateHandleInit implements CommandLineRunner {
+public class SessionTimeUpdateHandleInit implements NafosRunner {
 
     private ClassAndMethod classAndMethod;
 
@@ -32,7 +32,7 @@ public class SessionTimeUpdateHandleInit implements CommandLineRunner {
 
 
     @Override
-    public void run(String... strings) throws Exception {
+    public void run() {
         SessionTimeUpdateHandleInit(SpringApplicationContextHolder.getContext());
     }
 }

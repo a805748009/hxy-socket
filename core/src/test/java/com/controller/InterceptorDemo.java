@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import nafos.bootStrap.handle.http.NsRequest;
 import nafos.core.entry.ResultStatus;
-import nafos.core.mode.filter.fInterface.AbstractHttpInterceptor;
+import nafos.core.mode.interceptor.AbstractHttpInterceptor;
 import org.springframework.stereotype.Component;
 
 @Component

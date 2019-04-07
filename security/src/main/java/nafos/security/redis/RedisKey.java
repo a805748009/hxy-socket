@@ -8,9 +8,9 @@ package nafos.security.redis;
  */
 public class RedisKey {
 	// redisSession的key   -登录服务器	
-	public static final String SESSIONKEY = "login_session:";
+	public static final String SESSIONKEY = "nafos:login:sessionId";
 	
-	public static final String CACHEKEY = "login_session:";
+	public static final String CACHEKEY = "nafos:login:sessionId";
 	
 }
 

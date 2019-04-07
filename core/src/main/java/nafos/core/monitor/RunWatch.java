@@ -1,8 +1,10 @@
 package nafos.core.monitor;
 
+import kotlinx.coroutines.experimental.GlobalScope;
 import nafos.core.cache.LongAdderMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
@@ -112,9 +114,10 @@ public class RunWatch {
     }
 
     /**
-     * 定时打印
+     * 定时打印  方法过期，建议使用fiberDo.kt中的协程来实现
      * @param millisecond
      */
+    @Deprecated
     public static void cronPrint(long millisecond){
         new Thread(()->{
             Thread.currentThread().setName( "RunWatchMonitor");

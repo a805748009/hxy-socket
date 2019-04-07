@@ -1,11 +1,11 @@
 package nafos.security;
 
 import nafos.core.entry.ClassAndMethod;
+import nafos.core.helper.SpringApplicationContextHolder;
 import nafos.core.mode.InitMothods;
 import nafos.core.util.CastUtil;
 import nafos.core.util.ObjectUtil;
 import nafos.core.util.ProtoUtil;
-import nafos.core.util.SpringApplicationContextHolder;
 import nafos.security.cache.CacheMapDao;
 import nafos.security.cache.RedisSessionDao;
 import nafos.security.config.SecurityConfig;
@@ -24,26 +24,10 @@ import java.util.*;
 public class SecurityUtil {
     private static final Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
-    private static boolean isUseRedis ;
+    private static boolean isUseRedis;
 
-    private static String isValidate ;
-
-    private static List<String> oppositeHttpList;
-
-    private static List<Integer> oppositeCodeList = new ArrayList<>();
-
-    static{
-
+    static {
         isUseRedis = SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getIsUseRedis();
-
-        isValidate = SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getIsValidate();
-
-        oppositeHttpList = Arrays.asList(SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getOppositeHttpList().split(","));
-
-        for (String s : SpringApplicationContextHolder.getSpringBeanForClass(SecurityConfig.class).getOppositeCodeList().split(",")) {
-            oppositeCodeList.add(CastUtil.castInt(s));
-        }
-
     }
 
 
@@ -131,80 +115,19 @@ public class SecurityUtil {
 
 
     /**
-     * 验证此次请求是否需要登录，
-     *
-     * @param uri
-     * @return boolean  true 阻止， false 放行
-     */
-    public static boolean isNeedLogin(String sessionId, String uri) {
-        //远程调用的直接放行
-        if(uri.startsWith("/nafosRemoteCall"))return false;
-
-        //开启全验证状态
-        if ("ALLVALIDATE".equals(isValidate)) {
-            if (!isLogin(sessionId) && !oppositeHttpList.contains(uri)) {
-                return true;
-            }
-            return false;
-        }
-
-        //开启全不验证状态
-        if ("NOVALIDATE".equals(isValidate)) {
-            if (!isLogin(sessionId) && oppositeHttpList.contains(uri)) {
-                return true;
-            }
-            return false;
-        }
-
-        //否则是不开启验证状态
-        return false;
-    }
-
-
-
-    /**
-     * 验证此次请求是否需要登录，
-     *
-     * @param code
-     * @return boolean  true 阻止， false 放行
-     */
-    public static boolean isNeedLogin(String sessionId, int code) {
-
-        //开启全验证状态
-        if ("ALLVALIDATE".equals(isValidate)) {
-            if (!isLogin(sessionId) && !oppositeCodeList.contains(code)) {
-                return true;
-            }
-            return false;
-        }
-
-        //开启全不验证状态
-        if ("NOVALIDATE".equals(isValidate)) {
-            if (!isLogin(sessionId) && oppositeCodeList.contains(code)) {
-                return true;
-            }
-            return false;
-        }
-
-        //否则是不开启验证状态
-        return false;
-    }
-
-
-    /**
      * 更新缓存时间
      *
      * @param sessionId
      */
     public static void updateSessionTime(String sessionId) {
-        if(ObjectUtil.isNull(sessionId))return;
+        if (ObjectUtil.isNull(sessionId)) return;
         if (CacheMapDao.isFourFifthsExpiryTime(sessionId)) {
-            if(isUseRedis)
+            if (isUseRedis)
                 RedisSessionDao.update(sessionId);
             CacheMapDao.setExpiryTime(RedisKey.CACHEKEY + sessionId);
             //附带的外置操作
             ClassAndMethod route = InitMothods.getFilter("sessionUpdate");
-            route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()),route.getIndex(),
+            route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()), route.getIndex(),
                     new Object[]{sessionId});
         }
     }

@@ -5,11 +5,13 @@ import nafos.core.Enums.Protocol;
 import nafos.bootStrap.NettyStartup;
 import nafos.core.mode.InitMothods;
 import nafos.core.mode.RouteFactory;
+import nafos.core.mode.runner.NafosRunnerExecute;
+import nafos.core.monitor.FiberDo;
 import nafos.core.monitor.RunWatch;
 import nafos.core.monitor.SystemMonitor;
 import nafos.core.monitor.UnSafeSocketChannel;
-import nafos.core.shutdown.ShutDownHandleInterface;
-import nafos.core.shutdown.ShutDownHandler;
+import nafos.core.mode.shutdown.ShutDownHandleInterface;
+import nafos.core.mode.shutdown.ShutDownHandler;
 import nafos.core.helper.SpringApplicationContextHolder;
 import nafos.core.util.SnowflakeIdWorker;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,6 +73,9 @@ public class NafosServer {
         if (channelUnSafeConnectTime > 0) {
             new UnSafeSocketChannel(channelUnSafeConnectTime);
         }
+
+        // 执行开机启动任务
+        new NafosRunnerExecute().execute();
     }
 
     private void setPort() {
@@ -134,7 +139,7 @@ public class NafosServer {
     public NafosServer registRunWatch(long millisecond) {
         RunWatch.openRunWatch();
         if (millisecond > 0) {
-            RunWatch.cronPrint(millisecond);
+            FiberDo.Companion.doPrintRunwatch(millisecond);
         }
         return this;
     }
@@ -147,7 +152,7 @@ public class NafosServer {
      */
     public NafosServer registSystemMonitor(long millisecond) {
         if (millisecond > 0) {
-            SystemMonitor.cronAllLog(millisecond);
+            FiberDo.Companion.doPrintSystemMonitor(millisecond);
         }
         return this;
     }

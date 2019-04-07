@@ -4,8 +4,6 @@ import nafos.network.bootStrap.netty.NettyServer;
 import nafos.network.bootStrap.netty.handle.socket.IocBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,11 +12,11 @@ import org.springframework.stereotype.Component;
  * @Description 修改socket路由启动方式
  **/
 @Component
-public class GameSocketRouteHandleInitialize implements ApplicationRunner {
+public class GameSocketRouteHandleInitialize implements NafosRunner {
     private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
 
     @Override
-    public void run(ApplicationArguments applicationArguments) throws Exception {
+    public void run() throws Exception {
         logger.info("socket初始化修改routeHandle为：{}","GameSocketRouteHandle");
         IocBeanFactory.updateSocketRouthandle("GameSocketRouteHandle");
     }

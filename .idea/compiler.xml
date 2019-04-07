@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="common" />
         <module name="demo-entry" />
         <module name="demo-network" />
         <module name="demo-service" />
@@ -13,7 +14,6 @@
         <module name="nafos.core" />
         <module name="nafos.game" />
         <module name="nafos.msgQueue" />
-        <module name="nafos.remote" />
         <module name="nafos.security" />
         <module name="sample-dubbo" />
         <module name="sample-eurekaServer" />
@@ -21,26 +21,13 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="core" target="1.8" />
-      <module name="demo-entry" target="1.8" />
-      <module name="demo-network" target="1.8" />
-      <module name="demo-service" target="1.8" />
-      <module name="game" target="1.8" />
-      <module name="msgQueue" target="1.8" />
-      <module name="nafos" target="1.5" />
+      <module name="common" target="1.8" />
+      <module name="nafos" target="8" />
       <module name="nafos.core" target="1.8" />
       <module name="nafos.game" target="1.8" />
       <module name="nafos.msgQueue" target="1.8" />
-      <module name="nafos.network" target="1.8" />
       <module name="nafos.remote" target="1.8" />
       <module name="nafos.security" target="1.8" />
-      <module name="network" target="1.8" />
-      <module name="remote" target="1.8" />
-      <module name="sample-dubbo" target="1.8" />
-      <module name="sample-eurekaServer" target="1.8" />
-      <module name="sample-xxlJob" target="1.8" />
-      <module name="sample-zookeeper" target="1.5" />
-      <module name="security" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

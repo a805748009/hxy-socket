@@ -1,8 +1,8 @@
 package nafos.security.redis;
 
+import nafos.core.helper.SpringApplicationContextHolder;
 import nafos.core.util.ObjectUtil;
 import nafos.core.util.ProtoUtil;
-import nafos.core.util.SpringApplicationContextHolder;
 import nafos.security.config.SecurityConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -919,7 +919,7 @@ public class RedisUtil {
 	 * @param key
 	 * @param min score
 	 * @param max score
-	 * @param entityClass
+	 * @param max
 	 * @return
 	 */
 	public static  Set<String> zrangeByScoreStr(String key,double min,double max){

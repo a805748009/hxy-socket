@@ -3,7 +3,7 @@ package nafos.core.mode;
 import nafos.core.entry.ClassAndMethod;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.entry.SocketRouteClassAndMethod;
-import nafos.core.mode.filter.InterceptorsInit;
+import nafos.core.mode.interceptor.InterceptorsInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

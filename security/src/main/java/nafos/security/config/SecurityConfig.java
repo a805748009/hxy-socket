@@ -13,26 +13,9 @@ public class SecurityConfig {
     @Value("${nafos.security.isUseRedis:false}")
     private boolean isUseRedis;
 
-    // ALLVALIDATE 全部需要验证
-    // NOVALIDATE 全部不需要验证
-    @Value("${nafos.security.isValidate:NOVALIDATE}")
-    private String isValidate;
-
-    //安全模式相反的HttpUurlList  逗号隔开
-    @Value("${nafos.security.oppositeHttpList:}")
-    private String oppositeHttpList;
-
-    //安全模式相反的code  逗号隔开
-    @Value("${nafos.security.oppositeCodeList:}")
-    private String oppositeCodeList;
-
     //session过期时间，秒为单位
     @Value("${nafos.security.sessionTimeOut:1800}")
     private int sessionTimeOut;
-
-    //不通过安全验证连接允许存活的时间
-    @Value("${nafos.security.channelUnSafeConnectTime:300000}")
-    private long channelUnSafeConnectTime;
 
 
     @Value("${redis.pool.maxActive}")
@@ -46,7 +29,7 @@ public class SecurityConfig {
     @Value("${redis.pool.testOnReturn}")
     private boolean testOnReturn;
     @Value("${redis.ip}")
-    private String  ip;
+    private String ip;
     @Value("${redis.port}")
     private int port;
     @Value("${redis.port1}")
@@ -70,7 +53,7 @@ public class SecurityConfig {
     private int alllimitCount;
 
 
-    public boolean getIsUseRedis(){
+    public boolean getIsUseRedis() {
         return isUseRedis;
     }
 
@@ -78,25 +61,9 @@ public class SecurityConfig {
         return limitOnType;
     }
 
-    public String getIsValidate(){
-        return isValidate;
-    }
 
-    public String getOppositeHttpList(){
-        return oppositeHttpList;
-    }
-
-    public String getOppositeCodeList(){
-        return oppositeCodeList;
-    }
-
-
-    public int getSessionTimeOut(){
+    public int getSessionTimeOut() {
         return sessionTimeOut;
-    }
-
-    public long getChannelUnSafeConnectTime(){
-        return channelUnSafeConnectTime;
     }
 
 

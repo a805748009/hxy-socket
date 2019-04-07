@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/nafos.iml" filepath="$PROJECT_DIR$/nafos.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/nafos.core.iml" filepath="$PROJECT_DIR$/core/nafos.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/game/nafos.game.iml" filepath="$PROJECT_DIR$/game/nafos.game.iml" />
       <module fileurl="file://$PROJECT_DIR$/msgQueue/nafos.msgQueue.iml" filepath="$PROJECT_DIR$/msgQueue/nafos.msgQueue.iml" />
-      <module fileurl="file://$PROJECT_DIR$/remote/nafos.remote.iml" filepath="$PROJECT_DIR$/remote/nafos.remote.iml" />
       <module fileurl="file://$PROJECT_DIR$/security/nafos.security.iml" filepath="$PROJECT_DIR$/security/nafos.security.iml" />
     </modules>
   </component>
