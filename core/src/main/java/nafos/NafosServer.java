@@ -8,7 +8,6 @@ import nafos.core.mode.RouteFactory;
 import nafos.core.mode.runner.NafosRunnerExecute;
 import nafos.core.monitor.FiberDo;
 import nafos.core.monitor.RunWatch;
-import nafos.core.monitor.SystemMonitor;
 import nafos.core.monitor.UnSafeSocketChannel;
 import nafos.core.mode.shutdown.ShutDownHandleInterface;
 import nafos.core.mode.shutdown.ShutDownHandler;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Component;
  * @Date 2018/10/8 下午2:09
  * @Description TODO
  **/
-
 @Component
 public class NafosServer {
 
