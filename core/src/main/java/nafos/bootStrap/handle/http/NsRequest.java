@@ -129,7 +129,7 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
     /**
      * restful风格的postJSON解析
      */
-    private Map<String, ?> bodyParams() {
+    private Map<String, Object> bodyParams() {
         if (bodyParams == null) {
             // 处理POST请求
             String strContentType = headers().get("Content-Type");
@@ -222,18 +222,11 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
     }
 
     public Map<String, String> getRequestParams() {
-        return requestParams;
-    }
-
-    public void setRequestParams(Map<String, String> requestParams) {
-        this.requestParams = requestParams;
+        return requestParams();
     }
 
     public Map<String, Object> getBodyParams() {
-        return bodyParams;
+        return bodyParams();
     }
 
-    public void setBodyParams(Map<String, Object> bodyParams) {
-        this.bodyParams = bodyParams;
-    }
 }
