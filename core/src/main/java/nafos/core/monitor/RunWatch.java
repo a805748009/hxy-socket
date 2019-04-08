@@ -1,6 +1,5 @@
 package nafos.core.monitor;
 
-import kotlinx.coroutines.experimental.GlobalScope;
 import nafos.core.cache.LongAdderMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
