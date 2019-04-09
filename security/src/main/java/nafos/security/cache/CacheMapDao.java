@@ -100,4 +100,18 @@ public class CacheMapDao {
         exMap.delTimeOut();
     }
 
+    public static void cronDelTimeOut(long millisecond){
+        new Thread(()->{
+            while (true) {
+                try {
+                    Thread.sleep(millisecond);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                delTimeOut();
+                logger.debug("清除cacheMap中login信息, 【over】");
+            }
+        }).start();
+    }
+
 }
