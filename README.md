@@ -11,6 +11,7 @@ nafos是一个基于netty的高性能服务器框架，其目的在于易上手�
 在前后端分离的web架构上，或者APP,手游，nafos都是一个很不错的选择。
 
 除此之外，sample中也给出了超简单的扩展方案，使得nafos在分布式扩展上能更胜一筹。
+【kotlin代码报错请先在setting-plugins升级idea的kotlin插件至1.3】
 
 
 ## 文档

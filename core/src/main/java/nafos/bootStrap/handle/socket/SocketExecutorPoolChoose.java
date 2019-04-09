@@ -1,19 +1,17 @@
 package nafos.bootStrap.handle.socket;
 
 import io.netty.channel.ChannelHandlerContext;
-import nafos.bootStrap.handle.currency.AsyncSessionHandle;
-import nafos.bootStrap.handle.currency.ExcuteHandle;
-import nafos.core.Thread.ExecutorPool;
-import nafos.core.Thread.Processors;
 import nafos.bootStrap.handle.ExecutorPoolChoose;
-import nafos.core.entry.AsyncTaskMode;
+import nafos.bootStrap.handle.currency.ExcuteHandle;
+import nafos.bootStrap.handle.http.HttpRouteHandle;
+import nafos.core.Thread.ExecutorPool;
 import nafos.core.entry.ClassAndMethod;
 import nafos.core.entry.SocketRouteClassAndMethod;
 import nafos.core.helper.ClassAndMethodHelper;
+import nafos.core.helper.SpringApplicationContextHolder;
 import nafos.core.mode.InitMothods;
 import nafos.core.util.ArrayUtil;
 import nafos.core.util.ObjectUtil;
-import nafos.core.helper.SpringApplicationContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -67,17 +65,28 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
 
         boolean isRunOnWork = socketRouteClassAndMethod.isRunOnWorkGroup();
 
-//        String cookieId = ctx.channel().id().toString();
-//        int queuecCode = cookieId.hashCode() % Processors.getProcess();
+        String cookieId = ctx.channel().id().toString();
 
-        if (!isRunOnWork) {
-            ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, socketRouteClassAndMethod, messageBody, idByte));
-//            AsyncSessionHandle.runTask(queuecCode, new AsyncTaskMode(ctx, socketRouteClassAndMethod, messageBody, idByte));
-            return;
+        if (cookieId != null && cookieId.trim() != "") {
+            synchronized (cookieId) {
+                if (!isRunOnWork) {
+                    ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, socketRouteClassAndMethod, messageBody, idByte));
+                    return;
+                }
+
+                SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(), AbstractSocketRouteHandle.class)
+                        .route(ctx, socketRouteClassAndMethod, messageBody, idByte);
+            }
+        }else{
+            if (!isRunOnWork) {
+                ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, socketRouteClassAndMethod, messageBody, idByte));
+                return;
+            }
+
+            SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(), AbstractSocketRouteHandle.class)
+                    .route(ctx, socketRouteClassAndMethod, messageBody, idByte);
         }
 
-        SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(), AbstractSocketRouteHandle.class)
-                .route(ctx, socketRouteClassAndMethod, messageBody, idByte);
 
     }
 }

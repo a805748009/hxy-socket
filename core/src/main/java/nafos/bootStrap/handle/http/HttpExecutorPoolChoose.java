@@ -3,20 +3,16 @@ package nafos.bootStrap.handle.http;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.util.ReferenceCountUtil;
-import nafos.bootStrap.handle.currency.AsyncSessionHandle;
+import nafos.bootStrap.handle.ExecutorPoolChoose;
 import nafos.bootStrap.handle.currency.ExcuteHandle;
 import nafos.core.Thread.ExecutorPool;
-import nafos.core.Thread.Processors;
-import nafos.bootStrap.handle.ExecutorPoolChoose;
-import nafos.core.entry.AsyncTaskMode;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.helper.SpringApplicationContextHolder;
 import nafos.core.mode.InitMothods;
-import nafos.core.util.*;
+import nafos.core.util.NettyUtil;
+import nafos.core.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Random;
 
 /**
  * @Author 黄新宇
@@ -47,22 +43,26 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
 
         boolean isRunOnWork = httpRouteClassAndMethod.isRunOnWorkGroup();
 
-//        String cookieId = request.getNafosCookieId();
-//        cookieId = ObjectUtil.isNotNull(cookieId) ? cookieId : CastUtil.castString(new Random().nextInt(10));
-//        int queuecCode = cookieId.hashCode() % Processors.getProcess();
-
-
+        String cookieId = request.getNafosCookieId();
         ReferenceCountUtil.retain(request);
 
-        if (!isRunOnWork) {
-            ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, request, httpRouteClassAndMethod));
-//            AsyncSessionHandle.runTask(queuecCode, new AsyncTaskMode(ctx, request, httpRouteClassAndMethod));
-            return;
+        if (cookieId != null && cookieId.trim() != "") {
+            synchronized (cookieId) {
+                if (!isRunOnWork) {
+                    ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, request, httpRouteClassAndMethod));
+                    return;
+                }
+                SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
+                        .route(ctx, request, httpRouteClassAndMethod);
+            }
+        } else {
+            if (!isRunOnWork) {
+                ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, request, httpRouteClassAndMethod));
+                return;
+            }
+            SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
+                    .route(ctx, request, httpRouteClassAndMethod);
         }
-
-
-        SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
-                .route(ctx, request, httpRouteClassAndMethod);
 
 
     }

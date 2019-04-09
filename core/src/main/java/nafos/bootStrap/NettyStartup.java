@@ -8,6 +8,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import nafos.bootStrap.handle.currency.ChannelActiveHandle;
 import nafos.bootStrap.handle.currency.SocketChooseHandle;
 import nafos.bootStrap.handle.socket.ByteArrayOutboundHandle;
@@ -64,9 +65,9 @@ public class NettyStartup {
         }
         // Boss线程：由这个线程池提供的线程是boss种类的，用于创建、连接、绑定socket， （有点像门卫）然后把这些socket传给worker线程池。
         // 在服务器端每个监听的socket都有一个boss线程来处理。在客户端，只有一个boss线程来处理所有的socket。
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(2,new DefaultThreadFactory("boss-thread",true));
         // Worker线程：Worker线程执行所有的异步I/O，即处理操作
-        EventLoopGroup workGroup = new NioEventLoopGroup();
+        EventLoopGroup workGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors()*2,new DefaultThreadFactory("worker-thread",true));
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.option(ChannelOption.SO_BACKLOG, 4096);
