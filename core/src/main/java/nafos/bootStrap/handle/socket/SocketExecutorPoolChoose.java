@@ -2,6 +2,8 @@ package nafos.bootStrap.handle.socket;
 
 import io.netty.channel.ChannelHandlerContext;
 import nafos.bootStrap.handle.currency.AsyncSessionHandle;
+import nafos.bootStrap.handle.currency.ExcuteHandle;
+import nafos.core.Thread.ExecutorPool;
 import nafos.core.Thread.Processors;
 import nafos.bootStrap.handle.ExecutorPoolChoose;
 import nafos.core.entry.AsyncTaskMode;
@@ -65,11 +67,12 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
 
         boolean isRunOnWork = socketRouteClassAndMethod.isRunOnWorkGroup();
 
-        String cookieId = ctx.channel().id().toString();
-        int queuecCode = cookieId.hashCode() % Processors.getProcess();
+//        String cookieId = ctx.channel().id().toString();
+//        int queuecCode = cookieId.hashCode() % Processors.getProcess();
 
         if (!isRunOnWork) {
-            AsyncSessionHandle.runTask(queuecCode, new AsyncTaskMode(ctx, socketRouteClassAndMethod, messageBody, idByte));
+            ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, socketRouteClassAndMethod, messageBody, idByte));
+//            AsyncSessionHandle.runTask(queuecCode, new AsyncTaskMode(ctx, socketRouteClassAndMethod, messageBody, idByte));
             return;
         }
 

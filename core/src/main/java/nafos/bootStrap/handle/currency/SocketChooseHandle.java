@@ -26,12 +26,14 @@ public class SocketChooseHandle extends ByteToMessageDecoder {
      */
     private static final String WEBSOCKET_PREFIX = "GET /";
 
+    private static final WebsocketPipelineAdd websocketPipelineAdd = SpringApplicationContextHolder.getSpringBeanForClass(WebsocketPipelineAdd.class);
+
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         String protocol = getBufStart(in);
         if (protocol.startsWith(WEBSOCKET_PREFIX)) {
-            SpringApplicationContextHolder.getSpringBeanForClass(WebsocketPipelineAdd.class).handAdd(ctx.pipeline());
+            websocketPipelineAdd.handAdd(ctx.pipeline());
 
             ctx.pipeline().remove(LengthFieldBasedFrameDecoder.class);
             ctx.pipeline().remove(LengthFieldPrepender.class);

@@ -4,6 +4,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.util.ReferenceCountUtil;
 import nafos.bootStrap.handle.currency.AsyncSessionHandle;
+import nafos.bootStrap.handle.currency.ExcuteHandle;
+import nafos.core.Thread.ExecutorPool;
 import nafos.core.Thread.Processors;
 import nafos.bootStrap.handle.ExecutorPoolChoose;
 import nafos.core.entry.AsyncTaskMode;
@@ -45,17 +47,20 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
 
         boolean isRunOnWork = httpRouteClassAndMethod.isRunOnWorkGroup();
 
-        String cookieId = request.getNafosCookieId();
-        cookieId = ObjectUtil.isNotNull(cookieId) ? cookieId : CastUtil.castString(new Random().nextInt(10));
-        int queuecCode = cookieId.hashCode() % Processors.getProcess();
+//        String cookieId = request.getNafosCookieId();
+//        cookieId = ObjectUtil.isNotNull(cookieId) ? cookieId : CastUtil.castString(new Random().nextInt(10));
+//        int queuecCode = cookieId.hashCode() % Processors.getProcess();
+
+
+        ReferenceCountUtil.retain(request);
 
         if (!isRunOnWork) {
-            ReferenceCountUtil.retain(request);
-            AsyncSessionHandle.runTask(queuecCode, new AsyncTaskMode(ctx, request, httpRouteClassAndMethod));
+            ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, request, httpRouteClassAndMethod));
+//            AsyncSessionHandle.runTask(queuecCode, new AsyncTaskMode(ctx, request, httpRouteClassAndMethod));
             return;
         }
 
-        ReferenceCountUtil.retain(request);
+
         SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
                 .route(ctx, request, httpRouteClassAndMethod);
 

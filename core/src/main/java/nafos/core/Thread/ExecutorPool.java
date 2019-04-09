@@ -19,9 +19,9 @@ public class ExecutorPool {
 	private static ExecutorService instance = null;
 	static {
 		//线程池最小2个，最大是cpu核数*2个线程
-		instance = new ThreadPoolExecutor(Processors.getProcess()*2, Processors.getProcess()*2,
+		instance = new ThreadPoolExecutor(Processors.getProcess()*2, 800,
 				2L, TimeUnit.MINUTES,
-				new LinkedBlockingQueue<Runnable>(),new NamedThreadFactory("nafos"));
+				new LinkedBlockingQueue<Runnable>(50),new NamedThreadFactory("nafos"));
 	}
 
 	public static ExecutorService getInstance() {
