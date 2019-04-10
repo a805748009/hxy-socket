@@ -13,10 +13,13 @@ import nafos.core.monitor.RunWatch;
 import nafos.core.monitor.SystemMonitor;
 import nafos.core.monitor.UnSafeSocketChannel;
 import nafos.core.util.SnowflakeIdWorker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +29,10 @@ import org.springframework.stereotype.Component;
  * @Description TODO
  **/
 @Component
+@PropertySource({"classpath:application.properties"})
 public class NafosServer {
+
+    private static final Logger logger = LoggerFactory.getLogger(NettyStartup.class);
 
     @Value("${nafos.httpServerPort:0}")
     private int httpServerPort;
@@ -48,6 +54,7 @@ public class NafosServer {
 
 
     public NafosServer() {
+
     }
 
     public NafosServer(Class clazz) {
@@ -60,6 +67,8 @@ public class NafosServer {
             annoContext.register(clazz);
             annoContext.refresh();
             ac = annoContext;
+        } else {
+            logger.info("ApplicationContext is running");
         }
 
         nettyStartup = ac.getBean(NettyStartup.class);
@@ -75,6 +84,7 @@ public class NafosServer {
         // 执行开机启动任务
         new NafosRunnerExecute().execute();
     }
+
 
     private void setPort() {
         NafosServer.httpPort = httpServerPort;
