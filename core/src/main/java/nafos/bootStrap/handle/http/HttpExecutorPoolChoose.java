@@ -42,26 +42,14 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
 
         boolean isRunOnWork = httpRouteClassAndMethod.isRunOnWorkGroup();
 
-        String cookieId = request.getNafosCookieId();
         ReferenceCountUtil.retain(request);
 
-        if (cookieId != null && cookieId.trim() != "") {
-            synchronized (cookieId) {
-                if (!isRunOnWork) {
-                    ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, request, httpRouteClassAndMethod));
-                    return;
-                }
-                SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
-                        .route(ctx, request, httpRouteClassAndMethod);
-            }
-        } else {
-            if (!isRunOnWork) {
-                ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, request, httpRouteClassAndMethod));
-                return;
-            }
-            SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
-                    .route(ctx, request, httpRouteClassAndMethod);
+        if (!isRunOnWork) {
+            ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, request, httpRouteClassAndMethod));
+            return;
         }
+        SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
+                .route(ctx, request, httpRouteClassAndMethod);
 
 
     }

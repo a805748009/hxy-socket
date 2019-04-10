@@ -47,7 +47,7 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
 
         SocketRouteClassAndMethod socketRouteClassAndMethod = InitMothods.getSocketHandler(code);
         if (ObjectUtil.isNull(socketRouteClassAndMethod)) {
-            logger.error("{} :找不到匹配的路由",code);
+            logger.error("{} :找不到匹配的路由", code);
             return;
         }
 
@@ -55,8 +55,8 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
         ClassAndMethod filter;
         for (Class interceptor : socketRouteClassAndMethod.getInterceptors()) {
             filter = InitMothods.getInterceptor(interceptor);
-            if(filter == null){
-                logger.warn("{} :拦截器没有实现InterceptorInterface,或者继承AbstractSocketInterceptor. 拦截无效",interceptor);
+            if (filter == null) {
+                logger.warn("{} :拦截器没有实现InterceptorInterface,或者继承AbstractSocketInterceptor. 拦截无效", interceptor);
                 continue;
             }
             filter.setIndex(1);
@@ -65,27 +65,13 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
 
         boolean isRunOnWork = socketRouteClassAndMethod.isRunOnWorkGroup();
 
-        String cookieId = ctx.channel().id().toString();
-
-        if (cookieId != null && cookieId.trim() != "") {
-            synchronized (cookieId) {
-                if (!isRunOnWork) {
-                    ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, socketRouteClassAndMethod, messageBody, idByte));
-                    return;
-                }
-
-                SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(), AbstractSocketRouteHandle.class)
-                        .route(ctx, socketRouteClassAndMethod, messageBody, idByte);
-            }
-        }else{
-            if (!isRunOnWork) {
-                ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, socketRouteClassAndMethod, messageBody, idByte));
-                return;
-            }
-
-            SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(), AbstractSocketRouteHandle.class)
-                    .route(ctx, socketRouteClassAndMethod, messageBody, idByte);
+        if (!isRunOnWork) {
+            ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, socketRouteClassAndMethod, messageBody, idByte));
+            return;
         }
+
+        SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(), AbstractSocketRouteHandle.class)
+                .route(ctx, socketRouteClassAndMethod, messageBody, idByte);
 
 
     }
