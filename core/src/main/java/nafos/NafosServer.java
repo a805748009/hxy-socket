@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,6 @@ import org.springframework.stereotype.Component;
  * @Description TODO
  **/
 @Component
-@PropertySource({"classpath:application.properties"})
 public class NafosServer {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyStartup.class);
@@ -201,5 +201,6 @@ public class NafosServer {
         SnowflakeIdWorker.init(workerId, queneceId);
         return this;
     }
+
 
 }

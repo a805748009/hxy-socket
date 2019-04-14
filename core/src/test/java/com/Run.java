@@ -1,30 +1,32 @@
 package com;
 
 import nafos.NafosServer;
-import org.springframework.boot.Banner;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.builder.SpringApplicationBuilder;
+import nafos.core.Enums.Protocol;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @ComponentScan({"com","nafos"})
 @EnableScheduling
+//@PropertySources({
+//        @PropertySource("classpath:application.properties")
+//})
 public class Run {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(Run.class)
-                .bannerMode(Banner.Mode.OFF)
-                .web(WebApplicationType.NONE)
-                .run(args);
+//        new SpringApplicationBuilder(Run.class)
+//                .bannerMode(Banner.Mode.OFF)
+//                .web(WebApplicationType.NONE)
+//                .run(args);
 
 
-        new NafosServer(Run.class).startupHttp(5050);
 
-//       new NafosServer(Run.class)
-////               .registRunWatch(5000)
-////               .registSystemMonitor(7000)
-//               .registDefaultProtocol(Protocol.JSON)
-//               .startupHttp(8050);
+       new NafosServer(Run.class)
+//               .registRunWatch(5000)
+//               .registSystemMonitor(7000)
+               .registDefaultProtocol(Protocol.JSON)
+               .startupHttp(8050);
 
     }
 }
