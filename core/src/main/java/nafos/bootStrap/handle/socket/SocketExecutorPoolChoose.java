@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
     private static final Logger logger = LoggerFactory.getLogger(SocketExecutorPoolChoose.class);
 
+    public static AbstractSocketRouteHandle abstractSocketRouteHandle =  SpringApplicationContextHolder.getSpringBeanForClass(SocketRouteHandle.class);
+
 
     @Override
     public void choosePool(ChannelHandlerContext ctx, Object msg) {
@@ -70,8 +72,7 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
             return;
         }
 
-        SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(), AbstractSocketRouteHandle.class)
-                .route(ctx, socketRouteClassAndMethod, messageBody, idByte);
+        abstractSocketRouteHandle.route(ctx, socketRouteClassAndMethod, messageBody, idByte);
 
 
     }

@@ -5,6 +5,7 @@ import nafos.bootStrap.handle.http.HttpRouteHandle;
 import nafos.bootStrap.handle.http.NsRequest;
 import nafos.bootStrap.handle.socket.AbstractSocketRouteHandle;
 import nafos.bootStrap.handle.socket.IocBeanFactory;
+import nafos.bootStrap.handle.socket.SocketRouteHandle;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.entry.SocketRouteClassAndMethod;
 import nafos.core.helper.SpringApplicationContextHolder;
@@ -17,7 +18,7 @@ public class ExcuteHandle implements Runnable {
 
     private static HttpRouteHandle httpRouteHandle = SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class);
 
-    private static AbstractSocketRouteHandle abstractSocketRouteHandle =  SpringApplicationContextHolder.getContext().getBean(IocBeanFactory.getSocketRouthandle(), AbstractSocketRouteHandle.class);
+    private static AbstractSocketRouteHandle abstractSocketRouteHandle =  SpringApplicationContextHolder.getSpringBeanForClass(SocketRouteHandle.class);
 
     private ChannelHandlerContext ctx;
 

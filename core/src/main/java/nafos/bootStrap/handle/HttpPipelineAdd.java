@@ -20,7 +20,7 @@ public class HttpPipelineAdd implements PipelineAdd {
     @Autowired
     HttpServerHandler httpServerHandler;
 
-    public ChannelInboundHandler channelInboundHandler = null;
+    public static ChannelInboundHandler channelInboundHandler = null;
 
 
     @Override

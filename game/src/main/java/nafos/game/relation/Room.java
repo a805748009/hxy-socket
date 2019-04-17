@@ -1,8 +1,8 @@
 package nafos.game.relation;
 
 
-import nafos.core.mode.InitMothods;
 import nafos.game.entry.BaseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +41,13 @@ public class Room {
 
 
     /**
-    * @Author 黄新宇
-    * @date 2018/8/4 下午5:28
-    * @Description(清楚掉线的人)
-    * @param
-    * @return void
-    */
-    public void clearUnActiveUser(){
+     * @param
+     * @return void
+     * @Author 黄新宇
+     * @date 2018/8/4 下午5:28
+     * @Description(清楚掉线的人)
+     */
+    public void clearUnActiveUser() {
         List<String> l = new ArrayList<>();
         for (Client client : clients) {
             String userId = client.getUserId();
@@ -89,12 +89,11 @@ public class Room {
         }
     }
 
-    public void sendMsg(Object obj,byte[] id) {
+    public void sendMsg(Object obj, byte[] id) {
         for (Client client : clients) {
-            client.sendMsg(obj,id);
+            client.sendMsg(obj, id);
         }
     }
-
 
 
     //用户掉线，不删除在房间中的信息
@@ -113,7 +112,6 @@ public class Room {
     }
 
 
-
     public void deleteRoomInCacheAndNameSpace() {
         IoCache.roomMap.remove(id);
         NameSpace.removeRoom(nameSpace, id);
@@ -128,7 +126,7 @@ public class Room {
         }
         removeUserNotDelRoom(delClient);
 
-        synchronized (clients){
+        synchronized (clients) {
             if (clients.isEmpty()) {
                 deleteRoomInCacheAndNameSpace();
             }
@@ -138,7 +136,7 @@ public class Room {
 
     public void removeUser(Client client) {
         removeUserNotDelRoom(client);
-        synchronized (clients){
+        synchronized (clients) {
             if (clients.isEmpty()) {
                 deleteRoomInCacheAndNameSpace();
             }
@@ -207,8 +205,8 @@ public class Room {
     }
 
     public Object getUserDataOnKey(Client client, String key) {
-        String userId =  client.getUserId();
-        return getUserDataOnKey(userId,key);
+        String userId = client.getUserId();
+        return getUserDataOnKey(userId, key);
     }
 
     public Map<String, Object> getUserData(String userId) {

@@ -2,11 +2,13 @@ package nafos.game.relation;
 
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
+import nafos.core.util.ArrayUtil;
 import nafos.core.util.ObjectUtil;
-import nafos.core.util.SendUtil;
+import nafos.core.util.ProtoUtil;
 import nafos.game.entry.BaseUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ public class Client {
         this.channel = channel;
     }
 
-    public Client(Channel channel,BaseUser gameUserInfo) {
+    public Client(Channel channel, BaseUser gameUserInfo) {
         super();
         this.channel = channel;
         this.gameUserInfo = gameUserInfo;
@@ -52,10 +54,10 @@ public class Client {
     }
 
     public void setHide(boolean isHide) {
-        setHide(isHide,10);
+        setHide(isHide, 10);
     }
 
-    public void setHide(boolean isHide,int timeOut) {
+    public void setHide(boolean isHide, int timeOut) {
         this.hideTime = timeOut;
         this.isHide = isHide;
     }
@@ -92,7 +94,7 @@ public class Client {
     }
 
     public void sendMsg(Object obj, byte[] id) {
-        obj = SendUtil.castSendMsg(id, obj);
+        obj = castSendMsg(id, obj);
         wirteAndFlush(obj);
     }
 
@@ -132,13 +134,12 @@ public class Client {
     }
 
 
-
     /**
-    * @Author 黄新宇
-    * @date 2018/2/29 下午9:23
-    * @Description(是否加入房间)
-    * @return boolean
-    */
+     * @return boolean
+     * @Author 黄新宇
+     * @date 2018/2/29 下午9:23
+     * @Description(是否加入房间)
+     */
     public boolean isJoinRoom() {
         Room room = getRoom();
         return ObjectUtil.isNotNull(room);
@@ -192,7 +193,7 @@ public class Client {
 
     public void roomBroadcast(Object obj, Object id) {
         Room room = getRoom();
-        obj = SendUtil.castSendMsg(id, obj);
+        obj = castSendMsg(id, obj);
         room.sendMsg(obj);
     }
 
@@ -235,7 +236,7 @@ public class Client {
     }
 
     public void nameSpaceBroadcast(Object obj, byte[] id) {
-        obj = SendUtil.castSendMsg(id, obj);
+        obj = castSendMsg(id, obj);
         NameSpace.sendMsg(getNameSpace(), obj);
     }
 
@@ -256,6 +257,17 @@ public class Client {
         } else {
             logger.error("==============>>>>>消息暂不支持传入WebSocketFrame对象，请传基础对象。此次发送失败");
         }
+    }
+
+    private Object castSendMsg(Object id, Object object) {
+        //intBefore模式
+        if (id instanceof byte[]) {
+            if (object instanceof byte[])
+                return ArrayUtil.concat((byte[]) id, (byte[]) object);
+            return ArrayUtil.concat((byte[]) id, ProtoUtil.serializeToByte(object));
+        }
+        logger.error("================>>>>>>传入参数错误");
+        return null;
     }
 
 }
