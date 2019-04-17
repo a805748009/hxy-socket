@@ -47,8 +47,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        logger.error(cause.toString());
-        cause.printStackTrace();
+        logger.warn(cause.toString());
         ctx.close();
     }
 

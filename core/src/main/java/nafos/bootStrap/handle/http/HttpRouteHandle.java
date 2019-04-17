@@ -201,6 +201,8 @@ public class HttpRouteHandle {
             response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
         }
         ThreadLocalHelper.threadLocalRemove();
+
+        if(ctx.channel().isActive())
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 }
