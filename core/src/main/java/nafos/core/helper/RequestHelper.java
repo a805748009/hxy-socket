@@ -42,7 +42,7 @@ public class RequestHelper {
             RequestParam requestParam = parameter.getDeclaredAnnotation(RequestParam.class);
             //url 参数
             if (ObjectUtil.isNotNull(requestParam)) {
-                Object object = nsRequest.objectQueryParam(requestParam.value());
+                Object object = nsRequest.objectQueryParam("".equals(requestParam.value()) ? requestParam.name() : requestParam.value());
                 if (ObjectUtil.isNull(object) && requestParam.required()) {
                     if (requestParam.required()) {
                         logger.error("======{},参数{}不能为空 ", route.getMethod().toString(), requestParam.value());
