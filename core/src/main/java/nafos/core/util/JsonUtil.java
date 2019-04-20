@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +38,7 @@ public class JsonUtil {
         objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         // objectMapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true) ;
         // jackson对日期格式的处理
         objectMapper.setDateFormat(fmt);
@@ -57,6 +55,7 @@ public class JsonUtil {
         objectMapperNotNull.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
         objectMapperNotNull.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapperNotNull.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapperNotNull.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         // jackson对日期格式的处理
         objectMapperNotNull.setDateFormat(fmt);
 

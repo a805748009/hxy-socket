@@ -48,9 +48,11 @@ public class NafosServer {
 
     private static NettyStartup nettyStartup = null;
 
-    private static NafosServer nafosServer = null;
-
     private static ApplicationContext ac = null;
+
+    private  Class runClazz;
+
+    private boolean isInit;
 
 
     public NafosServer() {
@@ -58,13 +60,23 @@ public class NafosServer {
     }
 
     public NafosServer(Class clazz) {
+        runClazz = clazz;
+    }
+
+    private NafosServer init(){
+        synchronized (this){
+            if(isInit){
+                return this;
+            }
+            isInit = true;
+        }
         ac = SpringApplicationContextHolder.getContext();
         if (ac == null) {
-            if (AnnotationUtils.findAnnotation(clazz, ComponentScan.class) == null) {
-                throw new IllegalStateException("startup class [" + clazz.getName() + "] must be Annotation ComponentScan and choose scan package");
+            if (AnnotationUtils.findAnnotation(runClazz, ComponentScan.class) == null) {
+                throw new IllegalStateException("startup class [" + runClazz.getName() + "] must be Annotation ComponentScan and choose scan package");
             }
             AnnotationConfigApplicationContext annoContext = new AnnotationConfigApplicationContext();
-            annoContext.register(clazz);
+            annoContext.register(runClazz);
             annoContext.refresh();
             ac = annoContext;
         } else {
@@ -72,8 +84,9 @@ public class NafosServer {
         }
 
         nettyStartup = ac.getBean(NettyStartup.class);
-        nafosServer = ac.getBean(NafosServer.class);
-        nafosServer.setPort();
+//        nafosServer = ac.getBean(NafosServer.class);
+//        nafosServer.setPort();
+        setPort();
         InitMothods.init(ac);
 
         // 配置文件注册事件
@@ -83,12 +96,14 @@ public class NafosServer {
 
         // 执行开机启动任务
         new NafosRunnerExecute().execute();
+
+        return this;
     }
 
 
     private void setPort() {
-        NafosServer.httpPort = httpServerPort;
-        NafosServer.socketPort = socketServerPort;
+        httpPort = httpServerPort;
+        socketPort = socketServerPort;
     }
 
 
@@ -112,6 +127,7 @@ public class NafosServer {
     }
 
     public NafosServer startupHttp(int port) {
+        init();
         nettyStartup.startup(port, Connect.HTTP.name());
         return this;
     }
@@ -121,6 +137,7 @@ public class NafosServer {
     }
 
     public NafosServer startupSocket(int port) {
+        init();
         nettyStartup.startup(port, Connect.SOCKET.name());
         return this;
     }
