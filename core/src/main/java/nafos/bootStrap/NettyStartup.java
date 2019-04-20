@@ -36,9 +36,9 @@ public class NettyStartup {
 
     @Value("${nafos.isOpenSSL:false}")
     private boolean isOpenSSL;
-    @Value("${nafos.certFilePath}")
+    @Value("${nafos.certFilePath:}")
     private String certFilePath;
-    @Value("${nafos.keyFilePath}")
+    @Value("${nafos.keyFilePath:}")
     private String keyFilePath;
     @Value("${nafos.readerIdleTime:5}")
     private long readerIdleTime;
