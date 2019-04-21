@@ -1,41 +1,40 @@
 <p align="center">  
    <h3 align="center">NAFOS</h3>
    <p align="center">
-    一个基于netty的轻量级高性能服务端框架。
+     never ask for our savior，he's busier than you.
      <br>
 </p>
+ <br>
+        <a href="https://travis-ci.org/xuxueli/xxl-job">
+            <img  height="50" width="50"  src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555864133489&di=1d10a230c0925ce98139316d1ba992c7&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20160824%2F53427121c2f64eb492430b2849e9c0c4.jpg" >
+        </a>
 
 
 ## 简介
-nafos是一个基于netty的高性能服务器框架，其目的在于易上手，易扩展，让开发人员更致力于业务开发。
-在前后端分离的web架构上，或者APP,手游，nafos都是一个很不错的选择。
+nafos是一个基于netty的轻量级高性能服务端应用框架，能同时支持http，tcp，websocket通信，Json和Protobuffer编码协议以及压缩和加密。
 
-除此之外，sample中也给出了超简单的扩展方案，使得nafos在分布式扩展上能更胜一筹。
-【kotlin代码报错请先在setting-plugins升级idea的kotlin插件至1.3】
+最重要的是，它使用非常简单，且非常轻，启动速度快，是微服务的不二选择。
+
 
 
 ## 文档
 - [文档-请点击此处](https://www.showdoc.cc/nafos?page_id=1033780133131417)
-- [demo-请点击此处](https://gitee.com/huangxinyu/nafos-demo)
+
 
 
 
 
 ## 特点
 - 1、简单易用：通过简单的配置文件即可建立完善的启动方案，然后就可以开心的关注业务代码了；
-- 2、串行设计 ：单用户的所有请求都是串行进行，完美解决单用户并发问题，减少锁的使用；
-- 3、高性能：网络层采用netty作为中间件，同等配置及优化条件下，相比tomcat性能可提升一倍；
-- 4、易扩展：整合了springBoot，可完美支持spring大家族系列；
-- 5、强兼容: 可单机同时支持HTTP,TCP,websocket等服务，小规模应用下不用多开占用资源；
-- 6、工具类丰富：封装所有开发中常见工具类可直接调用；
-- 7、房间策略：封装常见游戏的房间策略，开房，比赛，聊天可直接调用，无需多写；
-- 8、模块化：多个模块之间相互解耦，喜欢哪个用哪个，不喜欢直接丢弃。
-- 9、脚本支持：内有现成的shell脚本可以直接使用，开关机，数据库备份等；
-- 10、自带分布式限流器，有IP策略和总流量策略等漏桶限流，抵御攻击。
-- 11、自带protostuff的feign编解码器，操作简单的同时可以极大程度优化feign端对端的通信问题。
-- 12、封装了kafa和rabbitMQ,工具类一般超简单使用，无需关注内部业务；
-- 13、丰富教程：除了详细文档外，在sample模块中还有多模块使用案例，开发无忧~
-
+- 2、强兼容: 可单机同时支持HTTP,TCP,websocket等服务，小规模应用下不用多开占用资源；
+- 3、高性能：网络抽象框架采用的netty，性能无忧；
+- 4、易扩展：无缝添加springboot，可完美支持spring大家族系列；
+- 5、自带分布式限流器，多策略轻松抵御流量攻击；
+- 6、房间策略：封装常见游戏的房间策略，开房，比赛，聊天可直接调用，无需多写；
+- 7、双编码：同时支持json和protobuffer格式编码，手游网站一块搞定；
+- 8、饿处理：设置了二级线程池处理请求，在阻塞下最大限度的接受请求防止丢失；
+- 9、自单点：一键配置即可实现SSO单点登录，简单方便又实用；
+- 10、安全节流：简单开启数据压缩和加密，节约带宽又安全；
 
 ## 交流
 
