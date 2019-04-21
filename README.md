@@ -3,11 +3,12 @@
    <p align="center">
      never ask for our savior，he's busier than you.
      <br>
+     <a href="https://gitee.com/huangxinyu/nafos" >
+                 <img  height="50" width="50"  src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555864133489&di=1d10a230c0925ce98139316d1ba992c7&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20160824%2F53427121c2f64eb492430b2849e9c0c4.jpg" >
+             </a>
 </p>
  <br>
-        <a href="https://travis-ci.org/xuxueli/xxl-job">
-            <img  height="50" width="50"  src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555864133489&di=1d10a230c0925ce98139316d1ba992c7&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20160824%2F53427121c2f64eb492430b2849e9c0c4.jpg" >
-        </a>
+     
 
 
 ## 简介
