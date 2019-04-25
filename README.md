@@ -42,6 +42,26 @@ nafos是一个基于netty的轻量级高性能服务端应用框架，能同时�
 - 邮箱：805748009@qq.com
 
 
+## 快速接口
+```java
+@ComponentScan({"com","nafos"})
+@Controller
+public class Run {
+    public static void main(String[] args) {
+        new NafosServer(Run.class)
+                .registDefaultProtocol(Protocol.JSON)
+                .startupHttp(8050);
+    }
+
+    @Get(uri="/hello")
+    public Object hello(NsRequest nsRequest){
+        System.out.println(nsRequest.intQueryParam("count"));
+        return null;
+    }
+}
+```
+
+
 ## 参与
 Contributions are welcome! Open a pull request to fix a bug, or open an [Issue](https://gitee.com/huangxinyu/BC-NETTYGO/issues) to discuss a new feature or change.
 
