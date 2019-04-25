@@ -19,7 +19,7 @@ nafos是一个基于netty的轻量级高性能服务端应用框架，能同时�
 
 
 ## 文档
-- [文档-请点击此处](https://www.showdoc.cc/nafos?page_id=1033780133131417)
+- [文档-请点击此处](https://www.showdoc.cc/nafos2?page_id=1918717850709847)
 
 
 
