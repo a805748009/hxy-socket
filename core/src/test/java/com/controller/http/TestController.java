@@ -1,4 +1,4 @@
-package com.controller;
+package com.controller.http;
 
 import nafos.core.annotation.Controller;
 import nafos.core.annotation.http.Get;
@@ -9,7 +9,7 @@ import nafos.bootStrap.handle.http.NsRespone;
 
 import java.util.Map;
 
-@Controller
+@Controller(interceptor = InterceptorDemo.class)
 public class TestController {
 
 
@@ -17,7 +17,7 @@ public class TestController {
     public Object getHello(@RequestParam("cs") String cs, NsRequest nsRequest, NsRespone nsRespone){
         nsRespone.setCookie("jsessionId","123456");
         System.out.println(cs+"---");
-//        System.out.println(nsRequest.uri());
+        System.out.println(nsRequest.uri());
         return "456";
     }
 

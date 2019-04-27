@@ -1,4 +1,4 @@
-package com.controller;
+package com.controller.http;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
