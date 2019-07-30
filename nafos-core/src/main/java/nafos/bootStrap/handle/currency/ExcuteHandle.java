@@ -4,7 +4,6 @@ import io.netty.channel.ChannelHandlerContext;
 import nafos.bootStrap.handle.http.HttpRouteHandle;
 import nafos.bootStrap.handle.http.NsRequest;
 import nafos.bootStrap.handle.socket.AbstractSocketRouteHandle;
-import nafos.bootStrap.handle.socket.IocBeanFactory;
 import nafos.bootStrap.handle.socket.SocketRouteHandle;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.entry.SocketRouteClassAndMethod;

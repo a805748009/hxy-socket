@@ -3,7 +3,6 @@ package nafos.bootStrap.handle.socket;
 import io.netty.channel.ChannelHandlerContext;
 import nafos.bootStrap.handle.ExecutorPoolChoose;
 import nafos.bootStrap.handle.currency.ExcuteHandle;
-import nafos.bootStrap.handle.http.HttpRouteHandle;
 import nafos.core.Thread.ExecutorPool;
 import nafos.core.entry.ClassAndMethod;
 import nafos.core.entry.SocketRouteClassAndMethod;
