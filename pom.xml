@@ -12,6 +12,7 @@
         <module>nafos-core</module>
         <module>nafos-security</module>
         <module>nafos-game</module>
+        <module>nafos-skywalking-plugin</module>
     </modules>
 
     <properties>
