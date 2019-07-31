@@ -12,10 +12,11 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName;
 
 /**
- * {@link NafosInstrumentation} enhance the <code>handle</code> method in <code>org.eclipse.jetty.server.handler.HandlerList</code>
+ * {@link NafosInstrumentation} enhance the <code>route</code> method in <code>nafos.bootStrap.handle.http.HttpRouteHandle</code>
  * by <code>HandleInterceptor</code>
  *
- * @author zhangxin
+ * @author hxy
+ * maven 打包后获取target\skywalking-agent\plugins 下的jar丢入skywalking的plugins重新启动就可以加入nafos监控了。
  */
 public class NafosInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
 

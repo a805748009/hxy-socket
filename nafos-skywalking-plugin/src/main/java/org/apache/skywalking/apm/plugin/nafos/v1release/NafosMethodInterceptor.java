@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
  * {@link NafosMethodInterceptor} intercept method of {@link nafos.bootStrap.handle.http.HttpRouteHandle#route(ChannelHandlerContext ctx, NsRequest request, HttpRouteClassAndMethod httpRouteClassAndMethod)}
  * operation.
  *
- * @author baiyang
+ * @author hxy
  */
 public class NafosMethodInterceptor implements InstanceMethodsAroundInterceptor {
 
