@@ -13,6 +13,7 @@
         <module>nafos-security</module>
         <module>nafos-game</module>
         <module>nafos-skywalking-plugin</module>
+        <module>nafos-sample</module>
     </modules>
 
     <properties>
