@@ -120,7 +120,7 @@ public class RouteFactory {
         }
 
         //http路由
-        if (ObjectUtil.isNotNull(handle.uri())) {
+        if (handle.uri() != null) {
             httpRoutRecord(method, handlerType, handle);
         }
     }
