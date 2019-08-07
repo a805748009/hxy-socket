@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetSocketAddress;
 
 /**
  * @Author 黄新宇
@@ -66,6 +67,10 @@ public class HttpRouteHandle {
             e.printStackTrace();
             return;
         }
+
+        InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
+        String clientIP = insocket.getAddress().getHostAddress();
+        request.setIp(clientIP);
 
         // 3.寻找路由成功,返回结果
         String methodName = httpRouteClassAndMethod.getClazz().getName() + "." + httpRouteClassAndMethod.getMethod().getMethodNames()[httpRouteClassAndMethod.getIndex()];
@@ -131,7 +136,7 @@ public class HttpRouteHandle {
         } catch (BizException e) {
             return e;
         } catch (Exception e) {
-            logger.error("程序异常：{}",e.toString());
+            logger.error("程序异常：{}", e.toString());
             e.printStackTrace();
             return HttpResponseStatus.INTERNAL_SERVER_ERROR;
         }

@@ -33,6 +33,8 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
 
     private Map<String, Object> bodyParams;
 
+    private String ip;
+
     NsRequest(HttpRequest request, ByteBuf content, HttpHeaders trailingHeaders) {
         super(request, content, trailingHeaders);
     }
@@ -176,6 +178,7 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
     public Map<String, Object> getJSONParams() {
         ByteBuf jsonBuf = content();
         String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
+        jsonBuf.release();
         if(jsonStr == null || jsonStr.trim().length() == 0) return new HashMap<>();
         return JsonUtil.jsonToMap(jsonStr);
     }
@@ -240,4 +243,11 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
         return bodyParams();
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 }
