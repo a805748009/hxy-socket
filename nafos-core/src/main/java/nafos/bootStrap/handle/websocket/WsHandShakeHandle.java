@@ -85,7 +85,6 @@ public class WsHandShakeHandle extends SimpleChannelInboundHandler<Object> {
         if (res.status().code() != 200) {
             ByteBuf buf = Unpooled.copiedBuffer(res.status().toString(), CharsetUtil.UTF_8);
             res.content().writeBytes(buf);
-            buf.release();
         }
         // 如果是非Keep-Alive，关闭连接
         ChannelFuture f = ctx.channel().writeAndFlush(res);

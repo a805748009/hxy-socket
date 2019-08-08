@@ -85,7 +85,6 @@ public class RequestHelper {
                         if (strContentType.contains("application/json")) {
                             ByteBuf jsonBuf = nsRequest.content();
                             String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
-                            jsonBuf.release();
                             linkedList.add(JsonUtil.json2Object(jsonStr,parameter.getType()));
                         } else {
                             linkedList.add(BeanToMapUtil.mapToObject(nsRequest.getFormParams(), parameter.getType()));
