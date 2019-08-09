@@ -12,6 +12,11 @@ public class BizException extends RuntimeException {
     private String message;//具体错误信息
 
     public static BizException LOGIN_SESSION_TIME_OUT = new BizException(600, "登录失效，请重新登录");
+    public static BizException PARAM_NOT_NULL = new BizException(601, "缺少参数");
+
+    public static BizException PARAM_NOT_NULL(String paramName) {
+        return new BizException(601, "缺少参数：" + paramName);
+    }
 
     public BizException() {
     }

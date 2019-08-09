@@ -14,10 +14,10 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD,ElementType.ANNOTATION_TYPE,ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Component
 @Handle(method = RequestMethod.GET)
-public @interface Get{
+public @interface Get {
 
 
     @AliasFor(
@@ -39,7 +39,6 @@ public @interface Get{
             attribute = "printLog"
     )
     boolean printLog() default false;
-
 
 
     @AliasFor(

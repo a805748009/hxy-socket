@@ -4,11 +4,18 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpMethod;
 import nafos.core.util.NettyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static io.netty.handler.codec.http.HttpMethod.*;
 import static io.netty.handler.codec.http.HttpResponseStatus.*;
@@ -24,11 +31,14 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpServerHandler.class);
 
+    private static final Set<HttpMethod> allowedMethods = new HashSet(Arrays.asList(GET, POST, PUT, HEAD, DELETE, PATCH));
+
+
     @Autowired
     HttpExecutorPoolChoose httpExecutorPoolChoose;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg)  {
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
         if (!(msg instanceof FullHttpRequest)) {
             NettyUtil.sendError(ctx, BAD_REQUEST);
             return;
@@ -41,7 +51,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
 
 
         // 2.选择处理方案
-        httpFilter(ctx, request);
+        httpExecutorPoolChoose.choosePool(ctx, request);
     }
 
 
@@ -70,7 +80,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
         }
 
         // 2)确保方法是我们需要的(目前只支持GET | POST  ,其它不支持)
-        if (request.method() != GET && request.method() != POST) {
+        if (!allowedMethods.contains(request.method())) {
             NettyUtil.sendError(ctx, METHOD_NOT_ALLOWED);
             return false;
         }
@@ -84,19 +94,5 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
         return true;
     }
 
-
-    /**
-     * http前置filter处理
-     *
-     * @param ctx
-     * @param request
-     */
-    private void httpFilter(ChannelHandlerContext ctx, FullHttpRequest request) {
-
-        // 1.选择线程池执行
-        httpExecutorPoolChoose.choosePool(ctx, request);
-
-
-    }
 
 }

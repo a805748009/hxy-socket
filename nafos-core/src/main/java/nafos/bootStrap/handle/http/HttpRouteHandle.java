@@ -191,7 +191,6 @@ public class HttpRouteHandle {
      * @throws UnsupportedEncodingException
      */
     private <T> void send(ChannelHandlerContext ctx, T context, FullHttpRequest request) {
-        request.release();
         NsRespone response = ThreadLocalHelper.getRespone();
         //设置允许跨域
         response.headers().set("Access-Control-Allow-Origin", "*");
@@ -199,18 +198,22 @@ public class HttpRouteHandle {
         if (response.getCookies().size() != 0) {
             response.headers().set(HttpHeaderNames.COOKIE, response.getCookies());
         }
-        //
-        if (context instanceof byte[]) {
-            response.content().writeBytes((byte[]) context);
-            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/x-protobuf");
-        } else if (context instanceof String) {
-            response.content().writeBytes(((String) context).getBytes());
-            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
-        } else {
-            //为null的时候
-            response.content().writeBytes("".getBytes());
-            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
+        //  head方法只需要状态，不需要body
+        if (!request.method().equals(HttpMethod.HEAD)) {
+            if (context instanceof byte[]) {
+                response.content().writeBytes((byte[]) context);
+                response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/x-protobuf");
+            } else if (context instanceof String) {
+                response.content().writeBytes(((String) context).getBytes());
+                response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
+            } else {
+                //为null的时候
+                response.content().writeBytes("".getBytes());
+                response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
+            }
         }
+
+        request.release();
         ThreadLocalHelper.threadLocalRemove();
 
         if (ctx.channel().isActive())

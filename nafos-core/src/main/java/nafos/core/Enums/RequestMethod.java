@@ -5,7 +5,10 @@ package nafos.core.Enums;
  */
 public  enum RequestMethod {
     GET,
-
-    POST
+    POST,
+    PUT,
+    HEAD,
+    DELETE,
+    PATCH
 
 }

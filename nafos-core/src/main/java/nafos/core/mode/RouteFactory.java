@@ -91,11 +91,7 @@ public class RouteFactory {
         final Class<?> userType = ClassUtils.getUserClass(handlerType);
 
         //把所有实现route的类方法放置到set中
-        Set<Method> methods = MethodIntrospector.selectMethods(userType, new ReflectionUtils.MethodFilter() {
-            public boolean matches(Method method) {
-                return AnnotatedElementUtils.findMergedAnnotation(method, Handle.class) != null;
-            }
-        });
+        Set<Method> methods = MethodIntrospector.selectMethods(userType, (ReflectionUtils.MethodFilter) method -> AnnotatedElementUtils.findMergedAnnotation(method, Handle.class) != null);
         for (Method method : methods) {
             //注册请求映射
             registerHandlerMethod(method, userType);

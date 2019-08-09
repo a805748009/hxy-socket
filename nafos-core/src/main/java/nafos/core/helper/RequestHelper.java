@@ -10,6 +10,7 @@ import nafos.core.annotation.http.RequestParam;
 import nafos.bootStrap.handle.http.NsRequest;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.bootStrap.handle.http.NsRespone;
+import nafos.core.entry.error.BizException;
 import nafos.core.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,7 @@ public class RequestHelper {
                 if (ObjectUtil.isNull(object) && requestParam.required()) {
                     if (requestParam.required()) {
                         logger.error("======{},参数{}不能为空 ", route.getMethod().toString(), requestParam.value());
-                        return null;
+                        throw BizException.PARAM_NOT_NULL(requestParam.value());
                     } else {
                         linkedList.add(null);
                         continue;
@@ -85,7 +86,7 @@ public class RequestHelper {
                         if (strContentType.contains("application/json")) {
                             ByteBuf jsonBuf = nsRequest.content();
                             String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
-                            linkedList.add(JsonUtil.json2Object(jsonStr,parameter.getType()));
+                            linkedList.add(JsonUtil.json2Object(jsonStr, parameter.getType()));
                         } else {
                             linkedList.add(BeanToMapUtil.mapToObject(nsRequest.getFormParams(), parameter.getType()));
                         }

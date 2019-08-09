@@ -10,14 +10,14 @@ import java.lang.annotation.*;
 
 /**
  * @Author 黄新宇
- * @Description(Post方式请求处理handle)
+ * @Description(PATCH方式请求处理handle)
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Component
-@Handle(method = RequestMethod.POST)
-public @interface Post {
+@Handle(method = RequestMethod.PATCH)
+public @interface Patch {
 
 
     @AliasFor(
