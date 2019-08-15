@@ -79,7 +79,7 @@ public class CacheMapDao {
         if (sessionId == null) {
             return false;
         }
-        return getSecurityCache().getIfPresent(sessionId) == null;
+        return getSecurityCache().getIfPresent(sessionId) != null;
     }
 
 
