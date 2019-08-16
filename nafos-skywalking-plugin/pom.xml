@@ -9,7 +9,7 @@
     <version>${nafos-version}</version>
 
     <properties>
-        <nafos-version>1.0.0-release</nafos-version>
+        <nafos-version>1.1.0-release</nafos-version>
         <shade.package>org.apache.skywalking.apm.dependencies</shade.package>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sdk.plugin.related.dir />

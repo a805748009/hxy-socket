@@ -7,7 +7,7 @@
     <groupId>hxy</groupId>
     <artifactId>nafos</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-release</version>
+    <version>1.1.0-release</version>
     <modules>
         <module>nafos-core</module>
         <module>nafos-security</module>
@@ -17,7 +17,7 @@
     </modules>
 
     <properties>
-        <nafos.version>1.0.0-release</nafos.version>
+        <nafos.version>1.1.0-release</nafos.version>
     </properties>
 
     <dependencies>
