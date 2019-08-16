@@ -13,11 +13,19 @@ import nafos.core.entry.error.BizException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 import static io.netty.handler.codec.http.HttpHeaders.Names.*;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 
 public class NettyUtil {
+
+    private static Map<String, String> headers = null;
+
+    public static void setCrossHeads(Map<String, String> map) {
+        headers = map;
+    }
 
     public static void sendError(ChannelHandlerContext ctx, HttpResponseStatus status) {
         // 设置到response对象
@@ -48,10 +56,17 @@ public class NettyUtil {
         // 设置到response对象
         final FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status,
                 Unpooled.copiedBuffer("{}", CharsetUtil.UTF_8));
-        //设置头部
-        response.headers().set("Access-Control-Allow-Origin", "*");
-        response.headers().set("Access-Control-Allow-Headers", "*");
-        response.headers().set("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+        if (headers == null) {
+            //设置头部
+            response.headers().set("Access-Control-Allow-Origin", "*");
+            response.headers().set("Access-Control-Allow-Headers", "*");
+            response.headers().set("Access-Control-Expose-Headers", "*");
+            response.headers().set("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+        } else {
+            for (Map.Entry<String, String> head : headers.entrySet()) {
+                response.headers().set(head.getKey(), head.getValue());
+            }
+        }
 
         // 发送
         // Close the connection as soon as the error message is sent.

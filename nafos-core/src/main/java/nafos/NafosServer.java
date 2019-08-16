@@ -10,6 +10,7 @@ import nafos.core.mode.runner.NafosRunnerExecute;
 import nafos.core.monitor.RunWatch;
 import nafos.core.monitor.SystemMonitor;
 import nafos.core.monitor.UnSafeSocketChannel;
+import nafos.core.util.NettyUtil;
 import nafos.core.util.SnowflakeIdWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * @Author 黄新宇
@@ -221,6 +224,17 @@ public class NafosServer {
      */
     public NafosServer registerScoketHeartTimeOut(long second) {
         NettyStartup.setHeartTimeout(second);
+        return this;
+    }
+
+    /**
+     * 注册跨域头部设置，有默认值
+     *
+     * @param map
+     * @return
+     */
+    public NafosServer registerCrossHeader(Map<String, String> map) {
+        NettyUtil.setCrossHeads(map);
         return this;
     }
 
