@@ -251,8 +251,10 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
 
 
     public boolean release(){
-        httpPostRequestDecoder.destroy();
-        httpPostRequestDecoder = null;
+        if(httpPostRequestDecoder!=null){
+            httpPostRequestDecoder.destroy();
+            httpPostRequestDecoder = null;
+        }
         return super.release();
     }
 }
