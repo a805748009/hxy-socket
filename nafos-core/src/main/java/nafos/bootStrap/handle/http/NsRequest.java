@@ -8,9 +8,7 @@ import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import io.netty.handler.codec.http.multipart.*;
 import io.netty.util.CharsetUtil;
-import nafos.bootStrap.handle.http.BuildHttpObjectAggregator;
 import nafos.core.util.AESUtil;
-import nafos.core.util.CastUtil;
 import nafos.core.util.JsonUtil;
 import nafos.core.util.ObjectUtil;
 import org.apache.commons.beanutils.BeanUtils;
@@ -18,7 +16,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.*;
 
 public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpRequest {
@@ -34,6 +31,8 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
     private Map<String, Object> bodyParams;
 
     private String ip;
+
+    private HttpPostRequestDecoder httpPostRequestDecoder;
 
     NsRequest(HttpRequest request, ByteBuf content, HttpHeaders trailingHeaders) {
         super(request, content, trailingHeaders);
@@ -161,8 +160,8 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
      */
     public Map<String, Object> getFormParams() {
         Map<String, Object> params = new HashMap<String, Object>();
-        HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(new DefaultHttpDataFactory(false), this);
-        List<InterfaceHttpData> postData = decoder.getBodyHttpDatas();
+        httpPostRequestDecoder = new HttpPostRequestDecoder(new DefaultHttpDataFactory(false), this);
+        List<InterfaceHttpData> postData = httpPostRequestDecoder.getBodyHttpDatas();
         for (InterfaceHttpData data : postData) {
             if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
                 MemoryAttribute attribute = (MemoryAttribute) data;
@@ -209,7 +208,7 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
     private Object xmlJsonEncode(Class<?> clazz) {
         Object fieldObj = null;
         Map<String, String> postMap = new HashMap<>();
-        HttpPostRequestDecoder httpPostRequestDecoder = new HttpPostRequestDecoder(this);
+        httpPostRequestDecoder = new HttpPostRequestDecoder(this);
         httpPostRequestDecoder.offer(this);
         List<InterfaceHttpData> parmList = httpPostRequestDecoder.getBodyHttpDatas();
         for (InterfaceHttpData parm : parmList) {
@@ -248,5 +247,12 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+
+    public boolean release(){
+        httpPostRequestDecoder.destroy();
+        httpPostRequestDecoder = null;
+        return super.release();
     }
 }
