@@ -3,6 +3,7 @@ package nafos.bootStrap.handle.http;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
+import io.netty.util.ReferenceCountUtil;
 import nafos.bootStrap.handle.currency.Crc32MessageHandle;
 import nafos.bootStrap.handle.currency.ZlibMessageHandle;
 import nafos.core.Enums.Protocol;
@@ -40,7 +41,6 @@ public class HttpRouteHandle {
 
 
     public void route(ChannelHandlerContext ctx, NsRequest request, HttpRouteClassAndMethod httpRouteClassAndMethod) {
-
         //线程设置request
         ThreadLocalHelper.setThreadInfo(new ReqResBean(request));
 
@@ -212,7 +212,6 @@ public class HttpRouteHandle {
                 response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
             }
         }
-
         request.release();
         ThreadLocalHelper.threadLocalRemove();
 

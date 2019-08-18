@@ -2,6 +2,7 @@ package nafos.bootStrap.handle.http;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
@@ -11,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +26,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.*;
  */
 @ChannelHandler.Sharable
 @Component
-public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
+public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpServerHandler.class);
 
@@ -38,7 +37,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
     HttpExecutorPoolChoose httpExecutorPoolChoose;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (!(msg instanceof FullHttpRequest)) {
             NettyUtil.sendError(ctx, BAD_REQUEST);
             return;

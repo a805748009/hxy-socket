@@ -42,8 +42,6 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
 
         boolean isRunOnWork = httpRouteClassAndMethod.isRunOnWorkGroup();
 
-        ReferenceCountUtil.retain(request);
-
         if (!isRunOnWork) {
             ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, request, httpRouteClassAndMethod));
             return;
