@@ -2,7 +2,6 @@ package nafos.bootStrap.handle.http;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.util.ReferenceCountUtil;
 import nafos.bootStrap.handle.ExecutorPoolChoose;
 import nafos.bootStrap.handle.currency.ExcuteHandle;
 import nafos.core.Thread.ExecutorPool;
@@ -40,16 +39,15 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
             return;
         }
 
-        boolean isRunOnWork = httpRouteClassAndMethod.isRunOnWorkGroup();
+        request.retain();
 
+        boolean isRunOnWork = httpRouteClassAndMethod.isRunOnWorkGroup();
         if (!isRunOnWork) {
             ExecutorPool.getInstance().execute(new ExcuteHandle(ctx, request, httpRouteClassAndMethod));
             return;
         }
         SpringApplicationContextHolder.getSpringBeanForClass(HttpRouteHandle.class)
                 .route(ctx, request, httpRouteClassAndMethod);
-
-
     }
 
     /**

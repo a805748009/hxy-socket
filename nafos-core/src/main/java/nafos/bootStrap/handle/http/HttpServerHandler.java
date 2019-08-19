@@ -26,7 +26,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.*;
  */
 @ChannelHandler.Sharable
 @Component
-public class HttpServerHandler extends ChannelInboundHandlerAdapter {
+public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpServerHandler.class);
 
@@ -37,7 +37,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     HttpExecutorPoolChoose httpExecutorPoolChoose;
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    public void channelRead0(ChannelHandlerContext ctx, Object msg) {
         if (!(msg instanceof FullHttpRequest)) {
             NettyUtil.sendError(ctx, BAD_REQUEST);
             return;

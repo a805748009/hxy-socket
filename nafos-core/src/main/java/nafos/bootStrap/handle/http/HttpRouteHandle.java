@@ -41,51 +41,55 @@ public class HttpRouteHandle {
 
 
     public void route(ChannelHandlerContext ctx, NsRequest request, HttpRouteClassAndMethod httpRouteClassAndMethod) {
-        //线程设置request
-        ThreadLocalHelper.setThreadInfo(new ReqResBean(request));
-
-        ClassAndMethod filter;
-
-
-        //  1.前置filter 拦截器
-        for (Class interceptor : httpRouteClassAndMethod.getInterceptors()) {
-            filter = InitMothods.getInterceptor(interceptor);
-            if (filter == null) {
-                logger.warn("{} :拦截器没有实现InterceptorInterface,或者继承AbstractHttpInterceptor. 拦截无效", interceptor);
-                continue;
-            }
-            filter.setIndex(0);
-            if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, request)) return;
-        }
-
-        // 2.消息入口处理
-        Object[] contentObj = null;
         try {
-            contentObj = getMessageObjOnContent(httpRouteClassAndMethod, request);
-        } catch (Exception e) {
-            NettyUtil.sendError(ctx, HttpResponseStatus.NO_CONTENT);
-            e.printStackTrace();
-            return;
+            //线程设置request
+            ThreadLocalHelper.setThreadInfo(new ReqResBean(request));
+
+            ClassAndMethod filter;
+
+
+            //  1.前置filter 拦截器
+            for (Class interceptor : httpRouteClassAndMethod.getInterceptors()) {
+                filter = InitMothods.getInterceptor(interceptor);
+                if (filter == null) {
+                    logger.warn("{} :拦截器没有实现InterceptorInterface,或者继承AbstractHttpInterceptor. 拦截无效", interceptor);
+                    continue;
+                }
+                filter.setIndex(0);
+                if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, request)) return;
+            }
+
+            // 2.消息入口处理
+            Object[] contentObj = null;
+            try {
+                contentObj = getMessageObjOnContent(httpRouteClassAndMethod, request);
+            } catch (Exception e) {
+                NettyUtil.sendError(ctx, HttpResponseStatus.NO_CONTENT);
+                e.printStackTrace();
+                return;
+            }
+
+            InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
+            String clientIP = insocket.getAddress().getHostAddress();
+            request.setIp(clientIP);
+
+            // 3.寻找路由成功,返回结果
+            String methodName = httpRouteClassAndMethod.getClazz().getName() + "." + httpRouteClassAndMethod.getMethod().getMethodNames()[httpRouteClassAndMethod.getIndex()];
+            RunWatch runWatch = RunWatch.init(methodName);
+
+            Object returnObj = routeMethod(httpRouteClassAndMethod, contentObj);
+
+            if (httpRouteClassAndMethod.isPrintLog()) {
+                logger.info("方法：" + methodName + "       程序耗时：" + runWatch.stop() + "ms");
+            } else {
+                runWatch.stop();
+            }
+
+            // 4.发送处理
+            sendMethod(httpRouteClassAndMethod, returnObj, ctx, request);
+        } finally {
+            request.release();
         }
-
-        InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
-        String clientIP = insocket.getAddress().getHostAddress();
-        request.setIp(clientIP);
-
-        // 3.寻找路由成功,返回结果
-        String methodName = httpRouteClassAndMethod.getClazz().getName() + "." + httpRouteClassAndMethod.getMethod().getMethodNames()[httpRouteClassAndMethod.getIndex()];
-        RunWatch runWatch = RunWatch.init(methodName);
-
-        Object returnObj = routeMethod(httpRouteClassAndMethod, contentObj);
-
-        if (httpRouteClassAndMethod.isPrintLog()) {
-            logger.info("方法：" + methodName + "       程序耗时：" + runWatch.stop() + "ms");
-        } else {
-            runWatch.stop();
-        }
-
-        // 4.发送处理
-        sendMethod(httpRouteClassAndMethod, returnObj, ctx, request);
     }
 
 
@@ -152,12 +156,10 @@ public class HttpRouteHandle {
     private void sendMethod(HttpRouteClassAndMethod route, Object object, ChannelHandlerContext context, FullHttpRequest request) {
         //error处理
         if (object instanceof BizException) {
-            request.release();
             NettyUtil.sendError(context, (BizException) object);
             return;
         }
         if (object instanceof HttpResponseStatus) {
-            request.release();
             NettyUtil.sendError(context, (HttpResponseStatus) object);
             return;
         }
@@ -212,7 +214,6 @@ public class HttpRouteHandle {
                 response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
             }
         }
-        request.release();
         ThreadLocalHelper.threadLocalRemove();
 
         if (ctx.channel().isActive())
