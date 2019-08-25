@@ -60,8 +60,8 @@ public class SecurityUpdateListener implements NafosRunner {
 
     @Override
     public void run() {
-        topic = RedissonManager.getRedisson().getTopic(securityListener);
         if (securityConfig.getIsUseRedis()){
+            topic = RedissonManager.getRedisson().getTopic(securityListener);
             logger.info("security已开启redis监听");
             runRedisListener();
         }
