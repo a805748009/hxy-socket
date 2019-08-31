@@ -4,8 +4,10 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 import nafos.core.Enums.Protocol;
 import nafos.core.annotation.Controller;
 import nafos.core.annotation.Handle;
+import nafos.core.annotation.Interceptor;
 import nafos.core.entry.HttpRouteClassAndMethod;
 import nafos.core.entry.SocketRouteClassAndMethod;
+import nafos.core.util.ArrayUtil;
 import nafos.core.util.ObjectUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -58,7 +61,6 @@ public class RouteFactory {
     }
 
 
-
     /**
      * 判断类是不是路由Controller
      * 并写入parentPath
@@ -70,7 +72,7 @@ public class RouteFactory {
         Controller controller = AnnotatedElementUtils.findMergedAnnotation(beanType, Controller.class);
         boolean isHandler = controller != null;
         if (isHandler) {
-            parentPath =  controller.value();
+            parentPath = controller.value();
             if (controller.interceptor() != null) {
                 interceptors = controller.interceptor();
             }
@@ -133,9 +135,11 @@ public class RouteFactory {
         MethodAccess ma = MethodAccess.get(handlerType);
         Integer code = handle.code();
 
+        Interceptor interceptor = AnnotatedElementUtils.findMergedAnnotation(method, Interceptor.class);
+
         SOCKETMETHODHANDLEMAP.put(code, new SocketRouteClassAndMethod(handlerType, ma,
                 ma.getIndex(method.getName()), method.getParameterTypes().length > 0 ? method.getParameterTypes()[1] : null,
-                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(), interceptors));
+                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(), (Class[]) ArrayUtil.concat(interceptors, interceptor.value())));
 
     }
 
@@ -159,10 +163,13 @@ public class RouteFactory {
         }
         uri = methodType + uri;
 
-        logger.debug("register router:{}",uri);
+        logger.debug("register router:{}", uri);
+
+        Interceptor interceptor = AnnotatedElementUtils.findMergedAnnotation(method, Interceptor.class);
+
         HTTPMETHODHANDLEMAP.put(uri, new HttpRouteClassAndMethod(handlerType, ma,
                 ma.getIndex(method.getName()), null,
-                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(), method.getParameters(), interceptors));
+                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(), method.getParameters(), (Class[]) ArrayUtil.concat(interceptors, interceptor.value())));
 
 
     }
