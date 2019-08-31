@@ -135,11 +135,9 @@ public class RouteFactory {
         MethodAccess ma = MethodAccess.get(handlerType);
         Integer code = handle.code();
 
-        Interceptor interceptor = AnnotatedElementUtils.findMergedAnnotation(method, Interceptor.class);
-
         SOCKETMETHODHANDLEMAP.put(code, new SocketRouteClassAndMethod(handlerType, ma,
                 ma.getIndex(method.getName()), method.getParameterTypes().length > 0 ? method.getParameterTypes()[1] : null,
-                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(), (Class[]) ArrayUtil.concat(interceptors, interceptor.value())));
+                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(),hmInterptors(method)));
 
     }
 
@@ -165,12 +163,22 @@ public class RouteFactory {
 
         logger.debug("register router:{}", uri);
 
-        Interceptor interceptor = AnnotatedElementUtils.findMergedAnnotation(method, Interceptor.class);
 
         HTTPMETHODHANDLEMAP.put(uri, new HttpRouteClassAndMethod(handlerType, ma,
                 ma.getIndex(method.getName()), null,
-                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(), method.getParameters(), (Class[]) ArrayUtil.concat(interceptors, interceptor.value())));
+                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(), method.getParameters(), hmInterptors(method)));
 
 
+    }
+
+    private Class[] hmInterptors(Method method) {
+        Interceptor interceptor = AnnotatedElementUtils.findMergedAnnotation(method, Interceptor.class);
+        Class[] hmInterceptors;
+        if (interceptor != null) {
+            hmInterceptors = (Class[]) ArrayUtil.concat(interceptors, interceptor.value());
+        } else {
+            hmInterceptors = interceptors;
+        }
+        return hmInterceptors;
     }
 }
