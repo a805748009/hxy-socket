@@ -19,7 +19,7 @@ public class OutThreadPool implements RejectedExecutionHandler{
 
 	@Override
 	public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-		logger.error("有新的请求超出线程池数量，已丢弃："+r.toString());
+		logger.warn("有新的请求超出线程池数量，已丢弃："+r.toString());
 	}
 	    
 }
