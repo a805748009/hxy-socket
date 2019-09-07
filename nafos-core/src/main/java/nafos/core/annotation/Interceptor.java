@@ -4,6 +4,7 @@ import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
+import java.util.Objects;
 
 /**
 * @Author 黄新宇
@@ -20,4 +21,6 @@ public @interface Interceptor {
 
     @AliasFor("value")
     Class[] interceptor() default {}; //拦截器数组，根据先后顺序拦截
+
+    String[] interceptorParams() default{};
 }

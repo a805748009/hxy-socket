@@ -42,6 +42,8 @@ public class RouteFactory {
 
     private static Class[] interceptors = null;
 
+    private static String[] interceptorParams = null;
+
 
     public RouteFactory(ApplicationContext context) {
         Map<String, Object> taskBeanMap = context.getBeansWithAnnotation(Controller.class);
@@ -75,6 +77,11 @@ public class RouteFactory {
             parentPath = controller.value();
             if (controller.interceptor() != null) {
                 interceptors = controller.interceptor();
+                interceptorParams = controller.interceptorParams();
+                int lengthDif = interceptors.length - interceptorParams.length;
+                if(lengthDif > 0){
+                    interceptorParams = (String[]) ArrayUtil.concat(interceptorParams, new String[lengthDif]);
+                }
             }
         }
         return isHandler;
@@ -137,7 +144,7 @@ public class RouteFactory {
 
         SOCKETMETHODHANDLEMAP.put(code, new SocketRouteClassAndMethod(handlerType, ma,
                 ma.getIndex(method.getName()), method.getParameterTypes().length > 0 ? method.getParameterTypes()[1] : null,
-                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(),hmInterptors(method)));
+                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(),hmInterptors(method),hmInterptorParams(method)));
 
     }
 
@@ -166,7 +173,8 @@ public class RouteFactory {
 
         HTTPMETHODHANDLEMAP.put(uri, new HttpRouteClassAndMethod(handlerType, ma,
                 ma.getIndex(method.getName()), null,
-                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(), handle.runOnWorkGroup(), method.getParameters(), hmInterptors(method)));
+                handle.printLog(), handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(),
+                handle.runOnWorkGroup(), method.getParameters(), hmInterptors(method),hmInterptorParams(method)));
 
 
     }
@@ -180,5 +188,20 @@ public class RouteFactory {
             hmInterceptors = interceptors;
         }
         return hmInterceptors;
+    }
+
+    private String[] hmInterptorParams(Method method) {
+        Interceptor interceptor = AnnotatedElementUtils.findMergedAnnotation(method, Interceptor.class);
+        String[] params;
+        if (interceptor != null) {
+            params = (String[]) ArrayUtil.concat(interceptorParams, interceptor.interceptorParams());
+        } else {
+            params = interceptorParams;
+        }
+        int lengthDif = hmInterptors(method).length - params.length;
+        if(lengthDif > 0){
+            params = (String[]) ArrayUtil.concat(params, new String[lengthDif]);
+        }
+        return params;
     }
 }

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class GlobalInterceptorFilter implements InterceptorInterface {
 
     @Override
-    public ResultStatus interptor(ChannelHandlerContext ctx, NsRequest req) {
+    public ResultStatus interptor(ChannelHandlerContext ctx, NsRequest req,String param) {
         ResultStatus resultStatus = new ResultStatus();
         String cookieId = req.getNafosCookieId();
         //	1)登录验证
@@ -35,7 +35,7 @@ public class GlobalInterceptorFilter implements InterceptorInterface {
     }
 
     @Override
-    public ResultStatus interptor(ChannelHandlerContext ctx, int code) {
+    public ResultStatus interptor(ChannelHandlerContext ctx, int code,String param) {
         ResultStatus resultStatus = new ResultStatus();
         String cookieId = (String) ctx.channel().attr(AttributeKey.valueOf("token")).get();
 

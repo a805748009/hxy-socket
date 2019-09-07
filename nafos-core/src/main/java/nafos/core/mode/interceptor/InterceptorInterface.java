@@ -11,8 +11,8 @@ import nafos.core.entry.ResultStatus;
 */
 public interface InterceptorInterface {
 
-	ResultStatus interptor(ChannelHandlerContext ctx, NsRequest req);
+	ResultStatus interptor(ChannelHandlerContext ctx, NsRequest req,String param);
 
-	ResultStatus interptor(ChannelHandlerContext ctx, int code);
+	ResultStatus interptor(ChannelHandlerContext ctx, int code,String param);
 
 }

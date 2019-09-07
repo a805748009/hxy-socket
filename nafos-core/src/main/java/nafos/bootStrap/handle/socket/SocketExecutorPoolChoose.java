@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
     private static final Logger logger = LoggerFactory.getLogger(SocketExecutorPoolChoose.class);
 
-    public static AbstractSocketRouteHandle abstractSocketRouteHandle =  SpringApplicationContextHolder.getSpringBeanForClass(SocketRouteHandle.class);
+    public static AbstractSocketRouteHandle abstractSocketRouteHandle = SpringApplicationContextHolder.getSpringBeanForClass(SocketRouteHandle.class);
 
 
     @Override
@@ -54,14 +54,16 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
 
         //切面拦截器
         ClassAndMethod filter;
-        for (Class interceptor : socketRouteClassAndMethod.getInterceptors()) {
+        for (int i = 0; i < socketRouteClassAndMethod.getInterceptors().length; i++) {
+            Class interceptor = socketRouteClassAndMethod.getInterceptors()[i];
             filter = InitMothods.getInterceptor(interceptor);
             if (filter == null) {
-                logger.warn("{} :拦截器没有实现InterceptorInterface,或者继承AbstractSocketInterceptor. 拦截无效", interceptor);
+                logger.warn("{} :拦截器没有实现InterceptorInterface,或者继承AbstractHttpInterceptor. 拦截无效", interceptor);
                 continue;
             }
-            filter.setIndex(1);
-            if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, code)) return;
+            filter.setIndex(0);
+            if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, code, socketRouteClassAndMethod.getInterceptorParams()[i]))
+                return;
         }
 
         boolean isRunOnWork = socketRouteClassAndMethod.isRunOnWorkGroup();

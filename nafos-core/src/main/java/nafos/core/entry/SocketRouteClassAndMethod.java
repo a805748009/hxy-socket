@@ -10,7 +10,7 @@ import nafos.core.Enums.Protocol;
  */
 public class SocketRouteClassAndMethod extends RouteClassAndMethod {
 
-    public SocketRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, Protocol type, boolean runOnWorkGroup,Class[] interceptors) {
-        super(clazz, method, index, paramType, printLog, type, runOnWorkGroup,interceptors);
+    public SocketRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, Protocol type, boolean runOnWorkGroup,Class[] interceptors,String[] interceptorParams) {
+        super(clazz, method, index, paramType, printLog, type, runOnWorkGroup,interceptors,interceptorParams);
     }
 }

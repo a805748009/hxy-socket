@@ -16,8 +16,8 @@ public class HttpRouteClassAndMethod extends RouteClassAndMethod {
 
 
 
-    public HttpRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, Protocol type, boolean runOnWorkGroup, Parameter[] parameters,Class[] interceptors) {
-        super(clazz, method, index, paramType, printLog, type, runOnWorkGroup,interceptors);
+    public HttpRouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, Protocol type, boolean runOnWorkGroup, Parameter[] parameters,Class[] interceptors,String[] interceptorParams) {
+        super(clazz, method, index, paramType, printLog, type, runOnWorkGroup,interceptors,interceptorParams);
         this.parameters = parameters;
     }
 

@@ -6,7 +6,7 @@ import nafos.core.entry.ResultStatus;
 public abstract class AbstractHttpInterceptor implements InterceptorInterface {
 
     @Override
-    public ResultStatus interptor(ChannelHandlerContext ctx, int code) {
+    public ResultStatus interptor(ChannelHandlerContext ctx, int code,String param) {
         return new ResultStatus(true);
     }
 

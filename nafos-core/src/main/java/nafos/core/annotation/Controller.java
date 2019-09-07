@@ -23,4 +23,6 @@ public @interface Controller {
     String value() default "";
 
     Class[] interceptor() default {}; //拦截器数组，根据先后顺序拦截
+
+    String[] interceptorParams() default{};
 }

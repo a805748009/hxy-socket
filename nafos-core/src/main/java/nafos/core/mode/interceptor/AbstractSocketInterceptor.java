@@ -7,7 +7,7 @@ import nafos.core.entry.ResultStatus;
 public abstract class AbstractSocketInterceptor implements InterceptorInterface {
 
     @Override
-    public ResultStatus interptor(ChannelHandlerContext ctx, NsRequest req) {
+    public ResultStatus interptor(ChannelHandlerContext ctx, NsRequest req,String param) {
         return new ResultStatus(true);
     }
 

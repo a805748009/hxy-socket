@@ -14,12 +14,12 @@ import nafos.core.util.ObjectUtil;
  **/
 public class ClassAndMethodHelper {
 
-    public static boolean checkResultStatus(ClassAndMethod filter,ChannelHandlerContext ctx,Object object){
-        if(ObjectUtil.isNotNull(filter)){
-            ResultStatus resultStatus =  (ResultStatus) filter.getMethod().invoke(
-                    SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(),ctx,object);
-            if(!resultStatus.isSuccess()){
-                NettyUtil.sendError(ctx, BizException.LOGIN_SESSION_TIME_OUT);
+    public static boolean checkResultStatus(ClassAndMethod filter, ChannelHandlerContext ctx, Object object, String param) {
+        if (ObjectUtil.isNotNull(filter)) {
+            ResultStatus resultStatus = (ResultStatus) filter.getMethod().invoke(
+                    SpringApplicationContextHolder.getSpringBeanForClass(filter.getClazz()), filter.getIndex(), ctx, object, param);
+            if (!resultStatus.isSuccess()) {
+                NettyUtil.sendError(ctx, resultStatus.getBizException());
                 return false;
             }
         }

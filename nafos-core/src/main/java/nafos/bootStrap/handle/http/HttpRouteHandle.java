@@ -3,7 +3,6 @@ package nafos.bootStrap.handle.http;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
-import io.netty.util.ReferenceCountUtil;
 import nafos.bootStrap.handle.currency.Crc32MessageHandle;
 import nafos.bootStrap.handle.currency.ZlibMessageHandle;
 import nafos.core.Enums.Protocol;
@@ -49,14 +48,16 @@ public class HttpRouteHandle {
 
 
             //  1.前置filter 拦截器
-            for (Class interceptor : httpRouteClassAndMethod.getInterceptors()) {
+            for (int i = 0; i < httpRouteClassAndMethod.getInterceptors().length; i++) {
+                Class interceptor = httpRouteClassAndMethod.getInterceptors()[i];
                 filter = InitMothods.getInterceptor(interceptor);
                 if (filter == null) {
                     logger.warn("{} :拦截器没有实现InterceptorInterface,或者继承AbstractHttpInterceptor. 拦截无效", interceptor);
                     continue;
                 }
                 filter.setIndex(0);
-                if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, request)) return;
+                if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, request, httpRouteClassAndMethod.getInterceptorParams()[i]))
+                    return;
             }
 
             // 2.消息入口处理

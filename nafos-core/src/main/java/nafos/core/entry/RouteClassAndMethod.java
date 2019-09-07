@@ -20,12 +20,32 @@ public class RouteClassAndMethod extends ClassAndMethod {
 
     protected Class[] interceptors;//拦截器
 
+    protected String[] interceptorParams;//拦截器参数
+
+    public RouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, Protocol type, boolean runOnWorkGroup, Class[] interceptors,String[] interceptorParams) {
+        super(clazz, method, index, paramType);
+        this.printLog = printLog;
+        this.type = type;
+        this.runOnWorkGroup = runOnWorkGroup;
+        this.interceptors = interceptors;
+        this.interceptorParams = interceptorParams;
+    }
+
     public RouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, Class<?> paramType, boolean printLog, Protocol type, boolean runOnWorkGroup, Class[] interceptors) {
         super(clazz, method, index, paramType);
         this.printLog = printLog;
         this.type = type;
         this.runOnWorkGroup = runOnWorkGroup;
         this.interceptors = interceptors;
+    }
+
+    public RouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, boolean printLog, Protocol type, boolean runOnWorkGroup, Class[] interceptors,String[] interceptorParams) {
+        super(clazz, method, index);
+        this.printLog = printLog;
+        this.type = type;
+        this.runOnWorkGroup = runOnWorkGroup;
+        this.interceptors = interceptors;
+        this.interceptorParams = interceptorParams;
     }
 
     public RouteClassAndMethod(Class<?> clazz, MethodAccess method, Integer index, boolean printLog, Protocol type, boolean runOnWorkGroup, Class[] interceptors) {
@@ -98,5 +118,13 @@ public class RouteClassAndMethod extends ClassAndMethod {
 
     public void setInterceptors(Class[] interceptors) {
         this.interceptors = interceptors;
+    }
+
+    public String[] getInterceptorParams() {
+        return interceptorParams;
+    }
+
+    public void setInterceptorParams(String[] interceptorParams) {
+        this.interceptorParams = interceptorParams;
     }
 }
