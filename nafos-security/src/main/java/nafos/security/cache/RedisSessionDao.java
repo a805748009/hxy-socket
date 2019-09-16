@@ -7,6 +7,7 @@ import nafos.security.redis.RedissonManager;
 import nafos.security.redis.SecurityUpdateListener;
 import org.redisson.api.RBatch;
 import org.redisson.api.RBucket;
+import org.redisson.api.RKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,8 +66,10 @@ public class RedisSessionDao {
      */
     public static Set<Object> getActiveSessions() {
         Set<Object> set = new HashSet<>();
-        for (RBucket<Object> objectRBucket : RedissonManager.getRedisson().getBuckets().find(SESSIONKEY + "*")) {
-            set.add(objectRBucket.get());
+        RKeys keys = RedissonManager.getRedisson().getKeys();
+        Iterable<String> foundedKeys = keys.getKeysByPattern(SESSIONKEY + "*");
+        for (String foundedKey : foundedKeys) {
+            set.add(RedissonManager.getRedisson().getBucket(foundedKey).get());
         }
         return set;
     }

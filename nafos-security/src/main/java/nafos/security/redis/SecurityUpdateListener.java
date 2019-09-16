@@ -43,7 +43,7 @@ public class SecurityUpdateListener implements NafosRunner {
 
 
     public void subcribe() {
-        topic.addListener((MessageListener<SecurityUpdate>) (channel, update) -> {
+        topic.addListener(SecurityUpdate.class, (channel, update) -> {
             logger.debug("收到redis监听：{} ， {}", update.getSessionId(), update.getSessionId());
             if ("LoginSessionDelete".equals(update.getAction())) {
                 CacheMapDao.deleteCache(update.getSessionId());
