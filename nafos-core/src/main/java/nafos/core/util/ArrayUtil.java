@@ -77,8 +77,9 @@ public class ArrayUtil {
                 buffer.append("[" + bs[x]);
             } else if (x == bs.length - 1) {
                 buffer.append("," + bs[x] + "]");
-            } else
+            } else {
                 buffer.append("," + bs[x]);
+            }
         }
         return buffer.toString();
     }

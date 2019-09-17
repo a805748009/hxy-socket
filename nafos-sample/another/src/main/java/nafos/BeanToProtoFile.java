@@ -40,22 +40,22 @@ public class BeanToProtoFile {
             ps.println("message " + tempClass.getSimpleName() + "{");
             int i = 1;
             for (Field f : fieldList) {
-                if (f.getType().getName().equals("java.lang.Integer")) {
+                if ("java.lang.Integer".equals(f.getType().getName())) {
                     ps.append("    optional int32 " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if (f.getType().getName().equals("java.lang.Boolean")) {
+                if ("java.lang.Boolean".equals(f.getType().getName())) {
                     ps.append("    optional bool " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if (f.getType().getName().equals("java.lang.String")) {
+                if ("java.lang.String".equals(f.getType().getName())) {
                     ps.append("    optional string " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if (f.getType().getName().equals("int")) {
+                if ("int".equals(f.getType().getName())) {
                     ps.append("    optional int32 " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if (f.getType().getName().equals("java.util.List")) {
+                if ("java.util.List".equals(f.getType().getName())) {
                     ps.append("    repeated int32 " + f.getName() + " = " + i + ";" + "\n");
                 }
-                if (f.getType().getName().equals("long")) {
+                if ("long".equals(f.getType().getName())) {
                     ps.append("    optional int64 " + f.getName() + " = " + i + ";" + "n");
                 }
                 i++;

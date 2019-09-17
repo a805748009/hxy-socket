@@ -32,8 +32,9 @@ public class ZlibMessageHandle {
      * @Description(解压byte数据)
      */
     public byte[] unZlibByteMessage(byte[] bytes) {
-        if (!isZlibIn)
+        if (!isZlibIn) {
             return bytes;
+        }
         byte[] bs = new byte[4];
         System.arraycopy(bytes, 0, bs, 0, 4);
         byte[] content = new byte[bytes.length - 4];
@@ -52,8 +53,9 @@ public class ZlibMessageHandle {
      * @return
      */
     public byte[] zlibByteMessage(byte[] bytes) {
-        if (!isZlibOut)
+        if (!isZlibOut) {
             return bytes;
+        }
         if (bytes.length > zlibOutMinLength) {
             return ArrayUtil.concat(ArrayUtil.intToByteArray(1), ZlibUtil.compress(bytes));
         }

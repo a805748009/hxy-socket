@@ -121,8 +121,9 @@ public class Room {
     public void removeUser(String userId) {
         Client delClient = null;
         for (Client client : clients) {
-            if (userId.equals(client.getUserId()))
+            if (userId.equals(client.getUserId())) {
                 delClient = client;
+            }
         }
         removeUserNotDelRoom(delClient);
 
@@ -186,8 +187,9 @@ public class Room {
     }
 
     public void addClientAndUserData(Client client, Map<String, Object> map) {
-        if (!clients.contains(client))
+        if (!clients.contains(client)) {
             clients.add(client);
+        }
         Object userId = client.getUserId();
         for (String key : map.keySet()) {
             if (userData.containsKey(userId)) {

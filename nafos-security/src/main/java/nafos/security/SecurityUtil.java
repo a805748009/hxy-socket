@@ -37,8 +37,9 @@ public class SecurityUtil {
         if (ObjectUtil.isNotNull(obj)) {
             return obj;
         } else {
-            if (!isUseRedis)
+            if (!isUseRedis) {
                 return null;
+            }
             obj = RedisSessionDao.doReadSession(sessionId);
             if (ObjectUtil.isNotNull(obj)) {
                 CacheMapDao.saveCache(sessionId, obj);
@@ -99,9 +100,12 @@ public class SecurityUtil {
      */
     public static boolean isLogin(String sessionId) {
         boolean exists = CacheMapDao.exists(sessionId);
-        if (exists) return true;
-        if (isUseRedis)
+        if (exists) {
+            return true;
+        }
+        if (isUseRedis) {
             return RedisSessionDao.existsSession(sessionId);
+        }
         return false;
     }
 
@@ -112,7 +116,9 @@ public class SecurityUtil {
      * @param sessionId
      */
     public static void updateSessionTime(String sessionId) {
-        if (ObjectUtil.isNull(sessionId)) throw BizException.LOGIN_SESSION_TIME_OUT;
+        if (ObjectUtil.isNull(sessionId)) {
+            throw BizException.LOGIN_SESSION_TIME_OUT;
+        }
         if (CacheMapDao.isFourFifthsExpiryTime(sessionId)) {
             CacheMapDao.saveTimeCache(sessionId, System.currentTimeMillis());
             if (isUseRedis) {
@@ -120,7 +126,9 @@ public class SecurityUtil {
             }
             //附带的外置操作
             ClassAndMethod route = InitMothods.getFilter("sessionUpdate");
-            if(route == null) return;
+            if(route == null) {
+                return;
+            }
             route.getMethod().invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.getClazz()), route.getIndex(),
                     new Object[]{sessionId});
         }

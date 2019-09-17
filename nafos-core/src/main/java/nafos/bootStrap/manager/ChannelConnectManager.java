@@ -25,7 +25,7 @@ public class ChannelConnectManager {
      * @param channel
      */
     public static void connect(Channel channel) {
-        NoSecurityChannelMap.put(channel, new Date().getTime());
+        NoSecurityChannelMap.put(channel, System.currentTimeMillis());
     }
 
     /**
@@ -41,7 +41,7 @@ public class ChannelConnectManager {
      * 关闭不安全的链接
      */
     public static void closeUnSafeChannel(long timeOut) {
-        long time = new Date().getTime();
+        long time = System.currentTimeMillis();
         NoSecurityChannelMap.entrySet().forEach(m -> {
             if (time - m.getValue() > timeOut) {
                 m.getKey().close();

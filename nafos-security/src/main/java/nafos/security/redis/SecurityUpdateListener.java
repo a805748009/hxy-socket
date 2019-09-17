@@ -35,8 +35,9 @@ public class SecurityUpdateListener implements NafosRunner {
      * 开启redis监听
      */
     public void runRedisListener() {
-        if (redisListenered)
+        if (redisListenered) {
             return;
+        }
         new Thread(() -> subcribe()).start();
         redisListenered = true;
     }

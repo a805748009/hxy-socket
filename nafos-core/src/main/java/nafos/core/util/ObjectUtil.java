@@ -34,7 +34,7 @@ public class ObjectUtil {
             return true;
         }
         if ((obj instanceof String)) {
-            return ((String) obj).trim().equals("");
+            return "".equals(((String) obj).trim());
         }
         if ((obj instanceof Object[])) {
             return ((Object[]) obj).length == 0;

@@ -13,8 +13,9 @@ import java.util.Map;
 public class BeanToMapUtil {
 
     public static Object mapToObject(Map<String, Object> map, Class<?> beanClass) {
-        if (map == null)
+        if (map == null) {
             return null;
+        }
         Object obj = null;
         try {
             obj = beanClass.newInstance();

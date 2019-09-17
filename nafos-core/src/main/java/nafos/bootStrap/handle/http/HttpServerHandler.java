@@ -30,7 +30,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpServerHandler.class);
 
-    private static final Set<HttpMethod> allowedMethods = new HashSet(Arrays.asList(GET, POST, PUT, HEAD, DELETE, PATCH));
+    private static final Set<HttpMethod> ALLOWED_METHODS = new HashSet(Arrays.asList(GET, POST, PUT, HEAD, DELETE, PATCH));
 
 
     @Autowired
@@ -46,7 +46,9 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
         FullHttpRequest request = (FullHttpRequest) msg;
 
         // 1.校验request合法性
-        if (!checkRequest(ctx, request)) return;
+        if (!checkRequest(ctx, request)) {
+            return;
+        }
 
 
         // 2.选择处理方案
@@ -79,7 +81,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
         }
 
         // 2)确保方法是我们需要的(目前只支持GET | POST  ,其它不支持)
-        if (!allowedMethods.contains(request.method())) {
+        if (!ALLOWED_METHODS.contains(request.method())) {
             NettyUtil.sendError(ctx, METHOD_NOT_ALLOWED);
             return false;
         }

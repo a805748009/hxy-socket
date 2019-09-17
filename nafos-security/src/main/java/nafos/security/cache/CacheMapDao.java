@@ -106,7 +106,9 @@ public class CacheMapDao {
      */
     public static void destory() {
         getSecurityCache().invalidateAll();
-        if (securityTimeCache != null) securityTimeCache.invalidateAll();
+        if (securityTimeCache != null) {
+            securityTimeCache.invalidateAll();
+        }
     }
 
     /**

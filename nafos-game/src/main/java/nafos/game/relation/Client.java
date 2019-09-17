@@ -157,8 +157,9 @@ public class Client {
      */
     public void leaveRoom() {
         Room room = getRoom();
-        if (ObjectUtil.isNull(room))
+        if (ObjectUtil.isNull(room)) {
             return;
+        }
         room.removeUser(this);
         channel.attr(AttributeKey.valueOf("room")).set(null);
     }
@@ -170,22 +171,25 @@ public class Client {
      */
     public void offLineRoom() {
         Room room = getRoom();
-        if (ObjectUtil.isNull(room))
+        if (ObjectUtil.isNull(room)) {
             return;
+        }
         room.offLineClient(this);
     }
 
     public void offLineRoomNotDelRoom() {
         Room room = getRoom();
-        if (ObjectUtil.isNull(room))
+        if (ObjectUtil.isNull(room)) {
             return;
+        }
         room.offLineClientNotDel(this);
     }
 
     public void leaveRoomNotDelRoom() {
         Room room = getRoom();
-        if (ObjectUtil.isNull(room))
+        if (ObjectUtil.isNull(room)) {
             return;
+        }
         room.removeUserNotDelRoom(this);
     }
 
@@ -253,8 +257,9 @@ public class Client {
      */
 
     protected void wirteAndFlush(Object obj) {
-        if (!channel.isActive())
+        if (!channel.isActive()) {
             return;
+        }
 
         if (obj instanceof byte[]) {
             channel.writeAndFlush((byte[]) obj);
@@ -266,8 +271,9 @@ public class Client {
     private Object castSendMsg(Object id, Object object) {
         //intBefore模式
         if (id instanceof byte[]) {
-            if (object instanceof byte[])
+            if (object instanceof byte[]) {
                 return ArrayUtil.concat((byte[]) id, (byte[]) object);
+            }
             return ArrayUtil.concat((byte[]) id, ProtoUtil.serializeToByte(object));
         }
         logger.error("================>>>>>>传入参数错误");

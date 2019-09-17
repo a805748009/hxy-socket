@@ -29,7 +29,9 @@ public class HttpExecutorPoolChoose implements ExecutorPoolChoose {
         // 根据URI来查找object.method.invoke
         String uri = request.method() + ":" + parseUri(request.uri());
 
-        if ("GET:/favicon.ico".equals(uri)) return;
+        if ("GET:/favicon.ico".equals(uri)) {
+            return;
+        }
 
         HttpRouteClassAndMethod httpRouteClassAndMethod = InitMothods.getHttpHandler(uri);
 

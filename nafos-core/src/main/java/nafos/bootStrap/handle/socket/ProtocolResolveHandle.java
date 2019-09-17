@@ -39,12 +39,16 @@ public class ProtocolResolveHandle extends SimpleChannelInboundHandler<byte[]> {
     @Override
     protected void channelRead0(ChannelHandlerContext context, byte[] contentBytes) throws Exception {
 
-        if (contentBytes.length == 0) return;
+        if (contentBytes.length == 0) {
+            return;
+        }
 
         contentBytes = zlibMessageHandle.unZlibByteMessage(contentBytes);//解压
         contentBytes = crc32MessageHandle.checkCrc32IntBefore(contentBytes);//CRC32校验
 
-        if (ObjectUtil.isNull(contentBytes)) return; //如果null，证明校验失败，直接返回不处理
+        if (ObjectUtil.isNull(contentBytes)) {
+            return; //如果null，证明校验失败，直接返回不处理
+        }
 
 
         //选择线程池

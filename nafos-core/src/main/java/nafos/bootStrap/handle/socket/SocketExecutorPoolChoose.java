@@ -62,8 +62,9 @@ public class SocketExecutorPoolChoose implements ExecutorPoolChoose {
                 continue;
             }
             filter.setIndex(0);
-            if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, code, socketRouteClassAndMethod.getInterceptorParams()[i]))
+            if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, code, socketRouteClassAndMethod.getInterceptorParams()[i])) {
                 return;
+            }
         }
 
         boolean isRunOnWork = socketRouteClassAndMethod.isRunOnWorkGroup();

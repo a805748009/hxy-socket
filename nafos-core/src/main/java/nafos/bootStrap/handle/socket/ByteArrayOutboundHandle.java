@@ -24,6 +24,7 @@ public class ByteArrayOutboundHandle extends ChannelOutboundHandlerAdapter {
     @Autowired
     Crc32MessageHandle crc32MessageHandle;
 
+    @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         if (msg instanceof byte[]) {
             byte[] contentBytes = (byte[]) msg;

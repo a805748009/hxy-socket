@@ -118,20 +118,25 @@ public class RequestHelper {
      */
     private static Object castClass(Object object, Class<?> clazz) {
 
-        if (clazz.equals(String.class))
+        if (clazz.equals(String.class)) {
             object = CastUtil.castString(object);
+        }
 
-        if (clazz.equals(int.class) || clazz.equals(Integer.class))
+        if (clazz.equals(int.class) || clazz.equals(Integer.class)) {
             object = CastUtil.castInt(object);
+        }
 
-        if (clazz.equals(boolean.class))
+        if (clazz.equals(boolean.class)) {
             object = CastUtil.castBoolean(object);
+        }
 
-        if (clazz.equals(double.class))
+        if (clazz.equals(double.class)) {
             object = CastUtil.castDouble(object);
+        }
 
-        if (clazz.equals(long.class))
+        if (clazz.equals(long.class)) {
             object = CastUtil.castLong(object);
+        }
 
         return object;
     }

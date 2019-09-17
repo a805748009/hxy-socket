@@ -56,8 +56,9 @@ public class HttpRouteHandle {
                     continue;
                 }
                 filter.setIndex(0);
-                if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, request, httpRouteClassAndMethod.getInterceptorParams()[i]))
+                if (!ClassAndMethodHelper.checkResultStatus(filter, ctx, request, httpRouteClassAndMethod.getInterceptorParams()[i])) {
                     return;
+                }
             }
 
             // 2.消息入口处理
@@ -106,19 +107,23 @@ public class HttpRouteHandle {
             return RequestHelper.getRequestParams(request, route);
         } else {
             if (route.getParameters().length == 0)//不需要任何参数
+            {
                 return null;
+            }
 
             if (request.method() == HttpMethod.GET) {
                 return RequestHelper.getRequestParams(request, route);
             }
 
             byte[] content = RequestHelper.getRequestParamsObj(request);
-            if (ObjectUtil.isNull(content))
+            if (ObjectUtil.isNull(content)) {
                 throw new NullPointerException(request.uri() + ":  客户端发过来的数据为空");
+            }
             content = zlibMessageHandle.unZlibByteMessage(content);//解压
             content = crc32MessageHandle.checkCrc32IntBefore(content);//CRC32校验
-            if (ObjectUtil.isNull(content))
+            if (ObjectUtil.isNull(content)) {
                 throw new NullPointerException(request.uri() + ":   客户端发过来的数据处理后为空");
+            }
             return RequestHelper.getRequestParams(request, route, content);
         }
     }
@@ -217,7 +222,8 @@ public class HttpRouteHandle {
         }
         ThreadLocalHelper.threadLocalRemove();
 
-        if (ctx.channel().isActive())
+        if (ctx.channel().isActive()) {
             ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+        }
     }
 }

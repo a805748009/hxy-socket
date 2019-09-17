@@ -56,8 +56,9 @@ public class Crc32MessageHandle {
      * @Description(前面加上校验字节)
      */
     public byte[] addCrc32IntBefore(byte[] bye) {
-        if (!isCrc32Out)
+        if (!isCrc32Out) {
             return bye;
+        }
         return ArrayUtil.concat(ArrayUtil.intToByteArray(getCrc32Int(bye)), bye);
     }
 
@@ -69,8 +70,9 @@ public class Crc32MessageHandle {
      * @Description(前面加上校验字节)
      */
     public byte[] checkCrc32IntBefore(byte[] bye) {
-        if (!isCrc32In)
+        if (!isCrc32In) {
             return bye;
+        }
         byte[] crc32byte = new byte[4];
         System.arraycopy(bye, 0, crc32byte, 0, 4);
         byte[] content = new byte[bye.length - 4];

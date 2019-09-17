@@ -60,22 +60,26 @@ public class SocketConnectFactory {
         final Class<?> userType = ClassUtils.getUserClass(handlerType);
 
         Set<Method> methods1 = MethodIntrospector.selectMethods(userType, new ReflectionUtils.MethodFilter(){
+            @Override
             public boolean matches(Method method) {
                 return method.isAnnotationPresent(Connect.class);
             }
         });
 
         Set<Method> methods2 = MethodIntrospector.selectMethods(userType, new ReflectionUtils.MethodFilter(){
+            @Override
             public boolean matches(Method method) {
                 return method.isAnnotationPresent(DisConnect.class);
             }
         });
 
-        if(!methods1.isEmpty())
-        connectClassAndMethod.add(registerHandlerMethod((Method) methods1.toArray()[0], userType));
+        if(!methods1.isEmpty()) {
+            connectClassAndMethod.add(registerHandlerMethod((Method) methods1.toArray()[0], userType));
+        }
 
-        if(!methods2.isEmpty())
-        disConnectClassAndMethod.add(registerHandlerMethod((Method) methods2.toArray()[0], userType));
+        if(!methods2.isEmpty()) {
+            disConnectClassAndMethod.add(registerHandlerMethod((Method) methods2.toArray()[0], userType));
+        }
 
     }
 

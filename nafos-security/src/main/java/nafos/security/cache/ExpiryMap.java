@@ -32,11 +32,13 @@ public class ExpiryMap<K, V> extends HashMap<K, V> {
         this.EXPIRY = defaultExpiryTime;
     }
 
+    @Override
     public V put(K key, V value) {
         expiryMap.put(key, System.currentTimeMillis() + EXPIRY);
         return super.put(key, value);
     }
 
+    @Override
     public boolean containsKey(Object key) {
         return !checkExpiry(key, true) && super.containsKey(key);
     }
@@ -52,17 +54,21 @@ public class ExpiryMap<K, V> extends HashMap<K, V> {
         return super.put(key, value);
     }
 
+    @Override
     public int size() {
         return entrySet().size();
     }
 
+    @Override
     public boolean isEmpty() {
         return entrySet().size() == 0;
     }
 
+    @Override
     public boolean containsValue(Object value) {
-        if (value == null)
+        if (value == null) {
             return Boolean.FALSE;
+        }
         Set<Entry<K, V>> set = super.entrySet();
         Iterator<Entry<K, V>> iterator = set.iterator();
         while (iterator.hasNext()) {
@@ -71,35 +77,42 @@ public class ExpiryMap<K, V> extends HashMap<K, V> {
                 if (checkExpiry(entry.getKey(), false)) {
                     iterator.remove();
                     return Boolean.FALSE;
-                } else
+                } else {
                     return Boolean.TRUE;
+                }
             }
         }
         return Boolean.FALSE;
     }
 
+    @Override
     public Collection<V> values() {
 
         Collection<V> values = super.values();
 
-        if (values == null || values.size() < 1)
+        if (values == null || values.size() < 1) {
             return values;
+        }
 
         Iterator<V> iterator = values.iterator();
 
         while (iterator.hasNext()) {
             V next = iterator.next();
-            if (!containsValue(next))
+            if (!containsValue(next)) {
                 iterator.remove();
+            }
         }
         return values;
     }
 
+    @Override
     public V get(Object key) {
-        if (key == null)
+        if (key == null) {
             return null;
-        if (checkExpiry(key, true))
+        }
+        if (checkExpiry(key, true)) {
             return null;
+        }
         return super.get(key);
     }
 
@@ -109,8 +122,9 @@ public class ExpiryMap<K, V> extends HashMap<K, V> {
      * @Description: 是否过期
      */
     public Object isInvalid(Object key) {
-        if (key == null)
+        if (key == null) {
             return null;
+        }
         if (!expiryMap.containsKey(key)) {
             return null;
         }
@@ -126,19 +140,23 @@ public class ExpiryMap<K, V> extends HashMap<K, V> {
         return super.get(key);
     }
 
+    @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-        for (Entry<? extends K, ? extends V> e : m.entrySet())
+        for (Entry<? extends K, ? extends V> e : m.entrySet()) {
             expiryMap.put(e.getKey(), System.currentTimeMillis() + EXPIRY);
+        }
         super.putAll(m);
     }
 
+    @Override
     public Set<Entry<K, V>> entrySet() {
         Set<Entry<K, V>> set = super.entrySet();
         Iterator<Entry<K, V>> iterator = set.iterator();
         while (iterator.hasNext()) {
             Entry<K, V> entry = iterator.next();
-            if (checkExpiry(entry.getKey(), false))
+            if (checkExpiry(entry.getKey(), false)) {
                 iterator.remove();
+            }
         }
 
         return set;
@@ -161,8 +179,9 @@ public class ExpiryMap<K, V> extends HashMap<K, V> {
         boolean flag = System.currentTimeMillis() > expiryTime;
 
         if (flag) {
-            if (isRemoveSuper)
+            if (isRemoveSuper) {
                 super.remove(key);
+            }
             expiryMap.remove(key);
         }
         return flag;

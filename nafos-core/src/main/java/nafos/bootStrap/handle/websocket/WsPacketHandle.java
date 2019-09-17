@@ -43,7 +43,7 @@ public class WsPacketHandle extends SimpleChannelInboundHandler<WebSocketFrame> 
         if (frame instanceof TextWebSocketFrame) {
             String msg = ((TextWebSocketFrame) frame).text();
             // 采用空格ping消息
-            if (msg.equals(" ")) {
+            if (" ".equals(msg)) {
                 return;
             }
             logger.error("收到消息{}，暂时不支持文字传输，请转成byte传", msg);

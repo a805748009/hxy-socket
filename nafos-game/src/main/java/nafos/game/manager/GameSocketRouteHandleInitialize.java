@@ -21,6 +21,6 @@ public class GameSocketRouteHandleInitialize implements NafosRunner {
     public void run() {
         logger.info("socket初始化修改routeHandle为：{}","GameSocketRouteHandle");
         ExcuteHandle.setAbstractSocketRouteHandle(SpringApplicationContextHolder.getSpringBeanForClass(GameSocketRouteHandle.class));
-        SpringApplicationContextHolder.getSpringBeanForClass(SocketExecutorPoolChoose.class).abstractSocketRouteHandle = SpringApplicationContextHolder.getSpringBeanForClass(GameSocketRouteHandle.class);
+        SocketExecutorPoolChoose.abstractSocketRouteHandle = SpringApplicationContextHolder.getSpringBeanForClass(GameSocketRouteHandle.class);
     }
 }

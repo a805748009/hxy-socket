@@ -56,34 +56,42 @@ public class RouteClassAndMethod extends ClassAndMethod {
         this.interceptors = interceptors;
     }
 
+    @Override
     public Class<?> getClazz() {
         return clazz;
     }
 
+    @Override
     public void setClazz(Class<?> clazz) {
         this.clazz = clazz;
     }
 
+    @Override
     public MethodAccess getMethod() {
         return method;
     }
 
+    @Override
     public void setMethod(MethodAccess method) {
         this.method = method;
     }
 
+    @Override
     public Integer getIndex() {
         return index;
     }
 
+    @Override
     public void setIndex(Integer index) {
         this.index = index;
     }
 
+    @Override
     public Class<?> getParamType() {
         return paramType;
     }
 
+    @Override
     public void setParamType(Class<?> paramType) {
         this.paramType = paramType;
     }

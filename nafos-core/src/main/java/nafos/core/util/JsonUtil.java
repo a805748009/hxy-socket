@@ -139,7 +139,9 @@ public class JsonUtil {
      * @return json 字符串
      */
     public static String toJson(Object object) {
-        if (object instanceof String) return (String) object;
+        if (object instanceof String) {
+            return (String) object;
+        }
         String jsonString = "";
         try {
             jsonString = objectMapper.writeValueAsString(object);

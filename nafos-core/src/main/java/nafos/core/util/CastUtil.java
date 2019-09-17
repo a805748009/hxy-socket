@@ -18,7 +18,7 @@ public class CastUtil {
 
     public static String castString(Object obj, String defaultValue) {
         if (obj != null) {
-            if (obj.getClass().getName().equals("java.lang.Double")) {
+            if ("java.lang.Double".equals(obj.getClass().getName())) {
                 DecimalFormat format = new DecimalFormat("#");
                 return format.format(obj);
             }

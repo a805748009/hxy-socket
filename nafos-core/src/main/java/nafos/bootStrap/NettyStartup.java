@@ -156,7 +156,9 @@ public class NettyStartup {
      * 打印log
      */
     private void showLog() {
-        if (isShowLog) return;
+        if (isShowLog) {
+            return;
+        }
         System.out.println("  .      _   _              ______    ____     _____\n" +
                 " /\\\\    | \\ | |     /\\     |  ____|  / __ \\   / ____|\n" +
                 "( ( )   |  \\| |    /  \\    | |__    | |  | | | (___\n" +

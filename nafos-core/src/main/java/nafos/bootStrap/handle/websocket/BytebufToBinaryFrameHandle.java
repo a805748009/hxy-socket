@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 @ChannelHandler.Sharable
 public class BytebufToBinaryFrameHandle extends ChannelOutboundHandlerAdapter {
 
+    @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         if (msg instanceof ByteBuf) {
             ctx.write(new BinaryWebSocketFrame((ByteBuf) msg), promise);

@@ -49,8 +49,9 @@ public class NameSpace {
 
 
     public static void sendMsg(String nameSpace, Object obj) {
-        if (ObjectUtil.isNull(getClients(nameSpace)))
+        if (ObjectUtil.isNull(getClients(nameSpace))) {
             return;
+        }
         spaceClientlock.readLock().lock();
         for (Client client : getClients(nameSpace)) {
             client.sendMsg(obj);

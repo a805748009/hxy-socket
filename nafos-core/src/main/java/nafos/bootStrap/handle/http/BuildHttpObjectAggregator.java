@@ -15,6 +15,7 @@ public class BuildHttpObjectAggregator extends HttpObjectAggregator {
         super(maxContentLength, closeOnExpectationFailed);
     }
 
+    @Override
     protected void aggregate(FullHttpMessage aggregated, HttpContent content) throws Exception {
         if (content instanceof LastHttpContent) {
             ((NsRequest) aggregated).setTrailingHeaders(((LastHttpContent) content).trailingHeaders());
@@ -22,6 +23,7 @@ public class BuildHttpObjectAggregator extends HttpObjectAggregator {
 
     }
 
+    @Override
     protected FullHttpMessage beginAggregation(HttpMessage start, ByteBuf content) throws Exception {
         assert !(start instanceof FullHttpMessage);
 
@@ -45,62 +47,75 @@ public class BuildHttpObjectAggregator extends HttpObjectAggregator {
             super(message, content, trailingHeaders);
         }
 
+        @Override
         public FullHttpResponse copy() {
             return this.replace(this.content().copy());
         }
 
+        @Override
         public FullHttpResponse duplicate() {
             return this.replace(this.content().duplicate());
         }
 
+        @Override
         public FullHttpResponse retainedDuplicate() {
             return this.replace(this.content().retainedDuplicate());
         }
 
+        @Override
         public FullHttpResponse replace(ByteBuf content) {
             DefaultFullHttpResponse dup = new DefaultFullHttpResponse(this.getProtocolVersion(), this.getStatus(), content, this.headers().copy(), this.trailingHeaders().copy());
             dup.setDecoderResult(this.decoderResult());
             return dup;
         }
 
+        @Override
         public FullHttpResponse setStatus(HttpResponseStatus status) {
             ((HttpResponse) this.message).setStatus(status);
             return this;
         }
 
+        @Override
         public HttpResponseStatus getStatus() {
             return ((HttpResponse) this.message).status();
         }
 
+        @Override
         public HttpResponseStatus status() {
             return this.getStatus();
         }
 
+        @Override
         public FullHttpResponse setProtocolVersion(HttpVersion version) {
             super.setProtocolVersion(version);
             return this;
         }
 
+        @Override
         public FullHttpResponse retain(int increment) {
             super.retain(increment);
             return this;
         }
 
+        @Override
         public FullHttpResponse retain() {
             super.retain();
             return this;
         }
 
+        @Override
         public FullHttpResponse touch(Object hint) {
             super.touch(hint);
             return this;
         }
 
+        @Override
         public FullHttpResponse touch() {
             super.touch();
             return this;
         }
 
+        @Override
         public String toString() {
             return HttpMessageUtil.appendFullResponse(new StringBuilder(256), this).toString();
         }
@@ -113,75 +128,91 @@ public class BuildHttpObjectAggregator extends HttpObjectAggregator {
             super(request, content, trailingHeaders);
         }
 
+        @Override
         public FullHttpRequest copy() {
             return this.replace(this.content().copy());
         }
 
+        @Override
         public FullHttpRequest duplicate() {
             return this.replace(this.content().duplicate());
         }
 
+        @Override
         public FullHttpRequest retainedDuplicate() {
             return this.replace(this.content().retainedDuplicate());
         }
 
+        @Override
         public FullHttpRequest replace(ByteBuf content) {
             DefaultFullHttpRequest dup = new DefaultFullHttpRequest(this.protocolVersion(), this.method(), this.uri(), content, this.headers().copy(), this.trailingHeaders().copy());
             dup.setDecoderResult(this.decoderResult());
             return dup;
         }
 
+        @Override
         public FullHttpRequest retain(int increment) {
             super.retain(increment);
             return this;
         }
 
+        @Override
         public FullHttpRequest retain() {
             super.retain();
             return this;
         }
 
+        @Override
         public FullHttpRequest touch() {
             super.touch();
             return this;
         }
 
+        @Override
         public FullHttpRequest touch(Object hint) {
             super.touch(hint);
             return this;
         }
 
+        @Override
         public FullHttpRequest setMethod(HttpMethod method) {
             ((HttpRequest) this.message).setMethod(method);
             return this;
         }
 
+        @Override
         public FullHttpRequest setUri(String uri) {
             ((HttpRequest) this.message).setUri(uri);
             return this;
         }
 
+        @Override
         public HttpMethod getMethod() {
             return ((HttpRequest) this.message).method();
         }
 
+        @Override
         public String getUri() {
             return ((HttpRequest) this.message).uri();
         }
 
+        @Override
         public HttpMethod method() {
             return this.getMethod();
         }
 
+        @Override
         public String uri() {
             return this.getUri();
         }
 
+        @Override
         public FullHttpRequest setProtocolVersion(HttpVersion version) {
             super.setProtocolVersion(version);
             return this;
         }
 
+        @Override
         public String toString() {
             return HttpMessageUtil.appendFullRequest(new StringBuilder(256), this).toString();
         }
@@ -199,6 +230,7 @@ public class BuildHttpObjectAggregator extends HttpObjectAggregator {
             this.trailingHeaders = trailingHeaders;
         }
 
+        @Override
         public HttpHeaders trailingHeaders() {
             HttpHeaders trailingHeaders = this.trailingHeaders;
             return (HttpHeaders) (trailingHeaders == null ? EmptyHttpHeaders.INSTANCE : trailingHeaders);
@@ -208,75 +240,93 @@ public class BuildHttpObjectAggregator extends HttpObjectAggregator {
             this.trailingHeaders = trailingHeaders;
         }
 
+        @Override
         public HttpVersion getProtocolVersion() {
             return this.message.protocolVersion();
         }
 
+        @Override
         public HttpVersion protocolVersion() {
             return this.message.protocolVersion();
         }
 
+        @Override
         public FullHttpMessage setProtocolVersion(HttpVersion version) {
             this.message.setProtocolVersion(version);
             return this;
         }
 
+        @Override
         public HttpHeaders headers() {
             return this.message.headers();
         }
 
+        @Override
         public DecoderResult decoderResult() {
             return this.message.decoderResult();
         }
 
+        @Override
         public DecoderResult getDecoderResult() {
             return this.message.decoderResult();
         }
 
+        @Override
         public void setDecoderResult(DecoderResult result) {
             this.message.setDecoderResult(result);
         }
 
+        @Override
         public ByteBuf content() {
             return this.content;
         }
 
+        @Override
         public int refCnt() {
             return this.content.refCnt();
         }
 
+        @Override
         public FullHttpMessage retain() {
             this.content.retain();
             return this;
         }
 
+        @Override
         public FullHttpMessage retain(int increment) {
             this.content.retain(increment);
             return this;
         }
 
+        @Override
         public FullHttpMessage touch(Object hint) {
             this.content.touch(hint);
             return this;
         }
 
+        @Override
         public FullHttpMessage touch() {
             this.content.touch();
             return this;
         }
 
+        @Override
         public boolean release() {
             return this.content.release();
         }
 
+        @Override
         public boolean release(int decrement) {
             return this.content.release(decrement);
         }
 
+        @Override
         public abstract FullHttpMessage copy();
 
+        @Override
         public abstract FullHttpMessage duplicate();
 
+        @Override
         public abstract FullHttpMessage retainedDuplicate();
     }
 

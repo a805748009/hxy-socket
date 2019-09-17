@@ -94,7 +94,9 @@ public class RouteFactory {
      */
     private void detectHandlerMethods(final Class<?> handlerType) {
 
-        if (!isHandler(handlerType)) return;
+        if (!isHandler(handlerType)) {
+            return;
+        }
 
         //获取类的父类，此处没有，返回的本身类
         final Class<?> userType = ClassUtils.getUserClass(handlerType);

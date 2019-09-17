@@ -45,44 +45,58 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
 
     public Integer intQueryParam(String key) {
         String value = requestParams().get(key);
-        if (value == null) return null;
+        if (value == null) {
+            return null;
+        }
         return Integer.valueOf(value);
     }
 
     public Boolean booleanQueryParam(String key) {
         String value = requestParams().get(key);
-        if (value == null) return null;
+        if (value == null) {
+            return null;
+        }
         return Boolean.valueOf(value);
     }
 
     public Long longQueryParam(String key) {
         String value = requestParams().get(key);
-        if (value == null) return null;
+        if (value == null) {
+            return null;
+        }
         return Long.valueOf(value);
     }
 
 
     public String stringBodyParam(String key) {
         Object value = bodyParams().get(key);
-        if (value == null) return null;
+        if (value == null) {
+            return null;
+        }
         return String.valueOf(value);
     }
 
     public Integer intBodyParam(String key) {
         Object value = bodyParams().get(key);
-        if (value == null) return null;
+        if (value == null) {
+            return null;
+        }
         return Integer.valueOf(value.toString());
     }
 
     public Boolean booleanBodyParam(String key) {
         Object value = bodyParams().get(key);
-        if (value == null) return null;
+        if (value == null) {
+            return null;
+        }
         return Boolean.valueOf(value.toString());
     }
 
     public Long longBodyParam(String key) {
         Object value = bodyParams().get(key);
-        if (value == null) return null;
+        if (value == null) {
+            return null;
+        }
         return Long.valueOf(value.toString());
     }
 
@@ -117,9 +131,9 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
     public String getNafosCookieId() {
         //H5跨域不能设置cookie问题，暂用此方法解决
         if (ObjectUtil.isNotNull(headers().get(cookieStart)) &&
-                !headers().get(cookieStart).equals("undefined") &&
-                !headers().get(cookieStart).equals("null") &&
-                !headers().get(cookieStart).equals("[object Null]")) {
+                !"undefined".equals(headers().get(cookieStart)) &&
+                !"null".equals(headers().get(cookieStart)) &&
+                !"[object Null]".equals(headers().get(cookieStart))) {
             try {
                 securityCookieId = AESUtil.decrypt(URLDecoder.decode(headers().get(cookieStart)));
                 return securityCookieId;
@@ -177,7 +191,9 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
     public Map<String, Object> getJSONParams() {
         ByteBuf jsonBuf = content();
         String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
-        if(jsonStr == null || jsonStr.trim().length() == 0) return new HashMap<>();
+        if(jsonStr == null || jsonStr.trim().length() == 0) {
+            return new HashMap<>();
+        }
         return JsonUtil.jsonToMap(jsonStr);
     }
 
@@ -250,6 +266,7 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
     }
 
 
+    @Override
     public boolean release(){
         if(httpPostRequestDecoder!=null){
             httpPostRequestDecoder.destroy();
