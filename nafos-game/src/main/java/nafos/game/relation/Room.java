@@ -34,7 +34,7 @@ public class Room {
     }
 
 
-    public void RoomInit() {
+    public void roomInit() {
         roomData.clear();
         clearUnActiveUser();
     }
@@ -96,7 +96,11 @@ public class Room {
     }
 
 
-    //用户掉线，不删除在房间中的信息
+    /**
+     * @Desc     用户掉线，不删除在房间中的信息
+     * @Author   hxy
+     * @Time     2019/9/18 15:36
+     */
     public void offLineClient(Client client) {
         clients.remove(client);
         if (clients.isEmpty()) {

@@ -160,7 +160,7 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
             String strContentType = headers().get("Content-Type");
             strContentType = ObjectUtil.isNotNull(strContentType) ? strContentType.trim() : "";
             if (strContentType.contains("application/json")) {
-                bodyParams = getJSONParams();
+                bodyParams = getJsonParams();
             } else {
                 bodyParams = getFormParams();
             }
@@ -188,7 +188,7 @@ public class NsRequest extends BuildHttpObjectAggregator.AggregatedFullHttpReque
     /**
      * 解析json数据（Content-Type = application/json）
      */
-    public Map<String, Object> getJSONParams() {
+    public Map<String, Object> getJsonParams() {
         ByteBuf jsonBuf = content();
         String jsonStr = jsonBuf.toString(CharsetUtil.UTF_8);
         if(jsonStr == null || jsonStr.trim().length() == 0) {

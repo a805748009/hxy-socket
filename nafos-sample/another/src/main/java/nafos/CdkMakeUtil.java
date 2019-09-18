@@ -85,7 +85,11 @@ public class CdkMakeUtil {
         return res;
     }
 
-    //生成CDK的个数list
+    /**
+     * @Desc     生成CDK的个数list
+     * @Author   hxy
+     * @Time     2019/9/18 18:16
+     */
     public static List<String> makeCdk(int cdkNum) {
         Set<Integer> set = new LinkedHashSet();
         List<String> cdkList = new ArrayList<>();
@@ -98,7 +102,11 @@ public class CdkMakeUtil {
         return cdkList;
     }
 
-    //插库sql生成
+    /**
+     * @Desc     插库sql生成
+     * @Author   hxy
+     * @Time     2019/9/18 18:16
+     */
     public static void main(String[] args) {
         List<String> li = makeCdk(30);
         StringBuilder sql = new StringBuilder("insert into cdk (cdk,type,num,rewardId) values ");

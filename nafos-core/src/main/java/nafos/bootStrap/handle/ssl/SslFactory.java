@@ -24,7 +24,7 @@ public class SslFactory {
 
     public static final String[] CIPHER_ARRAY = {"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256"};
 
-    public static SslContext createSSLContext(String certFilePath, String keyFilePath) {
+    public static SslContext createSslContext(String certFilePath, String keyFilePath) {
         if (null == sslContext) {
             synchronized (SslFactory.class) {
                 if (null == sslContext) {

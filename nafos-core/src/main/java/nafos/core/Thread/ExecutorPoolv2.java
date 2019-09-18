@@ -18,7 +18,11 @@ public class ExecutorPoolv2 {
 	private ExecutorPoolv2() {
 	}
 	
-	// 单例模式
+	/**
+	 * @Desc     单例模式
+	 * @Author   hxy
+	 * @Time     2019/9/18 18:16
+	 */
 	private static ExecutorService instance = null;
 	static {
 		//线程池最小2个，最大是cpu核数*2个线程

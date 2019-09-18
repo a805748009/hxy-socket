@@ -110,7 +110,11 @@ public class Client {
      * --------------------------房间操作方法-------------------------------------
      */
 
-    // 加入房间
+    /**
+     * @Desc     加入房间
+     * @Author   hxy
+     * @Time     2019/9/18 18:16
+     */
     public void joinRoom(String roomId) {
         Room room;
         if (ObjectUtil.isNull(IoCache.roomMap.get(roomId))) {

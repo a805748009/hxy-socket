@@ -35,7 +35,7 @@ public class NettyStartup {
     private static final Logger logger = LoggerFactory.getLogger(NettyStartup.class);
 
     @Value("${nafos.isOpenSSL:false}")
-    private boolean isOpenSSL;
+    private boolean openSSL;
     @Value("${nafos.certFilePath:}")
     private String certFilePath;
     @Value("${nafos.keyFilePath:}")
@@ -116,8 +116,8 @@ public class NettyStartup {
         ChannelPipeline pipeline = ch.pipeline();
 
         // 1.开启SSL验证
-        if (isOpenSSL) {
-            pipeline.addLast("ssl", SslFactory.createSSLContext(certFilePath, keyFilePath).newHandler(ch.alloc()));
+        if (openSSL) {
+            pipeline.addLast("ssl", SslFactory.createSslContext(certFilePath, keyFilePath).newHandler(ch.alloc()));
         }
 
         // 2.判断协议类型

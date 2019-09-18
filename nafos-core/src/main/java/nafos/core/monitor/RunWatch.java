@@ -21,7 +21,7 @@ public class RunWatch {
 
     private static boolean openRunWatch = false;
 
-    protected String DEFULTNAME = "defult_name";
+    protected String DEFAULT_NAME = "default_name";
 
     protected String methodName ;
 
@@ -39,11 +39,11 @@ public class RunWatch {
     }
 
     public RunWatch(String name) {
-        DEFULTNAME = name;
+        DEFAULT_NAME = name;
     }
 
     public  void run(){
-        run(DEFULTNAME);
+        run(DEFAULT_NAME);
     }
 
     public void run(String name){
@@ -93,7 +93,8 @@ public class RunWatch {
         sb.append( "name                                                                 count         totalTime         averageTime       proportion\n" );
         for (Map.Entry<String, LongAdder> e : runInfoMap.asMap().entrySet()) {
             long count =  countMap.get( e.getKey() ).longValue();
-            long average = e.getValue().longValue() / count; //平均时间
+            //平均时间
+            long average = e.getValue().longValue() / count;
             long proportion =  totalTime.longValue() == 0?100:e.getValue().longValue()*100/totalTime.longValue(); //总时间百分比
             sb.append( "                                                    " );
             sb.append( e.getKey()+"|");
