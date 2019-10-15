@@ -10,15 +10,17 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.util.CharsetUtil;
 import nafos.core.Thread.ThreadLocalHelper;
 import nafos.core.entry.error.BizException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import static io.netty.handler.codec.http.HttpHeaders.Names.*;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
-
+/**
+ * @Desc     NettyUtil
+ * @Author   hxy
+ * @Time     2019/10/15 21:41
+ */
 public class NettyUtil {
 
     private static Map<String, String> headers = null;
@@ -27,15 +29,19 @@ public class NettyUtil {
         headers = map;
     }
 
+    public static void setCrossHeads(CharSequence name, String value) {
+        if(headers == null){
+            headers = new HashMap<>();
+        }
+        headers.put(name.toString(),value);
+    }
+
+
     public static void sendError(ChannelHandlerContext ctx, HttpResponseStatus status) {
         // 设置到response对象
         final FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status,
                 Unpooled.copiedBuffer(new BizException(status.code(), status.reasonPhrase()).toString(), CharsetUtil.UTF_8));
-        response.headers().set("Access-Control-Allow-Origin", "*");
-        response.headers().set("Access-Control-Allow-Headers", "*");
-        response.headers().set("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-        response.headers().set(CONTENT_TYPE, "application/json;charset=UTF-8");
-        response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
+        resSetDefaultHead(response);
         ThreadLocalHelper.threadLocalRemove();
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
@@ -44,13 +50,20 @@ public class NettyUtil {
         // 设置到response对象
         final FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(bizException.getStatus()),
                 Unpooled.copiedBuffer(bizException.toString(), CharsetUtil.UTF_8));
-        response.headers().set("Access-Control-Allow-Origin", "*");
-        response.headers().set("Access-Control-Allow-Headers", "*");
-        response.headers().set("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
+        resSetDefaultHead(response);
         ThreadLocalHelper.threadLocalRemove();
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
+
+    private static void resSetDefaultHead(FullHttpResponse response){
+        response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+        response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_HEADERS, "*");
+        response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_METHODS, "PUT,POST,GET,DELETE,OPTIONS");
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
+        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes());
+    }
+
+
 
     public static void sendOptions(ChannelHandlerContext ctx, HttpResponseStatus status) {
         // 设置到response对象
@@ -58,10 +71,7 @@ public class NettyUtil {
                 Unpooled.copiedBuffer("{}", CharsetUtil.UTF_8));
         if (headers == null) {
             //设置头部
-            response.headers().set("Access-Control-Allow-Origin", "*");
-            response.headers().set("Access-Control-Allow-Headers", "*");
-            response.headers().set("Access-Control-Expose-Headers", "*");
-            response.headers().set("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+            resSetDefaultHead(response);
         } else {
             for (Map.Entry<String, String> head : headers.entrySet()) {
                 response.headers().set(head.getKey(), head.getValue());
