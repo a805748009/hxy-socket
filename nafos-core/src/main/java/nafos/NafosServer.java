@@ -237,6 +237,10 @@ public class NafosServer {
         NettyUtil.setCrossHeads(map);
         return this;
     }
+    public NafosServer registerCrossHeader(CharSequence name, String value) {
+        NettyUtil.setCrossHeads(name,value);
+        return this;
+    }
 
 
 }
