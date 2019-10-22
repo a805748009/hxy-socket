@@ -72,8 +72,10 @@ public class HttpRouteHandle {
             }
 
             InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
-            String clientIP = insocket.getAddress().getHostAddress();
-            request.setIp(clientIP);
+            if(insocket != null){
+                String clientIP = insocket.getAddress().getHostAddress();
+                request.setIp(clientIP);
+            }
 
             // 3.寻找路由成功,返回结果
             String methodName = httpRouteClassAndMethod.getClazz().getName() + "." + httpRouteClassAndMethod.getMethod().getMethodNames()[httpRouteClassAndMethod.getIndex()];
