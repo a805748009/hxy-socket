@@ -172,6 +172,14 @@ public class HttpRouteHandle {
             return;
         }
 
+        if (object instanceof NsRespone) {
+            ThreadLocalHelper.threadLocalRemove();
+            if (context.channel().isActive()) {
+                context.writeAndFlush(object).addListener(ChannelFutureListener.CLOSE);
+            }
+            return;
+        }
+
         if (route.getType() == Protocol.JSON) {
             send(context, JsonUtil.toJsonIsNotNull(object), request);
         } else {
