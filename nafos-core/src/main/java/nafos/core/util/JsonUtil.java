@@ -32,8 +32,8 @@ public class JsonUtil {
     private static final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     static {
-        // 初始化
-        objectMapper = new ObjectMapper();// jackson版本的json
+        // 初始化jackson版本的json
+        objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -63,6 +63,7 @@ public class JsonUtil {
     public static ObjectMapper getObjectMapper() {
         return objectMapper;
     }
+
     public static ObjectMapper getObjectMapperNotNull() {
         return objectMapperNotNull;
     }
@@ -84,7 +85,7 @@ public class JsonUtil {
             try {
                 return (T) objectMapper.readValue(jsonString, tr);
             } catch (Exception e) {
-                log.warn("json error:" + e.getMessage(), e);
+                log.warn("json error-jsonString:{}" ,jsonString);
             }
         }
         return null;
@@ -104,7 +105,7 @@ public class JsonUtil {
             try {
                 return objectMapper.readValue(jsonString, clazz);
             } catch (Exception e) {
-                log.warn("json error:" + e.getMessage(), e);
+                log.warn("json error- {} {}", jsonString, clazz);
             }
 
         }
@@ -124,12 +125,10 @@ public class JsonUtil {
         try {
             node = JsonUtil.getObjectMapper().readTree(json);
             return node.get(nodeName);
-        } catch (JsonProcessingException e) {
-            log.warn("json error:" + e.getMessage(), e);
         } catch (IOException e) {
-            log.warn("json error:" + e.getMessage(), e);
+            log.warn("json error- json:{} nodeName:{}", json, nodeName);
         }
-        return node;
+        return null;
     }
 
     /**
@@ -146,7 +145,7 @@ public class JsonUtil {
         try {
             jsonString = objectMapper.writeValueAsString(object);
         } catch (Exception e) {
-            log.warn("json error:" + e.getMessage(), e);
+            log.warn("json error- {}", object.toString());
         }
         return jsonString;
 
@@ -172,7 +171,7 @@ public class JsonUtil {
             // ObjectMapper mapper = new ObjectMapper();
             jsonString = objectMapperNotNull.writeValueAsString(object);
         } catch (Exception e) {
-            log.warn("json error:" + e.getMessage(), e);
+            log.warn("json error- {}", object.toString());
         }
         return jsonString;
     }
@@ -189,7 +188,7 @@ public class JsonUtil {
         try {
             return (List<?>) objectMapper.readValue(json, List.class);
         } catch (Exception e) {
-            log.warn("json error:" + e.getMessage(), e);
+            log.warn("json error- {}", json);
         }
         return null;
     }
@@ -208,7 +207,7 @@ public class JsonUtil {
             // ObjectMapper mapper = new ObjectMapper();
             return (Map<String, Object>) objectMapper.readValue(json, Map.class);
         } catch (Exception e) {
-            log.warn("json error:" + e.getMessage(), e);
+            log.warn("json error- {}", json);
         }
         return null;
     }
