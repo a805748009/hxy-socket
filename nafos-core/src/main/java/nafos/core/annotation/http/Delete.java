@@ -26,6 +26,12 @@ public @interface Delete {
     )
     String uri() default "";
 
+    @AliasFor(
+            annotation = Handle.class,
+            attribute = "uri"
+    )
+    String value() default "";
+
 
     @AliasFor(
             annotation = Handle.class,
