@@ -23,10 +23,16 @@ public class ThreadLocalHelper {
     }
 
     public static NsRequest getRequest() {
+        if(map.get() == null){
+            return null;
+        }
         return map.get().getNafosRequest();
     }
 
     public static NsRespone getRespone() {
+        if(map.get() == null){
+            return null;
+        }
         return map.get().getNafosRespone();
     }
 
