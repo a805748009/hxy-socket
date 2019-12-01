@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>nafos</artifactId>
+        <groupId>hxy</groupId>
+        <version>1.3.0-release</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>nafos-protocol</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>hxy</groupId>
+            <artifactId>nafos-server</artifactId>
+            <version>${nafos.version}</version>
+        </dependency>
+        <!-- //protostuff序列化 -->
+        <dependency>
+            <groupId>com.dyuproject.protostuff</groupId>
+            <artifactId>protostuff-core</artifactId>
+            <version>1.0.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.dyuproject.protostuff</groupId>
+            <artifactId>protostuff-runtime</artifactId>
+            <version>1.0.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <version>2.1</version>
+        </dependency>
+    </dependencies>
+
+</project>
