@@ -12,14 +12,23 @@
 
 
 ## 简介
-nafos是一个基于netty和spring的轻量级高性能服务端应用框架，能同时支持http，tcp，websocket通信，Json和Protobuffer编码协议以及压缩和加密。
+nafos是一个轻量的网络通讯协程框架。它能同时支持HTTP,WEBSOCKET,TCP通信，并以非常友好的方式连接到大家的业务代码。
 
-最重要的是，它使用非常简单，且非常轻，启动速度快，是微服务的不二选择。
+哦~对了，他还是协程处理大家写的业务代码。让在IO密集处理的业务代码中，省下更多的上下文切换消耗和系统内存，在高并发冲击下变的更加可靠和快速。
+
+而且，它很轻哦，启动十分快速的它，却能无缝兼容springboot，以及嵌入到其他任何系统中。
+
+Nafos is a lightweight network communication protocol framework. It can support HTTP, websocket and TCP communication at the same time, and connect to your business code in a very friendly way.
+
+oh ~ by the way, he ucoupled the code written by you with Coroutine . in the io intensive business code, it saves more context switching consumption and system memory, and becomes more reliable and fast under the impact of high concurrency.
+
+Moreover, it's very light, very fast to start, but it can be seamlessly compatible with spring boot, as well as embedded in any other system.
 
 
 
 ## 文档
-- [文档-请点击此处](https://gitee.com/huangxinyu/nafos/wikis)
+- 正在赶来的路上
+On the way
 
 
 
@@ -33,51 +42,61 @@ nafos是一个基于netty和spring的轻量级高性能服务端应用框架，�
 - 5、可限流：自带单机和分布式限流器，多策略轻松抗压防崩溃；
 - 6、房间策略：封装常见游戏的房间策略，开房，比赛，聊天可直接使用；
 - 7、双编码：同时支持json和protobuffer格式编码，手游和应用一块搞定；
-- 8、饿处理：设置了二级线程池处理请求，在阻塞下最大限度的接受请求防止丢失；
+- 8、协程：采用协程模式取代传统的线程模式，在高IO的业务代码下更加可靠和高效；
 - 9、自单点：一键配置即可实现SSO单点登录，多机器共享登陆状态无需额外代码；
 - 10、安全节流：简单开启数据压缩和加密，节约带宽又安全；
 
 ## 交流
 
 - 邮箱：805748009@qq.com
-- 交流群：54202911
+- 作者QQ：805748009
 
 ## 快速入门
 ```java
-package com;
+@ComponentScan(value = ["com", "nafos"])
+class HttpRun
 
-import nafos.NafosServer;
-import nafos.core.Enums.Protocol;
-import nafos.core.annotation.Controller;
-import nafos.core.annotation.http.Get;
-import org.springframework.context.annotation.ComponentScan;
+fun main() {
+    httpServer().start(HttpRun::class.java)
+	socketServer().start(SocketRun::class.java)
+}
 
-import java.util.Map;
+/**
+ * HTTP模式的controller
+ */
+@Controller("/test")
+class TestController {
 
-@ComponentScan({"com","nafos"})
-@Controller("/")
-public class RunApp {
-    public static void main(String[] args) {
-        new NafosServer(RunApp.class)
-                // 注册snowflakeId 非必要
-                .registSnowFlake(12, 0)
-                // 选定协议传输格式 不注册默认JSON
-                .registDefaultProtocol(Protocol.JSON)
-                .registShutDown(() -> {
-                    // TODO kill -15 关机前做的事情
-                })
-                // 启动端口号
-                .startupHttp(8050);
-    }
-
-    @Get//请求地址 127.0.0.1:8050/
-    public Object httpGet(Map map){
-        //打印get参数
-        System.out.println(map);
-        //返回参数，返回任意Object，自动转json
-        return map;
+    @Get("/hello")
+    fun hello(map: Map<String, String>, nsRequest: NsRequest, nsRespone: NsRespone): Any {
+        println(map)
+        println(nsRequest.uri)
+        println(nsRespone)
+        return map
     }
 }
+/**
+ * TCP或WEBSOCKET模式的controller
+ */
+@Controller
+class TestSocketController {
+
+    @Handle(code = 500)
+    fun login(channel: Channel, map: Map<String, String>, clientCode: Int) {
+        println(map)
+        val token = "唯一字符串"
+        initChannel(channel, token, "北京一区", User("小明", "123"))
+        channel.writeAndFlush("$clientCode|{}")
+    }
+
+    @Handle(code = 501)
+    fun hello(client: Client, map: Map<String, String>, clientCode: Int) {
+        println(map)
+        client.joinRoom("123456")
+        client.sendMsg(clientCode, map)
+    }
+}
+
 ```
 
 
