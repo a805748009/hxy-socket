@@ -12,13 +12,13 @@
 
 
 ## 简介
-nafos是一个轻量的网络通讯协程框架。它能同时支持HTTP,WEBSOCKET,TCP通信，并以非常友好的方式连接到大家的业务代码。
+nafos是一个轻量的网络通讯协程框架。它能同时支持HTTP,WEBSOCKET,TCP通信，并以非常友好的方式连接到大家的业务代码，无需tomcat等服务器，直接一个jar包就能简单启动。
 
 哦~对了，他还是协程处理大家写的业务代码。让在IO密集处理的业务代码中，省下更多的上下文切换消耗和系统内存，在高并发冲击下变的更加可靠和快速。
 
 而且，它很轻哦，启动十分快速的它，却能无缝兼容springboot，以及嵌入到其他任何系统中。
 
-Nafos is a lightweight network communication protocol framework. It can support HTTP, websocket and TCP communication at the same time, and connect to your business code in a very friendly way.
+Nafos is a lightweight network communication protocol framework. It can support HTTP, websocket and TCP communication at the same time, and connect to your business code in a very friendly way，no need Tomcat and other servers, you can simply start a jar package directly.
 
 oh ~ by the way, he ucoupled the code written by you with Coroutine . in the io intensive business code, it saves more context switching consumption and system memory, and becomes more reliable and fast under the impact of high concurrency.
 
