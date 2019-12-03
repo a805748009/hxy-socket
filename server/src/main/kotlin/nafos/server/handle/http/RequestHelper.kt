@@ -3,7 +3,6 @@ package nafos.server.handle.http
 import io.netty.handler.codec.http.HttpMethod
 import io.netty.util.CharsetUtil
 import nafos.server.CoroutineLocalHelper
-import nafos.server.annotation.http.RequestParam
 import nafos.server.BizException
 import nafos.server.HttpRouteClassAndMethod
 import nafos.server.util.BeanToMapUtil
@@ -26,7 +25,7 @@ fun getRequestParams(nsRequest: NsRequest, route: HttpRouteClassAndMethod): Arra
             if (any == null && requestParam.required) {
                 if (requestParam.required) {
                     logger.error("======{},参数{}不能为空 ", route.method.toString(), requestParam.value)
-                    throw nafos.server.BizException.PARAM_NOT_NULL(requestParam.value)
+                    throw BizException.PARAM_NOT_NULL(requestParam.value)
                 } else {
                     list.add(null)
                     continue
@@ -49,7 +48,7 @@ fun getRequestParams(nsRequest: NsRequest, route: HttpRouteClassAndMethod): Arra
          * NsRespone参数
          */
         if (NsRespone::class.java.isAssignableFrom(parameter.type)) {
-            list.add(nafos.server.CoroutineLocalHelper.getRespone())
+            list.add(CoroutineLocalHelper.getRespone())
             continue
         }
 
@@ -61,16 +60,7 @@ fun getRequestParams(nsRequest: NsRequest, route: HttpRouteClassAndMethod): Arra
         } else if (Map::class.java.isAssignableFrom(parameter.type)) {
             list.add(nsRequest.bodyParams)
         } else {
-            //接受参数为实体类，json下直接json转（否则map无法转嵌套），fromdata用map转。
-            var strContentType = nsRequest.headers().get("Content-Type")
-            strContentType = if (strContentType.isNullOrBlank()) "" else strContentType.trim()
-            if (strContentType.contains("application/json")) {
-                val jsonBuf = nsRequest.content()
-                val jsonStr = jsonBuf.toString(CharsetUtil.UTF_8)
-                list.add(JsonUtil.json2Object(jsonStr, parameter.type))
-            } else {
-                list.add(nafos.server.util.BeanToMapUtil.mapToObject(nsRequest.getFormParams(), parameter.type))
-            }
+            list.add(BeanToMapUtil.mapToObject(nsRequest.bodyParams, parameter.type))
         }
 
     }
