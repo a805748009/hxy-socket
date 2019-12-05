@@ -8,7 +8,7 @@ import nafos.server.SocketConfiguration
  * @Time        2019/11/24 1:30
  */
 class ProtocolSocketConfiguration(
-        override var port: Int = 9090,
+        port: Int = 9090,
         /**
          * 是否开启CRC32出信息加密
          */

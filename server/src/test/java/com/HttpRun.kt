@@ -1,5 +1,6 @@
 package com
 
+import nafos.server.HttpConfiguration
 import nafos.server.handle.http.NsRequest
 import nafos.server.handle.http.NsRespone
 import nafos.server.httpServer
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan
 class HttpRun
 
 fun main() {
-    httpServer().start(HttpRun::class.java)
+    httpServer(HttpConfiguration(port = 8665)).start(HttpRun::class.java)
 }
 
 @nafos.server.annotation.Controller("/test")

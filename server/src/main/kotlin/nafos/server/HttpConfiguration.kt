@@ -13,7 +13,8 @@ class HttpConfiguration(
         /**
          * HTTP启动端口号
          */
-        var port: Int = 8080
+        port: Int = 8080
+
 
 ) : Configuration(httpPort = port) {
     /***
@@ -23,5 +24,9 @@ class HttpConfiguration(
      */
     fun registerCrossHeader(name: CharSequence, value: String) {
         crossHeads[name.toString()] = value
+    }
+
+    fun setPort(value:Int){
+        this.httpPort = value
     }
 }

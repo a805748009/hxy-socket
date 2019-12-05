@@ -9,7 +9,7 @@ open class SocketConfiguration(
         /**
          * Socket启动端口号
          */
-        open var port: Int = 9090,
+        port: Int = 9090,
         /**
          * 心跳事件 - 秒为计时单位
          */
