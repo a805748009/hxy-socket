@@ -43,21 +43,21 @@ class NsRequest(
              * @Time     2019/12/3 11:43
              */
             synchronized(this) {
-                filesMap ?: run {
+                field ?: run {
                     val httpDecoder = HttpPostRequestDecoder(DefaultHttpDataFactory(true), this)
-                    httpDecoder.discardThreshold = 0
-                    filesMap = mutableMapOf()
+                    httpDecoder.setDiscardThreshold(0)
+                    field = mutableMapOf()
                     httpDecoder.bodyHttpDatas.forEach {
                         val fileUpload = (it as FileUpload)
-                        val fileName = fileUpload.filename
-                        val file = fileUpload.file
+                        val fileName = fileUpload.getFilename()
+                        val file = fileUpload.getFile()
                         if (fileName != null && file != null) {
-                            filesMap!![fileName] = file
+                            field!![fileName] = file
                         }
                     }
                 }
             }
-            return filesMap
+            return field
         }
 
 
