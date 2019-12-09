@@ -11,25 +11,27 @@ import io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import io.netty.util.CharsetUtil
 import nafos.server.CoroutineLocalHelper
 import nafos.server.BizException
+import nafos.server.HttpConfiguration
+import nafos.server.NafosServer
 
 
-var headers: MutableMap<String, String>? = null
+var headers: MutableMap<String, String>? = (NafosServer.configuration as HttpConfiguration).crossHeads
 
 inline fun sendError(ctx: ChannelHandlerContext, status: HttpResponseStatus) {
     // 设置到response对象
     val response = DefaultFullHttpResponse(HTTP_1_1, status,
-            Unpooled.copiedBuffer(nafos.server.BizException(status.code(), status.reasonPhrase()).toString(), CharsetUtil.UTF_8))
+            Unpooled.copiedBuffer(BizException(status.code(), status.reasonPhrase()).toString(), CharsetUtil.UTF_8))
     resSetDefaultHead(response)
-    nafos.server.CoroutineLocalHelper.coroutineLocalRemove()
+    CoroutineLocalHelper.coroutineLocalRemove()
     ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
 }
 
-inline fun sendError(ctx: ChannelHandlerContext, bizException: nafos.server.BizException) {
+inline fun sendError(ctx: ChannelHandlerContext, bizException: BizException) {
     // 设置到response对象
     val response = DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(bizException.status),
             Unpooled.copiedBuffer(bizException.toString(), CharsetUtil.UTF_8))
     resSetDefaultHead(response)
-    nafos.server.CoroutineLocalHelper.coroutineLocalRemove()
+    CoroutineLocalHelper.coroutineLocalRemove()
     ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
 }
 

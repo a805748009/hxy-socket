@@ -9,7 +9,7 @@ class HttpConfiguration(
         /**
          * 设置option头部信息，一般用来设置跨域请求允许通过的头部
          */
-        var crossHeads: MutableMap<String, String> = mutableMapOf(),
+        var crossHeads: MutableMap<String, String>? = null,
         /**
          * HTTP启动端口号
          */
@@ -23,7 +23,10 @@ class HttpConfiguration(
      *@Time        2019/11/23 18:32
      */
     fun registerCrossHeader(name: CharSequence, value: String) {
-        crossHeads[name.toString()] = value
+        crossHeads?: kotlin.run {
+            crossHeads = mutableMapOf()
+        }
+        crossHeads!![name.toString()] = value
     }
 
     fun setPort(value:Int){

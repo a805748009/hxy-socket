@@ -25,5 +25,10 @@ data class CoroutineInfo(
     constructor(nafosRequest: NsRequest) : this() {
         this.nafosRequest = nafosRequest
         this.nafosRespone = NsRespone(HttpVersion.HTTP_1_1, HttpResponseStatus.OK)
+        headers?.run {
+            this.entries.forEach {
+                nafosRespone!!.headers().set(it.key, it.value)
+            }
+        }
     }
 }

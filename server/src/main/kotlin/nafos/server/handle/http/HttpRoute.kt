@@ -44,7 +44,7 @@ fun route(ctx: ChannelHandlerContext, request: NsRequest, httpRouteClassAndMetho
 
         // 3.寻找路由成功,返回结果
         val returnObj = routeMethod(httpRouteClassAndMethod, *contentObj)
-        sendMethod(httpRouteClassAndMethod, returnObj, ctx, request)
+        sendMethod(returnObj, ctx, request)
     } finally {
         request.release()
     }
@@ -61,7 +61,7 @@ fun route(ctx: ChannelHandlerContext, request: NsRequest, httpRouteClassAndMetho
 private inline fun routeMethod(route: HttpRouteClassAndMethod, vararg any: Any?): Any {
     return try {
         route.method.invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.clazz), route.index!!, *any)
-    } catch (e: nafos.server.BizException) {
+    } catch (e: BizException) {
         e
     } catch (e: Exception) {
         logger.error("程序异常：{}", e.toString())
@@ -76,9 +76,9 @@ private inline fun routeMethod(route: HttpRouteClassAndMethod, vararg any: Any?)
  *@Author      xinyu.huang
  *@Time        2019/11/28 22:16
  */
-private inline fun sendMethod(route: HttpRouteClassAndMethod, any: Any?, context: ChannelHandlerContext, request: FullHttpRequest) {
+private inline fun sendMethod(any: Any?, context: ChannelHandlerContext, request: FullHttpRequest) {
     //error处理
-    if (any is nafos.server.BizException) {
+    if (any is BizException) {
         sendError(context, any)
         return
     }
@@ -88,7 +88,7 @@ private inline fun sendMethod(route: HttpRouteClassAndMethod, any: Any?, context
     }
 
     if (any is NsRespone) {
-        nafos.server.CoroutineLocalHelper.coroutineLocalRemove()
+        CoroutineLocalHelper.coroutineLocalRemove()
         if (context.channel().isActive) {
             context.writeAndFlush(any).addListener(ChannelFutureListener.CLOSE)
         }
@@ -105,7 +105,7 @@ private inline fun sendMethod(route: HttpRouteClassAndMethod, any: Any?, context
  *@Time        2019/11/28 22:26
  */
 private inline fun <T> send(ctx: ChannelHandlerContext, context: T?, request: FullHttpRequest) {
-    val response = nafos.server.CoroutineLocalHelper.getRespone()
+    val response = CoroutineLocalHelper.getRespone()
     //设置cookie头
     if (response.cookies.isNotEmpty()) {
         response.headers().set(HttpHeaderNames.COOKIE, response.cookies)
@@ -124,7 +124,7 @@ private inline fun <T> send(ctx: ChannelHandlerContext, context: T?, request: Fu
             }
         }
     }
-    nafos.server.CoroutineLocalHelper.coroutineLocalRemove()
+    CoroutineLocalHelper.coroutineLocalRemove()
 
     if (ctx.channel().isActive) {
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
