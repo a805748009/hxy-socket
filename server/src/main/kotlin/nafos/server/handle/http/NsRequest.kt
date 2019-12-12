@@ -2,6 +2,7 @@ package nafos.server.handle.http
 
 import io.netty.buffer.ByteBuf
 import io.netty.handler.codec.http.HttpHeaders
+import io.netty.handler.codec.http.HttpMethod
 import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.QueryStringDecoder
 import io.netty.handler.codec.http.cookie.Cookie
@@ -74,13 +75,16 @@ class NsRequest(
             map[entry.key] = entry.value[0]
         }
         requestParams = map
+
         //注册bodyParams
-        var strContentType = headers().get("Content-Type")
-        strContentType = strContentType?.trim() ?: ""
-        bodyParams = if (strContentType.contains("application/json")) {
-            getJsonParams()
-        } else {
-            getFormParams()
+        if(request.method() == HttpMethod.POST){
+            var strContentType = headers().get("Content-Type")
+            strContentType = strContentType?.trim() ?: ""
+            bodyParams = if (strContentType.contains("application/json")) {
+                getJsonParams()
+            } else {
+                getFormParams()
+            }
         }
     }
 

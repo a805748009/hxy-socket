@@ -36,10 +36,14 @@ fun route(ctx: ChannelHandlerContext, request: NsRequest, httpRouteClassAndMetho
             return
         }
 
-        val insocket = ctx.channel().remoteAddress() as InetSocketAddress
+        val insocket = ctx.channel().remoteAddress() as? InetSocketAddress
         if (insocket != null) {
             val clientIP = insocket.address.hostAddress
             request.ip = clientIP
+        }
+
+        if(!ctx.channel().isActive){
+            return
         }
 
         // 3.寻找路由成功,返回结果

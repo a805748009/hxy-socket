@@ -1,5 +1,6 @@
 package com
 
+import kotlinx.coroutines.delay
 import nafos.server.HttpConfiguration
 import nafos.server.annotation.Controller
 import nafos.server.annotation.http.Get
@@ -30,6 +31,15 @@ class TestController {
     fun hello(map: Map<String, String>, nsRequest: NsRequest, nsRespone: NsRespone): Any {
         println(map)
         println(nsRequest.uri)
+        nsRespone.setCookie("jessionId","d1654aw6d489w74d")
+        return map
+    }
+
+    @Get("/hello1")
+    suspend fun hello1(map: Map<String, String>, nsRequest: NsRequest, nsRespone: NsRespone): Any {
+        println(map)
+        println(nsRequest.uri)
+        delay(50)
         nsRespone.setCookie("jessionId","d1654aw6d489w74d")
         return map
     }
