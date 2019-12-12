@@ -9,7 +9,7 @@ import io.netty.handler.codec.http.HttpHeaderNames
 import io.netty.handler.codec.http.HttpResponseStatus
 import io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import io.netty.util.CharsetUtil
-import nafos.server.CoroutineLocalHelper
+import nafos.server.ThreadLocalHelper
 import nafos.server.BizException
 import nafos.server.HttpConfiguration
 import nafos.server.NafosServer
@@ -22,7 +22,7 @@ inline fun sendError(ctx: ChannelHandlerContext, status: HttpResponseStatus) {
     val response = DefaultFullHttpResponse(HTTP_1_1, status,
             Unpooled.copiedBuffer(BizException(status.code(), status.reasonPhrase()).toString(), CharsetUtil.UTF_8))
     resSetDefaultHead(response)
-    CoroutineLocalHelper.coroutineLocalRemove()
+    ThreadLocalHelper.threadLocalRemove()
     ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
 }
 
@@ -31,7 +31,7 @@ inline fun sendError(ctx: ChannelHandlerContext, bizException: BizException) {
     val response = DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(bizException.status),
             Unpooled.copiedBuffer(bizException.toString(), CharsetUtil.UTF_8))
     resSetDefaultHead(response)
-    CoroutineLocalHelper.coroutineLocalRemove()
+    ThreadLocalHelper.threadLocalRemove()
     ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
 }
 

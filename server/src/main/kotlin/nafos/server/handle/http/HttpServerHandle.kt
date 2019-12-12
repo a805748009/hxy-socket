@@ -7,8 +7,8 @@ import io.netty.handler.codec.http.FullHttpRequest
 import io.netty.handler.codec.http.HttpMethod.*
 import io.netty.handler.codec.http.HttpResponseStatus
 import io.netty.handler.codec.http.HttpResponseStatus.*
-import nafos.server.LatchCountManager
-import nafos.server.RouteFactory
+import nafos.server.thread.ExecutorPool
+import nafos.server.ThreadLocalHelper
 import org.slf4j.LoggerFactory
 
 /**
@@ -63,10 +63,13 @@ class HttpServerHandle : SimpleChannelInboundHandler<Any>() {
         request.retain()
 
         // 2.丢进协程处理
-        LatchCountManager.route(CoroutineInfo(request)) {
+        ExecutorPool.getInstance().execute {
+            ThreadLocalHelper.threadLocal.set(ThreadInfo(request))
             route(ctx, request, httpRouteClassAndMethod)
         }
-
+//        LatchCountManager.route(CoroutineInfo(request)) {
+//
+//        }
     }
 
 

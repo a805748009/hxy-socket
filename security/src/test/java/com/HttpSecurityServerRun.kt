@@ -5,14 +5,11 @@ import nafos.security.SecurityUtil
 import nafos.security.config.SecurityConfig
 import nafos.security.filter.currentNafosCookie
 import nafos.security.filter.setNafosCookieId
-import nafos.security.redis.RedissonJacksonCodec
-import nafos.security.redis.RedissonManager
-import nafos.server.CoroutineLocalHelper
+import nafos.server.ThreadLocalHelper
 import nafos.server.annotation.Controller
 import nafos.server.annotation.http.Get
 import nafos.server.handle.http.OK
 import nafos.server.httpServer
-import org.redisson.config.Config
 import org.springframework.context.annotation.ComponentScan
 
 @ComponentScan(value = ["com", "nafos"])
@@ -71,7 +68,7 @@ class TestController {
         val sessionId = "唯一ID"
         val user = User("小明","密码")
         SecurityUtil.setLoginUser(sessionId,user)
-        CoroutineLocalHelper.getRespone().setNafosCookieId(sessionId)
+        ThreadLocalHelper.getRespone().setNafosCookieId(sessionId)
         return OK()
     }
 }

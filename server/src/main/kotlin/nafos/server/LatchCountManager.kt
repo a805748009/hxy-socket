@@ -1,7 +1,7 @@
 package nafos.server
 
 import kotlinx.coroutines.*
-import nafos.server.handle.http.CoroutineInfo
+import nafos.server.handle.http.ThreadInfo
 import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.LongAdder
 
@@ -50,8 +50,8 @@ object LatchCountManager {
         }
     }
 
-    internal fun route(coroutineInfo: CoroutineInfo, method: suspend () -> Unit) {
-        GlobalScope.launch (Dispatchers.Default + nafos.server.CoroutineLocalHelper.coroutineLocal.asContextElement(coroutineInfo) ){
+    internal fun route(threadInfo: ThreadInfo, method: suspend () -> Unit) {
+        GlobalScope.launch (Dispatchers.Default + ThreadLocalHelper.threadLocal.asContextElement(threadInfo) ){
             latchCount.increment()
             try {
                 method()

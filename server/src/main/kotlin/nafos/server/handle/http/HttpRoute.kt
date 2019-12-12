@@ -7,7 +7,7 @@ import io.netty.handler.codec.http.HttpHeaderNames
 import io.netty.handler.codec.http.HttpMethod
 import io.netty.handler.codec.http.HttpResponseStatus
 import nafos.server.SpringApplicationContextHolder
-import nafos.server.CoroutineLocalHelper
+import nafos.server.ThreadLocalHelper
 import nafos.server.interceptors.interceptorDo
 import nafos.server.BizException
 import nafos.server.HttpRouteClassAndMethod
@@ -92,7 +92,7 @@ private inline fun sendMethod(any: Any?, context: ChannelHandlerContext, request
     }
 
     if (any is NsRespone) {
-        CoroutineLocalHelper.coroutineLocalRemove()
+        ThreadLocalHelper.threadLocalRemove()
         if (context.channel().isActive) {
             context.writeAndFlush(any).addListener(ChannelFutureListener.CLOSE)
         }
@@ -109,7 +109,7 @@ private inline fun sendMethod(any: Any?, context: ChannelHandlerContext, request
  *@Time        2019/11/28 22:26
  */
 private inline fun <T> send(ctx: ChannelHandlerContext, context: T?, request: FullHttpRequest) {
-    val response = CoroutineLocalHelper.getRespone()
+    val response = ThreadLocalHelper.getRespone()
     //设置cookie头
     if (response.cookies.isNotEmpty()) {
         response.headers().set(HttpHeaderNames.COOKIE, response.cookies)
@@ -128,7 +128,7 @@ private inline fun <T> send(ctx: ChannelHandlerContext, context: T?, request: Fu
             }
         }
     }
-    CoroutineLocalHelper.coroutineLocalRemove()
+    ThreadLocalHelper.threadLocalRemove()
 
     if (ctx.channel().isActive) {
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)

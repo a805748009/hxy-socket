@@ -1,20 +1,15 @@
-package nafos.server.handle.socket
+package nafos.protocol
 
-import io.netty.buffer.ByteBuf
 import io.netty.channel.Channel
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.util.AttributeKey
-import io.netty.util.CharsetUtil
 import nafos.server.LatchCountManager
 import nafos.server.RouteClassAndMethod
 import nafos.server.SpringApplicationContextHolder
-import nafos.server.ThreadLocalHelper
-import nafos.server.handle.http.ThreadInfo
 import nafos.server.interceptors.interceptorDo
-import nafos.server.thread.ExecutorPool
-import nafos.server.util.JsonUtil
+import nafos.server.util.ArrayUtil
 import org.slf4j.LoggerFactory
 
 /**
@@ -23,15 +18,15 @@ import org.slf4j.LoggerFactory
  * @Time        2019/11/28 23:32
  */
 @ChannelHandler.Sharable
-class ProtocolResolveHandle : SimpleChannelInboundHandler<Any>() {
+class ProtoProtocolResolveHandle : SimpleChannelInboundHandler<ByteArray>() {
 
-    private val logger = LoggerFactory.getLogger(ProtocolResolveHandle::class.java)
+    private val logger = LoggerFactory.getLogger(ProtoProtocolResolveHandle::class.java)
 
 
     companion object {
-        private var protocolResolveHandle = ProtocolResolveHandle()
+        private var protocolResolveHandle = ProtoProtocolResolveHandle()
 
-        fun getInstance(): ProtocolResolveHandle {
+        fun getInstance(): ProtoProtocolResolveHandle {
             return protocolResolveHandle
         }
     }
@@ -41,16 +36,30 @@ class ProtocolResolveHandle : SimpleChannelInboundHandler<Any>() {
      * 简而言之就是从通道中读取数据，也就是服务端接收客户端发来的数据。但是这个数据在不进行解码时它是ByteBuf类型的
      */
     @Throws(Exception::class)
-    override fun channelRead0(context: ChannelHandlerContext, any: Any) {
-        val contentStr = if (any is ByteBuf) {
-            any.toString(CharsetUtil.UTF_8)
-        } else {
-            any as String
+    override fun channelRead0(context: ChannelHandlerContext, contentBytes: ByteArray) {
+        if (contentBytes.isEmpty()) {
+            return
         }
-        val clientCode = contentStr.substring(0, contentStr.indexOf("|")).toInt()
-        val surplusStr = contentStr.substring(contentStr.indexOf("|") + 1)
-        val serverCode = surplusStr.substring(0, contentStr.indexOf("|")).toInt()
-        val contentJosnStr = surplusStr.substring(contentStr.indexOf("|") + 1)
+        var contentBytes = contentBytes
+
+        contentBytes = ZlibMessageHandle.getInstance().unZlibByteMessage(contentBytes)//解压
+        contentBytes = Crc32MessageHandle.getInstance().checkCrc32IntBefore(contentBytes)//CRC32校验
+
+        if (contentBytes == null) {
+            return  //如果null，证明校验失败，直接返回不处理
+        }
+
+        val idByte = ByteArray(4)//前端传过来的ID，原样返回
+        System.arraycopy(contentBytes, 0, idByte, 0, 4)
+
+        val uriByte = ByteArray(4)//解析路由的uri
+        System.arraycopy(contentBytes, 4, uriByte, 0, 4)
+        val serverCode = ArrayUtil.byteArrayToInt(uriByte)
+
+        val messageBody = ByteArray(contentBytes.size - 8)
+        if (contentBytes.size > 8) {
+            System.arraycopy(contentBytes, 8, messageBody, 0, contentBytes.size - 8)
+        }
 
         logger.debug("收到socket消息，id: $serverCode")
 
@@ -61,35 +70,29 @@ class ProtocolResolveHandle : SimpleChannelInboundHandler<Any>() {
         }
 
         // 丢进协程处理
-//        LatchCountManager.start {
-//            route(context, serverCode, socketRouteClassAndMethod, contentJosnStr, clientCode)
-//        }
-        ExecutorPool.getInstance().execute {
-            route(context, serverCode, socketRouteClassAndMethod, contentJosnStr, clientCode)
+        LatchCountManager.start {
+            route(context, serverCode, socketRouteClassAndMethod, messageBody, idByte)
         }
 
     }
 
 
-    private inline fun route(ctx: ChannelHandlerContext, serverCode: Int, route: RouteClassAndMethod, body: String, clientCode: Int) {
+    private inline fun route(ctx: ChannelHandlerContext, serverCode: Int, route: RouteClassAndMethod, body: ByteArray, clientCode: ByteArray) {
         // 拦截器
         if (!interceptorDo(ctx, serverCode, route)) {
             return
         }
 
-        var obj: Any? = if (Map::class.java.isAssignableFrom(route.paramType!![1])) {
-            JsonUtil.jsonToMap(body)
-        } else {
-            JsonUtil.json2Object(body, route.paramType!![1]!!)
-        }
+        val obj = ProtoUtil.deserializeFromByte(body, route.paramType!![0]);
 
         val zeroParameterType = route.paramType!![0]
-        val zeroParamter = if(Channel::class.java.isAssignableFrom(zeroParameterType)){
+        val zeroParamter = if (Channel::class.java.isAssignableFrom(zeroParameterType)) {
             ctx.channel()
-        }else{
+        } else {
             ctx.channel().attr<Any>(AttributeKey.valueOf<Any>("client")).get()
         }
-        route.method.invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.clazz), route.index!!, zeroParamter, obj, clientCode)
+
+        route.method.invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.clazz), route.index!!, zeroParamter, obj!!, clientCode)
     }
 
 
