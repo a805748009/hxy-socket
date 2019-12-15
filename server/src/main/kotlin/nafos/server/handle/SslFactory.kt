@@ -15,6 +15,7 @@ object SslFactory {
     private val logger = LoggerFactory.getLogger(SslFactory::class.java)
 
 
+    @Volatile
     private var sslContext: SslContext? = null
 
     private val cipherList = listOf("ECDHE-RSA-AES128-SHA", "ECDHE-RSA-AES256-SHA", "AES128-SHA", "AES256-SHA", "DES-CBC3-SHA")

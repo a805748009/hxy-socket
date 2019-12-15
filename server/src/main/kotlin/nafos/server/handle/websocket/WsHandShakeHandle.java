@@ -20,16 +20,9 @@ import org.slf4j.LoggerFactory;
 public class WsHandShakeHandle extends SimpleChannelInboundHandler<Object> {
     private static final Logger logger = LoggerFactory.getLogger(WsHandShakeHandle.class);
 
-    private static WsHandShakeHandle wsHandShakeHandle = null;
+    private static WsHandShakeHandle wsHandShakeHandle = new WsHandShakeHandle();
 
     public static WsHandShakeHandle getInstance(){
-        if(wsHandShakeHandle == null){
-            synchronized (WsHandShakeHandle.class){
-                if(wsHandShakeHandle == null){
-                    wsHandShakeHandle = new WsHandShakeHandle();
-                }
-            }
-        }
         return wsHandShakeHandle;
     }
 

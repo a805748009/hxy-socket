@@ -17,16 +17,9 @@ import nafos.server.handle.websocket.WsHandShakeHandle;
 @ChannelHandler.Sharable
 public class BytebufToBinaryFrameHandle extends ChannelOutboundHandlerAdapter {
 
-    private static BytebufToBinaryFrameHandle bytebufToBinaryFrameHandle = null;
+    private static BytebufToBinaryFrameHandle bytebufToBinaryFrameHandle = new BytebufToBinaryFrameHandle();
 
     public static BytebufToBinaryFrameHandle getInstance(){
-        if(bytebufToBinaryFrameHandle == null){
-            synchronized (WsHandShakeHandle.class){
-                if(bytebufToBinaryFrameHandle == null){
-                    bytebufToBinaryFrameHandle = new BytebufToBinaryFrameHandle();
-                }
-            }
-        }
         return bytebufToBinaryFrameHandle;
     }
 

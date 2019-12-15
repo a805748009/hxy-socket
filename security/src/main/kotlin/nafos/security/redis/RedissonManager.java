@@ -18,7 +18,7 @@ import java.io.IOException;
 public class RedissonManager {
     private static final Logger logger = LoggerFactory.getLogger(RedissonManager.class);
 
-    private static RedissonClient redisson = null;
+    private volatile static RedissonClient redisson = null;
 
 
     public static void init(){

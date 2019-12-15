@@ -19,16 +19,9 @@ public class WsPacketHandle extends SimpleChannelInboundHandler<WebSocketFrame> 
 
     private static final Logger logger = LoggerFactory.getLogger(WsPacketHandle.class);
 
-    private static WsPacketHandle wsPacketHandle = null;
+    private static WsPacketHandle wsPacketHandle = new WsPacketHandle();
 
     public static WsPacketHandle getInstance() {
-        if (wsPacketHandle == null) {
-            synchronized (WsHandShakeHandle.class) {
-                if (wsPacketHandle == null) {
-                    wsPacketHandle = new WsPacketHandle();
-                }
-            }
-        }
         return wsPacketHandle;
     }
 

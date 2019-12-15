@@ -20,9 +20,9 @@ import java.util.concurrent.TimeUnit;
 public class CacheMapDao {
     private static Logger logger = LoggerFactory.getLogger(CacheMapDao.class);
 
-    private static Cache<String, Object> securityCache;
+    private volatile static Cache<String, Object> securityCache;
 
-    private static Cache<String, Long> securityTimeCache;
+    private volatile static Cache<String, Long> securityTimeCache;
 
     private static int sessionTimeout = SecurityConfig.getSessionTimeOut();
 
