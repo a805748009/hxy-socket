@@ -7,16 +7,19 @@ import org.springframework.context.ApplicationContextAware
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.core.annotation.AnnotationUtils
+import org.springframework.stereotype.Component
 
 /***
  *@Description springContext保存
  *@Author      xinyu.huang
  *@Time        2019/11/23 19:35
  */
+@Component
 object SpringApplicationContextHolder : ApplicationContextAware {
 
     private val logger = LoggerFactory.getLogger(SpringApplicationContextHolder::class.java)
 
+    @Volatile
     private var context: ApplicationContext? = null
 
     @Throws(BeansException::class)
@@ -50,7 +53,7 @@ object SpringApplicationContextHolder : ApplicationContextAware {
      *@Time        2019/11/23 19:52
      */
     @JvmStatic
-    fun getOrInitContext(clazz: java.lang.Class<*>): ApplicationContext {
+    fun getOrInitContext(clazz: Class<*>): ApplicationContext {
         synchronized(this.javaClass) {
             context?.also { logger.info("ApplicationContext is running") }
                     ?: run {
