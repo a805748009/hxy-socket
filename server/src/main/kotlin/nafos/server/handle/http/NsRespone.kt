@@ -62,6 +62,14 @@ class NsRespone(version: HttpVersion, status: HttpResponseStatus) : DefaultFullH
         return this
     }
 
+    fun returnFile(byteArray: ByteArray, fileName: String): NsRespone {
+        this.setHeader("Content-Disposition", "attachment;fileName=$fileName")
+        this.setHeader(HttpHeaderNames.CONTENT_TYPE.toString(), "multipart/form-data")
+        this.status = HttpResponseStatus.OK
+        this.content().writeBytes(byteArray)
+        return this
+    }
+
     /**
      * @Desc     重定向
      * @Author   hxy
