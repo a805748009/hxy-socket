@@ -7,10 +7,7 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.util.AttributeKey
 import io.netty.util.CharsetUtil
-import nafos.server.LatchCountManager
-import nafos.server.RouteClassAndMethod
-import nafos.server.SpringApplicationContextHolder
-import nafos.server.ThreadLocalHelper
+import nafos.server.*
 import nafos.server.handle.http.ThreadInfo
 import nafos.server.interceptors.interceptorDo
 import nafos.server.thread.ExecutorPool
@@ -84,12 +81,18 @@ class ProtocolResolveHandle : SimpleChannelInboundHandler<Any>() {
         }
 
         val zeroParameterType = route.paramType!![0]
-        val zeroParamter = if(Channel::class.java.isAssignableFrom(zeroParameterType)){
+        val zeroParamter = if (Channel::class.java.isAssignableFrom(zeroParameterType)) {
             ctx.channel()
-        }else{
+        } else {
             ctx.channel().attr<Any>(AttributeKey.valueOf<Any>("client")).get()
         }
-        route.method.invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.clazz), route.index!!, zeroParamter, obj, clientCode)
+
+        try {
+            route.method.invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.clazz), route.index!!, zeroParamter, obj, clientCode)
+        } catch (e: BizException){
+            ctx.channel().writeAndFlush("${e.status}|${JsonUtil.toJson(e)}")
+        }
+
     }
 
 

@@ -18,7 +18,7 @@ public class AESUtil {
 
     private static final String ALGORITHMSTR = "AES/ECB/PKCS5Padding";
 
-    private static final String KEY = "NAFOS_KEY_DEFULT";
+    private static String KEY = "NAFOS_KEY_DEFULT";
 
     public static String encrypt(String src, String key) {
         try {

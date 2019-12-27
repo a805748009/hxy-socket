@@ -5,11 +5,13 @@ import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.util.AttributeKey
+import nafos.server.BizException
 import nafos.server.LatchCountManager
 import nafos.server.RouteClassAndMethod
 import nafos.server.SpringApplicationContextHolder
 import nafos.server.interceptors.interceptorDo
 import nafos.server.util.ArrayUtil
+import nafos.server.util.JsonUtil
 import org.slf4j.LoggerFactory
 
 /**
@@ -92,7 +94,11 @@ class ProtoProtocolResolveHandle : SimpleChannelInboundHandler<ByteArray>() {
             ctx.channel().attr<Any>(AttributeKey.valueOf<Any>("client")).get()
         }
 
-        route.method.invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.clazz), route.index!!, zeroParamter, obj!!, clientCode)
+        try {
+            route.method.invoke(SpringApplicationContextHolder.getSpringBeanForClass(route.clazz), route.index!!, zeroParamter, obj!!, clientCode)
+        } catch (e: BizException) {
+            ctx.channel().send(ArrayUtil.intToByteArray(e.status),e)
+        }
     }
 
 

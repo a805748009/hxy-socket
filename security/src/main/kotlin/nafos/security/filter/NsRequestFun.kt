@@ -24,5 +24,5 @@ inline fun currentNafosCookie(): String {
 }
 
 fun NsRespone.setNafosCookieId(cookieId: String) {
-    cookies.add(DefaultCookie("nafosCookie", URLEncoder.encode(AESUtil.encrypt(cookieId))))
+    setCookie("nafosCookie", URLEncoder.encode(AESUtil.encrypt(cookieId)))
 }

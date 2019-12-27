@@ -110,10 +110,6 @@ private inline fun sendMethod(any: Any?, context: ChannelHandlerContext, request
  */
 private inline fun <T> send(ctx: ChannelHandlerContext, context: T?, request: FullHttpRequest) {
     val response = ThreadLocalHelper.getRespone()
-    //设置cookie头
-    if (response.cookies.isNotEmpty()) {
-        response.headers().set(HttpHeaderNames.COOKIE, response.cookies)
-    }
     //  head方法只需要状态，不需要body
     if (request.method() != HttpMethod.HEAD) {
         when (context) {

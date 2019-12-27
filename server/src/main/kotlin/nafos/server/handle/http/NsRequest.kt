@@ -26,11 +26,37 @@ class NsRequest(
         trailingHeaders: HttpHeaders?
 ) : BuildHttpObjectAggregator.AggregatedFullHttpRequest(request, content, trailingHeaders) {
 
-    var cookies = setOf<Cookie>()
+    var cookies:Set<Cookie> = setOf()
+    get() {
+        val cookieStr = headers().get("Cookie")
+        return cookieStr?.run {
+             ServerCookieDecoder.LAX.decode(cookieStr)
+        }?: emptySet()
+    }
 
-    var requestParams: Map<String, String> = mutableMapOf()
+    var requestParams: Map<String, String> = mapOf()
+        get() {
+            val map = mutableMapOf<String, String>()
+            val decoder = QueryStringDecoder(uri())
+            for (entry in decoder.parameters().entries) {
+                map[entry.key] = entry.value[0]
+            }
+            return map
+        }
 
-    var bodyParams: Map<String, Any> = mutableMapOf()
+    var bodyParams: Map<String, Any> = mapOf()
+        get() {
+            if (this.method() != HttpMethod.POST) {
+                return emptyMap()
+            }
+            var strContentType = headers().get("Content-Type")
+            strContentType = strContentType?.trim() ?: ""
+            return if (strContentType.contains("application/json")) {
+                getJsonParams()
+            } else {
+                getFormParams()
+            }
+        }
 
     var ip: String? = null
 
@@ -60,33 +86,6 @@ class NsRequest(
             }
             return field
         }
-
-
-    init {
-        //cookies
-        val cookieStr = headers().get("Cookie")
-        cookieStr?.run {
-            cookies = ServerCookieDecoder.LAX.decode(cookieStr)
-        }
-        //注册requestParams
-        val map = mutableMapOf<String, String>()
-        val decoder = QueryStringDecoder(uri())
-        for (entry in decoder.parameters().entries) {
-            map[entry.key] = entry.value[0]
-        }
-        requestParams = map
-
-        //注册bodyParams
-        if(request.method() == HttpMethod.POST){
-            var strContentType = headers().get("Content-Type")
-            strContentType = strContentType?.trim() ?: ""
-            bodyParams = if (strContentType.contains("application/json")) {
-                getJsonParams()
-            } else {
-                getFormParams()
-            }
-        }
-    }
 
 
     /***

@@ -36,14 +36,6 @@ data class Client(
         channel.disconnect()
     }
 
-    fun getToken(): String {
-        return channel.attr(AttributeKey.valueOf<Any>(TOKEN)).get() as String
-    }
-
-    fun setToken(token: String) {
-        channel.attr(AttributeKey.valueOf<Any>(TOKEN)).set(token)
-    }
-
     fun getUserId(): Any? {
         return this.user?.getUserId()
     }

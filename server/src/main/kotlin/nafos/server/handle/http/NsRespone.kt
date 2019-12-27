@@ -18,15 +18,15 @@ import java.util.ArrayList
  * @Time        2019/11/24 21:02
  */
 class NsRespone(version: HttpVersion, status: HttpResponseStatus) : DefaultFullHttpResponse(version, status) {
-    var cookies: MutableList<Cookie> = ArrayList()
 
     fun setCookie(key: String, value: String): NsRespone {
-        cookies.add(DefaultCookie(key, value))
+        headers().add(HttpHeaderNames.SET_COOKIE, DefaultCookie(key, value))
         return this
     }
 
-    fun setHeader(key: String, value: String) {
-        headers().set(key, value)
+    fun setHeader(key: String, value: String): NsRespone  {
+        headers().add(key,value)
+        return this
     }
 
     /**

@@ -39,7 +39,7 @@ class TestSocketController {
         println(map)
         val token = "唯一字符串"
         //将此链接加入到北京一区的区域划分，并绑定token和user，方便后续操作。
-        initChannel(channel, token, "北京一区", User("小明", "123"))
+        initChannel(channel,  "北京一区", User("小明", "123"))
         //返回给此客户端一个空的JSON到clientCode路由
         channel.writeAndFlush("$clientCode|{}")
     }

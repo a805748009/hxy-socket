@@ -31,6 +31,8 @@ public class RouteFactory {
 
     private final static Map<String, HttpRouteClassAndMethod> httpMethodHandleMap = new HashMap<>();
 
+    private final static Map<String, HttpRouteClassAndMethod> httpRegMethodHandleMap = new HashMap<>();
+
     private final static Map<Integer, RouteClassAndMethod> socketMethodHandleMap = new HashMap<>();
 
     private Protocol defaultProtocol = Protocol.JSON;
@@ -61,9 +63,9 @@ public class RouteFactory {
 
 
     /**
-     *@Description 判断类是不是路由Controller  并写入parentPath
-     *@Author      xinyu.huang
-     *@Time        2019/11/28 23:16
+     * @Description 判断类是不是路由Controller  并写入parentPath
+     * @Author xinyu.huang
+     * @Time 2019/11/28 23:16
      */
     private boolean isHandler(Class<?> beanType) {
         Controller controller = AnnotatedElementUtils.findMergedAnnotation(beanType, Controller.class);
@@ -83,9 +85,9 @@ public class RouteFactory {
     }
 
     /**
-     *@Description 根据类遍历方法，拼接后注册实际操作方法
-     *@Author      xinyu.huang
-     *@Time        2019/11/28 23:16
+     * @Description 根据类遍历方法，拼接后注册实际操作方法
+     * @Author xinyu.huang
+     * @Time 2019/11/28 23:16
      */
     private void detectHandlerMethods(final Class<?> handlerType) {
 
@@ -105,11 +107,11 @@ public class RouteFactory {
     }
 
 
-   /***
-    *@Description 注册到方法MAP
-    *@Author      xinyu.huang
-    *@Time        2019/11/28 23:16
-    */
+    /***
+     *@Description 注册到方法MAP
+     *@Author xinyu.huang
+     *@Time 2019/11/28 23:16
+     */
     private void registerHandlerMethod(Method method, Class<?> handlerType) {
 
         //获取方法method上的@Nuri实例。
@@ -118,7 +120,7 @@ public class RouteFactory {
         //socket路由
         if (handle.code() > 0) {
             socketRoutRecord(method, handlerType, handle);
-        }else {
+        } else {
             //http路由
             httpRoutRecord(method, handlerType, handle);
         }
@@ -126,9 +128,9 @@ public class RouteFactory {
 
 
     /**
-     *@Description SOCKET路由记录入map
-     *@Author      xinyu.huang
-     *@Time        2019/11/28 23:12
+     * @Description SOCKET路由记录入map
+     * @Author xinyu.huang
+     * @Time 2019/11/28 23:12
      */
     private void socketRoutRecord(Method method, Class<?> handlerType, Handle handle) {
         MethodAccess ma = MethodAccess.get(handlerType);
@@ -142,9 +144,9 @@ public class RouteFactory {
 
 
     /**
-     *@Description HTTP路由记录入map
-     *@Author      xinyu.huang
-     *@Time        2019/11/28 23:14
+     * @Description HTTP路由记录入map
+     * @Author xinyu.huang
+     * @Time 2019/11/28 23:14
      */
     private void httpRoutRecord(Method method, Class<?> handlerType, Handle handle) {
         MethodAccess ma = MethodAccess.get(handlerType);
@@ -160,13 +162,16 @@ public class RouteFactory {
 
         logger.debug("register router:{}", uri);
 
-
-        httpMethodHandleMap.put(uri, new HttpRouteClassAndMethod(handlerType, ma,
+        HttpRouteClassAndMethod hm = new HttpRouteClassAndMethod(handlerType, ma,
                 ma.getIndex(method.getName()), null,
                 handle.type() == Protocol.DEFAULT ? defaultProtocol : handle.type(),
-                method.getParameters(), hmInterptors(method), hmInterptorParams(method)));
+                method.getParameters(), hmInterptors(method), hmInterptorParams(method));
 
-
+        if (uri.contains("{}")) {
+            httpRegMethodHandleMap.put(uri, hm);
+        } else {
+            httpMethodHandleMap.put(uri, hm);
+        }
     }
 
     private Class[] hmInterptors(Method method) {
