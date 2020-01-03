@@ -1,10 +1,12 @@
 package nafos.server.handle.http
 
 import io.netty.handler.codec.http.HttpMethod
+import io.netty.util.CharsetUtil
 import nafos.server.ThreadLocalHelper
 import nafos.server.BizException
 import nafos.server.HttpRouteClassAndMethod
 import nafos.server.util.BeanToMapUtil
+import nafos.server.util.JsonUtil
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("RequestHelper.kt")
@@ -58,7 +60,7 @@ fun getRequestParams(nsRequest: NsRequest, route: HttpRouteClassAndMethod): Arra
         } else if (Map::class.java.isAssignableFrom(parameter.type)) {
             list.add(nsRequest.bodyParams)
         } else {
-            list.add(BeanToMapUtil.mapToObject(nsRequest.bodyParams, parameter.type))
+            list.add(JsonUtil.json2Object(nsRequest.content().toString(CharsetUtil.UTF_8), parameter.type))
         }
 
     }
