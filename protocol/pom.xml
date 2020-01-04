@@ -22,13 +22,11 @@
             <groupId>com.dyuproject.protostuff</groupId>
             <artifactId>protostuff-core</artifactId>
             <version>1.0.8</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.dyuproject.protostuff</groupId>
             <artifactId>protostuff-runtime</artifactId>
             <version>1.0.8</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.objenesis</groupId>
