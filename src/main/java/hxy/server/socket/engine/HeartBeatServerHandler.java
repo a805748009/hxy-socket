@@ -1,6 +1,5 @@
 package hxy.server.socket.engine;
 
-import hxy.server.socket.util.SslFactory;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;

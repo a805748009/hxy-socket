@@ -1,6 +1,5 @@
 package hxy.server.socket.engine;
 
-import hxy.server.socket.util.SpringApplicationContextHolder;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.HttpRequest;
@@ -12,11 +11,7 @@ import java.util.concurrent.CompletableFuture;
 public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private WebSocketServerHandshaker handshaker;
-    private static WebSocketHandler webSocketHandler;
-
-    static {
-        webSocketHandler = SpringApplicationContextHolder.getBean(WebSocketHandler.class);
-    }
+    private static SocketMsgHandler socketMsgHandler = HandlerInitizer.getSocketMsgHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
@@ -43,7 +38,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
                 WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
             } else {
                 this.handshaker.handshake(ctx.channel(), req);
-                CompletableFuture.runAsync(() -> webSocketHandler.onConnect(ctx, req), ctx.executor());
+                CompletableFuture.runAsync(() -> socketMsgHandler.onConnect(ctx, req), ctx.executor());
             }
         } else {
             ReferenceCountUtil.retain(req);
@@ -54,15 +49,15 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
     private void handleWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) {
         if (frame instanceof CloseWebSocketFrame) {
             this.handshaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
-            CompletableFuture.runAsync(() -> webSocketHandler.disConnect(ctx), ctx.executor());
+            CompletableFuture.runAsync(() -> socketMsgHandler.disConnect(ctx), ctx.executor());
             return;
         }
         if (frame instanceof PingWebSocketFrame) {
             ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
             return;
         }
-
-        CompletableFuture.runAsync(() -> webSocketHandler.onMessage(ctx, frame), ctx.executor());
+        String msg = ((TextWebSocketFrame) frame).text();
+        CompletableFuture.runAsync(() -> socketMsgHandler.onMessage(ctx, msg), ctx.executor());
     }
 
     private boolean isWebSocketRequest(HttpRequest req) {

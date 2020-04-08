@@ -29,13 +29,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class EngineStarter {
 
-    public EngineStarter(ApplicationContext ac) {
-        SpringApplicationContextHolder.setAc(ac);
-    }
-
     private Logger logger = LoggerFactory.getLogger(WebsocketInitHandler.class);
 
-    private static SocketConfiguration config = SpringApplicationContextHolder.getBean(SocketConfiguration.class);
+    private static SocketConfiguration config = null;
+
+    public EngineStarter(ApplicationContext ac) {
+        SpringApplicationContextHolder.setAc(ac);
+        config = SpringApplicationContextHolder.getBean(SocketConfiguration.class);
+
+        HandlerInitizer.chooseMsgHandler();
+    }
 
     EventLoopGroup bossGroup = null;
     EventLoopGroup workGroup = null;
@@ -55,6 +58,11 @@ public class EngineStarter {
             bootstrap.channel(NioServerSocketChannel.class)
                     .group(bossGroup, workGroup);
         }
+        //TCP协议中，TCP总是希望每次发送的数据足够大，避免网络中充满了小数据块。
+        // Nagle算法就是为了尽可能的发送大数据快。
+        // TCP_NODELAY就是控制是否启用Nagle算法。
+        // 如果要求高实时性，有数据发送时就马上发送，就将该选项设置为true关闭Nagle算法；
+        // 如果要减少发送次数减少网络交互，就设置为false等累积一定大小后再发送。默认为false。
         bootstrap.option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_BACKLOG, 1024);
@@ -73,11 +81,11 @@ public class EngineStarter {
 
                     // 设置N秒没有读到数据，则触发一个READER_IDLE事件。
                     pipeline.addLast(new IdleStateHandler(config.getHeartTimeout(), 0, 0, TimeUnit.SECONDS));
-                    pipeline.addLast(new HeartBeatServerHandler());
-
                     //选择服务启动
-                    SocketInitHandler sc = SpringApplicationContextHolder.getBean(SocketInitHandler.class);
+                    SocketInitHandler sc = SpringApplicationContextHolder.getBean("socketInitHandler");
                     sc.buildChannelPipeline(pipeline);
+
+                    pipeline.addLast(new HeartBeatServerHandler());
                 }
             });
             // 开始真正绑定端口进行监听
