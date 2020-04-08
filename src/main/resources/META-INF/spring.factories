@@ -1,0 +1,2 @@
+org.springframework.context.annotation.ComponentScan=\
+hxy.server.socket

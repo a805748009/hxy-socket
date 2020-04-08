@@ -1,0 +1,28 @@
+package hxy.server.socket.engine.choose;
+
+import hxy.server.socket.engine.EngineStarter;
+import hxy.server.socket.engine.SocketInitHandler;
+import hxy.server.socket.engine.WebsocketInitHandler;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * @ClassName WsChannelChoose
+ * @Description 选择websocket服务启动
+ * @Author hxy
+ * @Date 2020/4/8 19:57
+ */
+@Configuration
+public class WsChannelChoose{
+
+    @Bean
+    public SocketInitHandler socketInitHandler(){
+        return new WebsocketInitHandler();
+    }
+
+    @Bean(initMethod = "run",destroyMethod = "shutdown")
+    public EngineStarter engineStarter(ApplicationContext applicationContext){
+        return new EngineStarter(applicationContext);
+    }
+}
