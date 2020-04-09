@@ -1,6 +1,7 @@
 package test;
 
 import hxy.server.socket.anno.EnableCodeHandler;
+import hxy.server.socket.anno.EnableTcpsocket;
 import hxy.server.socket.anno.EnableWebsocket;
 import org.springframework.boot.Banner;
 import org.springframework.boot.WebApplicationType;
@@ -14,8 +15,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
  * @Date 2020/4/8 17:04
  */
 @SpringBootApplication
-@EnableWebsocket
-@EnableCodeHandler
+@EnableTcpsocket
 public class RunApp {
 
     public static void main(String[] args) {

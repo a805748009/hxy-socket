@@ -1,8 +1,8 @@
 package hxy.server.socket.engine;
 
 import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 
 /**
  * @ClassName TcpsocketInitHandler
@@ -14,9 +14,9 @@ public class TcpsocketInitHandler  implements SocketInitHandler{
 
     @Override
     public void buildChannelPipeline(ChannelPipeline pipeline) {
-        pipeline.addLast(new HttpServerCodec());
-        pipeline.addLast(new HttpServerExpectContinueHandler());
-        pipeline.addLast(new WebSocketServerHandler());
+        pipeline.addLast("lengthEncode", new LengthFieldPrepender(4, false));
+        pipeline.addLast("lengthDecoder", new LengthFieldBasedFrameDecoder(2000, 0, 4, 0, 4));
+        pipeline.addLast(new TcpSocketServerHandler());
     }
 
 }

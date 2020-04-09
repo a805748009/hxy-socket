@@ -19,16 +19,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
             handleHttpRequest(ctx, (HttpRequest) msg);
         } else if (msg instanceof WebSocketFrame) {
             handleWebSocketFrame(ctx, (WebSocketFrame) msg);
-        } else {
-            ReferenceCountUtil.retain(msg);
-            ctx.fireChannelRead(msg);
         }
     }
 
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.flush();
-    }
 
     private void handleHttpRequest(ChannelHandlerContext ctx, HttpRequest req) {
         if (isWebSocketRequest(req)) {
@@ -40,9 +33,6 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
                 this.handshaker.handshake(ctx.channel(), req);
                 CompletableFuture.runAsync(() -> socketMsgHandler.onConnect(ctx, req), ctx.executor());
             }
-        } else {
-            ReferenceCountUtil.retain(req);
-            ctx.fireChannelRead(req);
         }
     }
 

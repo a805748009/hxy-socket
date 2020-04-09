@@ -19,8 +19,8 @@ public class SimpleSocketMsgHandler implements SocketMsgHandler {
 
     @Override
     public void onMessage(ChannelHandlerContext ctx, String msg) {
-        System.out.println("收到消息1="+ctx.channel().toString());
         System.out.println("收到消息="+msg);
+        ctx.channel().writeAndFlush(msg);
     }
 
     @Override
