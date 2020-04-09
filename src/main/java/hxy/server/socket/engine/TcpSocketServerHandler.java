@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class TcpSocketServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
-    private static SocketMsgHandler socketMsgHandler = HandlerInitizer.getSocketMsgHandler();
+    private static SocketMsgHandler socketMsgHandler = ChannelHandlerInitializer.getSocketMsgHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {

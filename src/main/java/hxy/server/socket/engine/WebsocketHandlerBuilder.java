@@ -10,12 +10,13 @@ import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
  * @Author hxy
  * @Date 2020/4/8 17:15
  */
-public class WebsocketInitHandler implements SocketInitHandler{
+public class WebsocketHandlerBuilder implements SocketHandlerBuilder {
 
     @Override
     public void buildChannelPipeline(ChannelPipeline pipeline) {
         pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new HttpServerExpectContinueHandler());
+        pipeline.addLast(MsgOutboundHandle.getInstance());
         pipeline.addLast(new WebSocketServerHandler());
     }
 

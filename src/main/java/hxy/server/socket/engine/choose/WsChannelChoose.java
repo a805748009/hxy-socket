@@ -1,8 +1,8 @@
 package hxy.server.socket.engine.choose;
 
 import hxy.server.socket.engine.EngineStarter;
-import hxy.server.socket.engine.SocketInitHandler;
-import hxy.server.socket.engine.WebsocketInitHandler;
+import hxy.server.socket.engine.SocketHandlerBuilder;
+import hxy.server.socket.engine.WebsocketHandlerBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Configuration;
 public class WsChannelChoose{
 
     @Bean
-    public SocketInitHandler socketInitHandler(){
-        return new WebsocketInitHandler();
+    public SocketHandlerBuilder socketInitHandler(){
+        return new WebsocketHandlerBuilder();
     }
 
     @Bean(initMethod = "run",destroyMethod = "shutdown")

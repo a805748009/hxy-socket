@@ -10,12 +10,13 @@ import io.netty.handler.codec.LengthFieldPrepender;
  * @Author hxy
  * @Date 2020/4/8 17:15
  */
-public class TcpsocketInitHandler  implements SocketInitHandler{
+public class TcpsocketHandlerBuilder implements SocketHandlerBuilder {
 
     @Override
     public void buildChannelPipeline(ChannelPipeline pipeline) {
         pipeline.addLast("lengthEncode", new LengthFieldPrepender(4, false));
         pipeline.addLast("lengthDecoder", new LengthFieldBasedFrameDecoder(2000, 0, 4, 0, 4));
+        pipeline.addLast(MsgOutboundHandle.getInstance());
         pipeline.addLast(new TcpSocketServerHandler());
     }
 

@@ -1,8 +1,8 @@
 package hxy.server.socket.engine.choose;
 
 import hxy.server.socket.engine.EngineStarter;
-import hxy.server.socket.engine.SocketInitHandler;
-import hxy.server.socket.engine.TcpsocketInitHandler;
+import hxy.server.socket.engine.SocketHandlerBuilder;
+import hxy.server.socket.engine.TcpsocketHandlerBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
 public class TsChannelChoose {
 
     @Bean
-    public SocketInitHandler socketInitHandler(){
-        return new TcpsocketInitHandler();
+    public SocketHandlerBuilder socketHandlerBuilder(){
+        return new TcpsocketHandlerBuilder();
     }
 
     @Bean(initMethod = "run",destroyMethod = "shutdown")

@@ -2,6 +2,7 @@ package test;
 
 import hxy.server.socket.anno.Socket;
 import hxy.server.socket.engine.SocketMsgHandler;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpRequest;
 
@@ -20,7 +21,7 @@ public class SimpleSocketMsgHandler implements SocketMsgHandler {
     @Override
     public void onMessage(ChannelHandlerContext ctx, String msg) {
         System.out.println("收到消息="+msg);
-        ctx.channel().writeAndFlush(msg);
+        ctx.writeAndFlush(msg);
     }
 
     @Override

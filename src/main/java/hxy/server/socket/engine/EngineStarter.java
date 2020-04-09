@@ -29,15 +29,17 @@ import java.util.concurrent.TimeUnit;
  */
 public class EngineStarter {
 
-    private Logger logger = LoggerFactory.getLogger(WebsocketInitHandler.class);
+    private Logger logger = LoggerFactory.getLogger(WebsocketHandlerBuilder.class);
 
     private static SocketConfiguration config = null;
+
+    private static final String SOCKET_HANDLER_BUILDER_NAME = "socketHandlerBuilder";
 
     public EngineStarter(ApplicationContext ac) {
         SpringApplicationContextHolder.setAc(ac);
         config = SpringApplicationContextHolder.getBean(SocketConfiguration.class);
 
-        HandlerInitizer.chooseMsgHandler();
+        ChannelHandlerInitializer.chooseMsgHandler();
     }
 
     EventLoopGroup bossGroup = null;
@@ -82,7 +84,7 @@ public class EngineStarter {
                     // 设置N秒没有读到数据，则触发一个READER_IDLE事件。
                     pipeline.addLast(new IdleStateHandler(config.getHeartTimeout(), 0, 0, TimeUnit.SECONDS));
                     //选择服务启动
-                    SocketInitHandler sc = SpringApplicationContextHolder.getBean("socketInitHandler");
+                    SocketHandlerBuilder sc = SpringApplicationContextHolder.getBean(SOCKET_HANDLER_BUILDER_NAME);
                     sc.buildChannelPipeline(pipeline);
 
                     pipeline.addLast(new HeartBeatServerHandler());

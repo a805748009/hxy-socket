@@ -13,9 +13,9 @@ import java.util.Map;
  * @Author xinyu.huang
  * @Time 2020/4/8 22:33
  */
-public class HandlerInitizer {
+public class ChannelHandlerInitializer {
 
-    private static Logger logger = LoggerFactory.getLogger(HandlerInitizer.class);
+    private static Logger logger = LoggerFactory.getLogger(ChannelHandlerInitializer.class);
 
     private static ApplicationContext context = SpringApplicationContextHolder.getApplicationContext();
 

@@ -4,14 +4,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
-import io.netty.util.ReferenceCountUtil;
 
 import java.util.concurrent.CompletableFuture;
 
 public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private WebSocketServerHandshaker handshaker;
-    private static SocketMsgHandler socketMsgHandler = HandlerInitizer.getSocketMsgHandler();
+    private static SocketMsgHandler socketMsgHandler = ChannelHandlerInitializer.getSocketMsgHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
