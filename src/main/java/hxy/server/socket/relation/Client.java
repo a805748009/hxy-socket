@@ -17,6 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2020/4/9 15:16
  */
 public class Client implements AttributeMap {
+    public static String CLIENT_ATTRIBUTE_KEY = "CLIENT";
+
     private String id;
 
     private Channel channel;
@@ -29,6 +31,7 @@ public class Client implements AttributeMap {
         this.id = id;
         this.channel = channel;
         Global.INSTANCE.addClient(this);
+        this.attr(AttributeKey.valueOf(CLIENT_ATTRIBUTE_KEY)).set(this);
     }
 
     public Channel getChannel() {
@@ -39,9 +42,13 @@ public class Client implements AttributeMap {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void close() {
+        Global.INSTANCE.removeClient(this);
+        namespaces.values().forEach(ns -> ns.removeClient(this));
+        rooms.values().forEach(rm -> rm.removeClient(this));
+        channel.close();
     }
+
 
     /***
      * @Description: 发送消息
@@ -73,6 +80,15 @@ public class Client implements AttributeMap {
         return rooms.get(roomId);
     }
 
+    public boolean leaveRoom(@NotNull String roomId){
+        Room room = rooms.get(roomId);
+        if(room == null){
+            return false;
+        }
+        room.removeClient(this);
+        return true;
+    }
+
     public void joinNamespace(@NotNull Namespace namespace) {
         namespace.addClient(this);
         namespaces.put(namespace.id, namespace);
@@ -86,6 +102,15 @@ public class Client implements AttributeMap {
 
     public Namespace getNamespace(@NotNull String namespaceId) {
         return namespaces.get(namespaceId);
+    }
+
+    public boolean leaveNamespace(@NotNull String namespaceId) {
+        Namespace namespace = namespaces.get(namespaceId);
+        if (namespace == null){
+            return false;
+        }
+        namespace.removeClient(this);
+        return true;
     }
 
     @Override
