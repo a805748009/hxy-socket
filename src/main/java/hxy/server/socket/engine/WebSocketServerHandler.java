@@ -55,4 +55,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
                 && "websocket".equals(req.headers().get("Upgrade"));
     }
 
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+        ctx.flush();
+    }
+
 }

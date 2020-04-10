@@ -47,11 +47,13 @@ public class MsgOutboundHandle extends ChannelOutboundHandlerAdapter {
     private void wsWrite(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
         if(msg instanceof String){
             ctx.write(new TextWebSocketFrame((String) msg), promise);
+            return;
         }
         if (msg instanceof byte[]) {
             ctx.write(new BinaryWebSocketFrame(Unpooled.wrappedBuffer((byte[]) msg)), promise);
+            return;
         }
-        throw new UnsupportedOperationException("不支持的传输类型,请转换成String和Byte类型");
+        ctx.write(msg, promise);
     }
 }
 
