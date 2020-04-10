@@ -16,6 +16,14 @@ import java.nio.channels.SocketChannel;
 public class TcpTextClientDemo {
 
     public static void main(String[] args) {
+        for (int i = 0; i < 100; i++) {
+            new Thread(()->{
+                connect();
+            }).start();
+        }
+    }
+
+    public static void connect(){
         //创建连接的地址
         InetSocketAddress InetSocketAddress = new InetSocketAddress("127.0.0.1", 9090);
         //声明连接通道
@@ -35,7 +43,7 @@ public class TcpTextClientDemo {
             //服务端socket包方案，在前面加上4个字节的长度.  websocket可以忽略
             byte[] sendMsg = ByteUtil.concat(ByteUtil.intToByteArray(msg.length), msg);
 
-            for (int i = 0; i < 100; i++) {
+            for (;;) {
                 //数据放入缓冲区
                 byteBuffer.put(sendMsg);
                 //复位buffer
@@ -44,8 +52,7 @@ public class TcpTextClientDemo {
                 socketChannel.write(byteBuffer);
                 //清空数据
                 byteBuffer.clear();
-                System.out.println(i);
-                Thread.sleep(1000);
+                Thread.sleep(10);
             }
         } catch (Exception e) {
             e.printStackTrace();
