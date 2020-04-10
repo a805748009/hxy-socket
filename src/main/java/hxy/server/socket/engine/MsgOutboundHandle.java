@@ -41,7 +41,7 @@ public class MsgOutboundHandle extends ChannelOutboundHandlerAdapter {
             contentBytes = (byte[]) msg;
             ctx.write(Unpooled.wrappedBuffer(contentBytes), promise);
         }
-        throw new UnsupportedOperationException("不支持的传输类型,请转换成String和Byte类型");
+        throw new UnsupportedOperationException("Unsupported transport type, please convert to string and byte");
     }
 
     private void wsWrite(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {

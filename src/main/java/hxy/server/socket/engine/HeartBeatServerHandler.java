@@ -25,7 +25,7 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
             if (event.state() == IdleState.READER_IDLE) {
                 lossConnectCount++;
                 if (lossConnectCount > 2) {
-                    logger.info("无心跳关闭：{}", ctx.channel().toString());
+                    logger.info("close when non-heart-beating:{}", ctx.channel().toString());
                     ctx.channel().close();
                 }
             }

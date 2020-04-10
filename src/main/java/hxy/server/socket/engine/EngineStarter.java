@@ -93,7 +93,7 @@ public class EngineStarter {
             // 开始真正绑定端口进行监听
             ChannelFuture future = bootstrap.bind("0.0.0.0", config.getPort()).sync();
             showLog();
-            logger.info("================Hxy-socket启动成功， 端口号：{}========",  config.getPort());
+            logger.info("================Hxy-socket start success, port:{}========",  config.getPort());
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -110,12 +110,13 @@ public class EngineStarter {
 
 
     private void showLog() {
-        System.out.println("  .      _   _              ______    ____     _____\n" +
-                " /\\\\    | \\ | |     /\\     |  ____|  / __ \\   / ____|\n" +
-                "( ( )   |  \\| |    /  \\    | |__    | |  | | | (___\n" +
-                "( ( )   | . ` |   / /\\ \\   |  __|   | |  | |  \\___ \\\n" +
-                " \\\\/    | |\\  |  / ____ \\  | |      | |__| |  ____) |\n" +
-                "  '     |_| \\_| /_/    \\_\\ |_|       \\____/  |_____/   version:1.3.0-release    \n" +
-                " =============================================================================================");
+        System.out.println("  _    _                               _        _   \n" +
+                " | |  | |    hxy-socket 1.0-SNAPSHOT  | |      | |  \n" +
+                " | |__| |_  ___   _     ___  ___   ___| | _____| |_ \n" +
+                " |  __  \\ \\/ / | | |   / __|/ _ \\ / __| |/ / _ \\ __|\n" +
+                " | |  | |>  <| |_| |   \\__ \\ (_) | (__|   <  __/ |_ \n" +
+                " |_|  |_/_/\\_\\\\__, |   |___/\\___/ \\___|_|\\_\\___|\\__|\n" +
+                "               __/ |                                \n" +
+                "              |___/                                 ");
     }
 }
