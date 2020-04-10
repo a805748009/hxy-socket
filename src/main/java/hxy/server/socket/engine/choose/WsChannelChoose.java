@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class WsChannelChoose{
 
     @Bean
-    public SocketHandlerBuilder socketInitHandler(){
+    public SocketHandlerBuilder socketHandlerBuilder(){
         return new WebsocketHandlerBuilder();
     }
 

@@ -1,11 +1,6 @@
 package test;
 
-import hxy.server.socket.anno.EnableCodeHandler;
-import hxy.server.socket.anno.EnableTcpsocket;
 import hxy.server.socket.anno.EnableWebsocket;
-import hxy.server.socket.entity.SslInfo;
-import hxy.server.socket.relation.Global;
-import hxy.server.socket.relation.Room;
 import org.springframework.boot.Banner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +13,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
  * @Date 2020/4/8 17:04
  */
 @SpringBootApplication
-@EnableTcpsocket
+@EnableWebsocket
 public class RunApp {
 
     public static void main(String[] args) {
