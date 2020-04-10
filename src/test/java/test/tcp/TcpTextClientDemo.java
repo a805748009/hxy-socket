@@ -1,6 +1,6 @@
 package test.tcp;
 
-import hxy.server.socket.util.ArrayUtil;
+import hxy.server.socket.util.ByteUtil;
 import io.netty.util.CharsetUtil;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class TcpTextClientDemo {
 
             byte[] msg = "hello".getBytes();
             //服务端socket包方案，在前面加上4个字节的长度.  websocket可以忽略
-            byte[] sendMsg = ArrayUtil.concat(ArrayUtil.intToByteArray(msg.length), msg);
+            byte[] sendMsg = ByteUtil.concat(ByteUtil.intToByteArray(msg.length), msg);
 
             for (int i = 0; i < 100; i++) {
                 //数据放入缓冲区
@@ -99,7 +99,7 @@ public class TcpTextClientDemo {
         //服务端封装的前四个字节（标明包长度，解决粘包的问题）
         byte[] lengthByte = new byte[4];
         System.arraycopy(bytes, 0, lengthByte, 0, 4);
-        System.out.println("lengthByte:" + ArrayUtil.byteArrayToInt(lengthByte));
+        System.out.println("lengthByte:" + ByteUtil.byteArrayToInt(lengthByte));
 
 
 

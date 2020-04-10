@@ -6,9 +6,9 @@ package hxy.server.socket.entity;
  * @Date 2020/4/8 18:38
  */
 public class SslInfo {
-    boolean open = false;
-    String certFilePath = null;
-    String keyFilePath = null;
+    private boolean open = false;
+    private String certFilePath = null;
+    private String keyFilePath = null;
 
     public SslInfo() {
     }

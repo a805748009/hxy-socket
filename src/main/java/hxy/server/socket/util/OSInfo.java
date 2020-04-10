@@ -1,6 +1,6 @@
 package hxy.server.socket.util;
 
-import hxy.server.socket.enums.EPlatform;
+import hxy.server.socket.engine.EPlatform;
 
 /**
  * @author 黄新宇

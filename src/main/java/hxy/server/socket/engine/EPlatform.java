@@ -1,4 +1,4 @@
-package hxy.server.socket.enums;
+package hxy.server.socket.engine;
 
 public enum EPlatform {
     Any("any"),
