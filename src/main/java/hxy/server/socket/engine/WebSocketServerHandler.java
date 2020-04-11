@@ -1,16 +1,14 @@
 package hxy.server.socket.engine;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
 
-import java.util.concurrent.CompletableFuture;
-
-public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> {
+public class WebSocketServerHandler extends AbstractSocketServerHandler<Object> {
 
     private WebSocketServerHandshaker handshaker;
-    private static SocketMsgHandler socketMsgHandler = ChannelHandlerInitializer.getSocketMsgHandler();
+
+    private final static SocketMsgHandler socketMsgHandler = ChannelHandlerInitializer.getSocketMsgHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
@@ -30,7 +28,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
                 WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
             } else {
                 this.handshaker.handshake(ctx.channel(), req);
-                CompletableFuture.runAsync(() -> socketMsgHandler.onConnect(ctx, req), ctx.executor());
+                doHandler(() -> socketMsgHandler.onConnect(ctx, req), ctx);
             }
         }
     }
@@ -38,7 +36,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
     private void handleWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) {
         if (frame instanceof CloseWebSocketFrame) {
             this.handshaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
-            CompletableFuture.runAsync(() -> socketMsgHandler.disConnect(ctx), ctx.executor());
+            doHandler(() -> socketMsgHandler.disConnect(ctx), ctx);
             return;
         }
         if (frame instanceof PingWebSocketFrame) {
@@ -46,8 +44,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
             return;
         }
         String msg = ((TextWebSocketFrame) frame).text();
-        CompletableFuture.runAsync(() -> socketMsgHandler.onMessage(ctx, msg), ctx.executor());
+        doHandler(() -> socketMsgHandler.onMessage(ctx, msg), ctx);
     }
+
 
     private boolean isWebSocketRequest(HttpRequest req) {
         return req != null
@@ -60,9 +59,4 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         ctx.flush();
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        super.exceptionCaught(ctx,cause);
-    }
 }
