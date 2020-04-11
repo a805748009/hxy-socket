@@ -28,4 +28,10 @@ public class TcpSocketServerHandler extends SimpleChannelInboundHandler<ByteBuf>
         CompletableFuture.runAsync(() -> socketMsgHandler.disConnect(ctx), ctx.executor());
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        super.exceptionCaught(ctx,cause);
+    }
+
 }

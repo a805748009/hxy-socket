@@ -10,12 +10,12 @@ import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 @ChannelHandler.Sharable
-public class MsgOutboundHandle extends ChannelOutboundHandlerAdapter {
+public class MsgOutboundHandler extends ChannelOutboundHandlerAdapter {
 
-    private static MsgOutboundHandle msgOutboundHandle = new MsgOutboundHandle();
+    private static MsgOutboundHandler msgOutboundHandler = new MsgOutboundHandler();
 
-    public static MsgOutboundHandle getInstance() {
-        return msgOutboundHandle;
+    public static MsgOutboundHandler getInstance() {
+        return msgOutboundHandler;
     }
 
     private static final String SOCKET_HANDLER_BUILDER_NAME = "socketHandlerBuilder";

@@ -16,7 +16,7 @@ public class WebsocketHandlerBuilder implements SocketHandlerBuilder {
     public void buildChannelPipeline(ChannelPipeline pipeline) {
         pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new HttpServerExpectContinueHandler());
-        pipeline.addLast(MsgOutboundHandle.getInstance());
+        pipeline.addLast(MsgOutboundHandler.getInstance());
         pipeline.addLast(new WebSocketServerHandler());
     }
 

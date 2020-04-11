@@ -16,7 +16,7 @@ public class TcpsocketHandlerBuilder implements SocketHandlerBuilder {
     public void buildChannelPipeline(ChannelPipeline pipeline) {
         pipeline.addLast("lengthEncode", new LengthFieldPrepender(4, false));
         pipeline.addLast("lengthDecoder", new LengthFieldBasedFrameDecoder(2000, 0, 4, 0, 4));
-        pipeline.addLast(MsgOutboundHandle.getInstance());
+        pipeline.addLast(MsgOutboundHandler.getInstance());
         pipeline.addLast(new TcpSocketServerHandler());
     }
 

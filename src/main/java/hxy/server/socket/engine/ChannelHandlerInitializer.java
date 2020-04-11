@@ -1,6 +1,7 @@
 package hxy.server.socket.engine;
 
 import hxy.server.socket.anno.Socket;
+import hxy.server.socket.engine.factory.CodeHandlerRouteFactory;
 import hxy.server.socket.util.SpringApplicationContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ public class ChannelHandlerInitializer {
         boolean isEnableSimpleCodeHandler = context.containsBean(SIMPLE_CODE_HANDLER_NAME);
         if (isEnableSimpleCodeHandler) {
             socketMsgHandler = (SocketMsgHandler) context.getBean(SIMPLE_CODE_HANDLER_NAME);
+            CodeHandlerRouteFactory.load(context);
             logger.info(">>>>>>enable SocketMsgHandler: {}", SIMPLE_CODE_HANDLER_NAME);
             return;
         }
