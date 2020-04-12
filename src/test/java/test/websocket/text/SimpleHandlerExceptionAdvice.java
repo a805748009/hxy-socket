@@ -1,4 +1,4 @@
-package test.websocket;
+package test.websocket.text;
 
 import hxy.server.socket.anno.ExceptionHandler;
 import hxy.server.socket.engine.HandlerExceptionAdvice;
@@ -13,7 +13,6 @@ import io.netty.channel.ChannelHandlerContext;
 public class SimpleHandlerExceptionAdvice implements HandlerExceptionAdvice {
     @Override
     public void doException(ChannelHandlerContext ctx,Throwable e) {
-        System.out.println(1111);
         e.printStackTrace();
     }
 }

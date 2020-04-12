@@ -1,4 +1,4 @@
-package test.websocket;
+package test.websocket.text;
 
 import hxy.server.socket.anno.EnableWebsocket;
 import org.springframework.boot.Banner;
