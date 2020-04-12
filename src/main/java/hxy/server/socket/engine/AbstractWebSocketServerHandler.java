@@ -1,15 +1,12 @@
 package hxy.server.socket.engine;
 
-import hxy.server.socket.engine.factory.ChannelHandlerInitializer;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
 
-public class WebSocketServerHandler extends AbstractSocketServerHandler<Object> {
+public abstract class AbstractWebSocketServerHandler<Object> extends AbstractSocketServerHandler<Object> {
 
     private WebSocketServerHandshaker handshaker;
-
-    private final static SocketMsgHandler socketMsgHandler = ChannelHandlerInitializer.getSocketMsgHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
@@ -44,9 +41,10 @@ public class WebSocketServerHandler extends AbstractSocketServerHandler<Object> 
             ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
             return;
         }
-        String msg = ((TextWebSocketFrame) frame).text();
-        doHandler(() -> socketMsgHandler.onMessage(ctx, msg), ctx);
+        doMessage(ctx, frame);
     }
+
+    protected abstract void doMessage(ChannelHandlerContext ctx, WebSocketFrame frame);
 
 
     private boolean isWebSocketRequest(HttpRequest req) {

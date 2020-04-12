@@ -4,6 +4,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import java.util.Optional;
+
 /**
  * @ClassName SpringApplicationContextHolder
  * @Description springboot 附加容器
@@ -39,8 +41,13 @@ public class SpringApplicationContextHolder implements ApplicationContextAware {
         return (T) getApplicationContext().getBean(name);
     }
 
+    public static <T> T getBeanOrNull(String name) {
+        assertContextInjected();
+        return Optional.ofNullable(getApplicationContext().getBean(name)).map(o -> (T) o).orElse(null);
+    }
+
     public static void assertContextInjected() {
-        if(context == null){
+        if (context == null) {
             throw new NullPointerException("application未注入 ，请在springContext.xml中注入SpringHolder!");
         }
     }

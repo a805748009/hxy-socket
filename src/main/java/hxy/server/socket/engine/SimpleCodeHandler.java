@@ -22,7 +22,7 @@ import java.util.Map;
  * @Time 2020/4/8 21:32
  */
 @Socket
-public class SimpleCodeHandler implements SocketMsgHandler {
+public class SimpleCodeHandler implements SocketMsgHandler<String> {
     private Logger logger = LoggerFactory.getLogger(SimpleCodeHandler.class);
 
     @Override

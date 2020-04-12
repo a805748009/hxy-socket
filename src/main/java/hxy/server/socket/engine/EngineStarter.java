@@ -1,12 +1,9 @@
 package hxy.server.socket.engine;
 
 import hxy.server.socket.configuration.SocketConfiguration;
-import hxy.server.socket.engine.factory.ChannelHandlerInitializer;
 import hxy.server.socket.engine.factory.SocketHandlerBuilder;
-import hxy.server.socket.engine.factory.WebsocketHandlerBuilder;
 import hxy.server.socket.entity.SslInfo;
 import hxy.server.socket.util.OSInfo;
-import hxy.server.socket.util.SpringApplicationContextHolder;
 import hxy.server.socket.util.SslFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -20,7 +17,10 @@ import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,20 +30,26 @@ import java.util.concurrent.TimeUnit;
  * @Author hxy
  * @Date 2020/4/8 18:32
  */
-public class EngineStarter {
+public class EngineStarter implements ApplicationRunner , DisposableBean {
 
-    private Logger logger = LoggerFactory.getLogger(WebsocketHandlerBuilder.class);
+    private Logger logger = LoggerFactory.getLogger(EngineStarter.class);
 
-    private static SocketConfiguration config = null;
+    @Autowired
+    private SocketConfiguration socketConfiguration;
 
-    private static final String SOCKET_HANDLER_BUILDER_NAME = "socketHandlerBuilder";
+    @Autowired
+    private SocketHandlerBuilder socketHandlerBuilder;
 
-    public EngineStarter(ApplicationContext ac) {
-        SpringApplicationContextHolder.setAc(ac);
-        config = SpringApplicationContextHolder.getBean(SocketConfiguration.class);
-
-        ChannelHandlerInitializer.chooseMsgHandler();
+    @Override
+    public void destroy() throws Exception {
+        this.shutdown();
     }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        this.run();
+    }
+
 
     EventLoopGroup bossGroup = null;
     EventLoopGroup workGroup = null;
@@ -52,14 +58,14 @@ public class EngineStarter {
         ServerBootstrap bootstrap = new ServerBootstrap();
 
         if (OSInfo.isLinux()) {
-            bossGroup = new EpollEventLoopGroup(config.getBossThreadCount(), new DefaultThreadFactory("boss-thread", true));
-            workGroup = new EpollEventLoopGroup(config.getWorkThreadCount(), new DefaultThreadFactory("worker-thread", true));
+            bossGroup = new EpollEventLoopGroup(socketConfiguration.getBossThreadCount(), new DefaultThreadFactory("boss-thread", true));
+            workGroup = new EpollEventLoopGroup(socketConfiguration.getWorkThreadCount(), new DefaultThreadFactory("worker-thread", true));
             bootstrap.channel(EpollServerSocketChannel.class)
                     .group(bossGroup, workGroup)
                     .option(EpollChannelOption.TCP_CORK, true);
         } else {
-            bossGroup = new NioEventLoopGroup(config.getBossThreadCount(), new DefaultThreadFactory("boss-thread", true));
-            workGroup = new NioEventLoopGroup(config.getWorkThreadCount(), new DefaultThreadFactory("worker-thread", true));
+            bossGroup = new NioEventLoopGroup(socketConfiguration.getBossThreadCount(), new DefaultThreadFactory("boss-thread", true));
+            workGroup = new NioEventLoopGroup(socketConfiguration.getWorkThreadCount(), new DefaultThreadFactory("worker-thread", true));
             bootstrap.channel(NioServerSocketChannel.class)
                     .group(bossGroup, workGroup);
         }
@@ -78,25 +84,24 @@ public class EngineStarter {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
                     ChannelPipeline pipeline = socketChannel.pipeline();
-                    SslInfo sslInfo = config.getSslInfo();
+                    SslInfo sslInfo = socketConfiguration.getSslInfo();
                     // 开启SSL验证
                     if (sslInfo.isOpen()) {
                         pipeline.addLast("ssl", SslFactory.createSslContext(sslInfo.getCertFilePath(), sslInfo.getKeyFilePath()).newHandler(socketChannel.alloc()));
                     }
 
                     // 设置N秒没有读到数据，则触发一个READER_IDLE事件。
-                    pipeline.addLast(new IdleStateHandler(config.getHeartTimeout(), 0, 0, TimeUnit.SECONDS));
+                    pipeline.addLast(new IdleStateHandler(socketConfiguration.getHeartTimeout(), 0, 0, TimeUnit.SECONDS));
                     //选择服务启动
-                    SocketHandlerBuilder sc = SpringApplicationContextHolder.getBean(SOCKET_HANDLER_BUILDER_NAME);
-                    sc.buildChannelPipeline(pipeline);
+                    socketHandlerBuilder.buildChannelPipeline(pipeline);
 
                     pipeline.addLast(new HeartBeatServerHandler());
                 }
             });
             // 开始真正绑定端口进行监听
-            ChannelFuture future = bootstrap.bind("0.0.0.0", config.getPort()).sync();
+            ChannelFuture future = bootstrap.bind("0.0.0.0", socketConfiguration.getPort()).sync();
             showLog();
-            logger.info("================Hxy-socket start success, port:{}========",  config.getPort());
+            logger.info("================Hxy-socket start success, port:{}========",  socketConfiguration.getPort());
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -122,4 +127,6 @@ public class EngineStarter {
                 "               __/ |                                \n" +
                 "              |___/                                 ");
     }
+
+
 }

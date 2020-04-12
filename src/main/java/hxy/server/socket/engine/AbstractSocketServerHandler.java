@@ -3,6 +3,8 @@ package hxy.server.socket.engine;
 import hxy.server.socket.util.SpringApplicationContextHolder;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -11,16 +13,12 @@ import java.util.concurrent.CompletableFuture;
  * @Author xinyu.huang
  * @Time 2020/4/11 21:14
  */
-abstract class AbstractSocketServerHandler<T> extends SimpleChannelInboundHandler<T> {
-    private final static HandlerExceptionAdvice handlerExceptionAdvice;
+public abstract class AbstractSocketServerHandler<T> extends SimpleChannelInboundHandler<T> {
 
-    static {
-        if (SpringApplicationContextHolder.getApplicationContext().containsBean("ExceptionHandler")) {
-            handlerExceptionAdvice = SpringApplicationContextHolder.getBean("ExceptionHandler");
-        } else {
-            handlerExceptionAdvice = null;
-        }
-    }
+    private HandlerExceptionAdvice handlerExceptionAdvice = SpringApplicationContextHolder.getBeanOrNull("ExceptionHandler");
+
+    protected SocketMsgHandler socketMsgHandler = SpringApplicationContextHolder.getBean("socketMsgHandler");
+
 
     void doHandler(Runnable runnable, ChannelHandlerContext ctx) {
         CompletableFuture.runAsync(runnable, ctx.executor())

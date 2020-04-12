@@ -1,4 +1,4 @@
-package test;
+package test.websocket;
 
 import hxy.server.socket.anno.ExceptionHandler;
 import hxy.server.socket.engine.HandlerExceptionAdvice;

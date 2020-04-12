@@ -1,0 +1,3 @@
+socket:
+  config:
+    protocolType: BYTE

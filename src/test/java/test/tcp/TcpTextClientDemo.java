@@ -16,11 +16,11 @@ import java.nio.channels.SocketChannel;
 public class TcpTextClientDemo {
 
     public static void main(String[] args) {
-        for (int i = 0; i < 100; i++) {
-            new Thread(()->{
+//        for (int i = 0; i < 100; i++) {
+//            new Thread(()->{
                 connect();
-            }).start();
-        }
+//            }).start();
+//        }
     }
 
     public static void connect(){

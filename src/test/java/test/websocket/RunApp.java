@@ -1,6 +1,5 @@
-package test;
+package test.websocket;
 
-import hxy.server.socket.anno.EnableCodeHandler;
 import hxy.server.socket.anno.EnableWebsocket;
 import org.springframework.boot.Banner;
 import org.springframework.boot.WebApplicationType;

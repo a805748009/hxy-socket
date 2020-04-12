@@ -1,9 +1,7 @@
 package hxy.server.socket.engine.choose;
 
-import hxy.server.socket.engine.EngineStarter;
 import hxy.server.socket.engine.factory.SocketHandlerBuilder;
 import hxy.server.socket.engine.factory.WebsocketHandlerBuilder;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,15 +12,12 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2020/4/8 19:57
  */
 @Configuration
-public class WsChannelChoose{
+public class WsChannelChoose {
 
     @Bean
-    public SocketHandlerBuilder socketHandlerBuilder(){
+    public SocketHandlerBuilder socketHandlerBuilder() {
         return new WebsocketHandlerBuilder();
     }
 
-    @Bean(initMethod = "run",destroyMethod = "shutdown")
-    public EngineStarter engineStarter(ApplicationContext applicationContext){
-        return new EngineStarter(applicationContext);
-    }
+
 }

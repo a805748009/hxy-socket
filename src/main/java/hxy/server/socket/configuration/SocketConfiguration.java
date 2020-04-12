@@ -1,7 +1,6 @@
 package hxy.server.socket.configuration;
 
 import hxy.server.socket.entity.SslInfo;
-import hxy.server.socket.util.SpringApplicationContextHolder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +17,11 @@ public class SocketConfiguration {
      * 端口号
      */
     int port = 9090;
+
+    /**
+     * 协议格式
+     */
+    ProtocolType protocolType = ProtocolType.TEXT;
 
     /**
      * 启动boss线程数
@@ -79,4 +83,16 @@ public class SocketConfiguration {
         this.heartTimeout = heartTimeout;
     }
 
+    public ProtocolType getProtocolType() {
+        return protocolType;
+    }
+
+    public void setProtocolType(ProtocolType protocolType) {
+        this.protocolType = protocolType;
+    }
+
+    public enum ProtocolType {
+        TEXT, BYTE
+    }
 }
+

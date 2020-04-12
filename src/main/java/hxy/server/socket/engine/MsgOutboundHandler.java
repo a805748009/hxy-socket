@@ -13,11 +13,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 @ChannelHandler.Sharable
 public class MsgOutboundHandler extends ChannelOutboundHandlerAdapter {
 
-    private static MsgOutboundHandler msgOutboundHandler = new MsgOutboundHandler();
-
-    public static MsgOutboundHandler getInstance() {
-        return msgOutboundHandler;
-    }
+    public final static MsgOutboundHandler INSTANCE = new MsgOutboundHandler();
 
     private static final String SOCKET_HANDLER_BUILDER_NAME = "socketHandlerBuilder";
 
