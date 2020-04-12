@@ -1,4 +1,4 @@
-package hxy.server.socket.engine;
+package hxy.server.socket.engine.factory;
 
 import io.netty.channel.ChannelPipeline;
 

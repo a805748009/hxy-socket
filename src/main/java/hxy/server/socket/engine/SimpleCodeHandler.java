@@ -27,7 +27,7 @@ public class SimpleCodeHandler implements SocketMsgHandler {
 
     @Override
     public void onConnect(ChannelHandlerContext ctx, HttpRequest req) {
-        logger.debug("新的连接:{}", ctx.channel().toString());
+        logger.debug("onConnect:{}", ctx.channel().toString());
         for (ChannelActive channelActive : CodeHandlerRouteFactory.getChannelActives()) {
             channelActive.onConnect(ctx, req);
         }
@@ -75,7 +75,7 @@ public class SimpleCodeHandler implements SocketMsgHandler {
 
     @Override
     public void disConnect(ChannelHandlerContext ctx) {
-        logger.debug("断开连接:{}", ctx.channel().toString());
+        logger.debug("disConnect:{}", ctx.channel().toString());
         for (ChannelActive channelActive : CodeHandlerRouteFactory.getChannelActives()) {
             channelActive.disConnect(ctx);
         }
