@@ -35,6 +35,11 @@ public class SpringApplicationContextHolder implements ApplicationContextAware {
         return (T) getApplicationContext().getBean(requiredType);
     }
 
+    public static boolean containsBean(String name) {
+        assertContextInjected();
+        return getApplicationContext().containsBean(name);
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> T getBean(String name) {
         assertContextInjected();

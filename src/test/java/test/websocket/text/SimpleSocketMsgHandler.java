@@ -21,6 +21,8 @@ public class SimpleSocketMsgHandler implements SocketMsgHandler<String> {
     public void onMessage(ChannelHandlerContext ctx, String msg) {
         System.out.println("收到消息=" + msg);
         ctx.writeAndFlush(msg);
+        throw new NullPointerException();
+
     }
 
     @Override

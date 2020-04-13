@@ -3,8 +3,6 @@ package hxy.server.socket.engine;
 import hxy.server.socket.util.SpringApplicationContextHolder;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -15,10 +13,17 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class AbstractSocketServerHandler<T> extends SimpleChannelInboundHandler<T> {
 
-    private HandlerExceptionAdvice handlerExceptionAdvice = SpringApplicationContextHolder.getBeanOrNull("ExceptionHandler");
+    private static HandlerExceptionAdvice handlerExceptionAdvice;
 
-    protected SocketMsgHandler socketMsgHandler = SpringApplicationContextHolder.getBean("socketMsgHandler");
+    protected static SocketMsgHandler socketMsgHandler = SpringApplicationContextHolder.getBean("socketMsgHandler");
 
+    static{
+        if(SpringApplicationContextHolder.containsBean("ExceptionHandler")){
+            handlerExceptionAdvice = SpringApplicationContextHolder.getBean("ExceptionHandler");
+        }else {
+            handlerExceptionAdvice = null;
+        }
+    }
 
     void doHandler(Runnable runnable, ChannelHandlerContext ctx) {
         CompletableFuture.runAsync(runnable, ctx.executor())
@@ -32,6 +37,8 @@ public abstract class AbstractSocketServerHandler<T> extends SimpleChannelInboun
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         if (handlerExceptionAdvice != null) {
             handlerExceptionAdvice.doException(ctx, cause);
-        } else cause.printStackTrace();
+        } else {
+            cause.printStackTrace();
+        }
     }
 }
