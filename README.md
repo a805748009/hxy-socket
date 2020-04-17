@@ -16,9 +16,40 @@
 </p>
 
 #### 介绍
-    基于springboot和netty的socket通信框架,方便扩展springboot各类插件。
+    基于springboot和netty的socket通信框架,方便扩展springboot各类插件,test中也有丰富的客户端联调demo。
     同时，框架本身
     1.支持websocket,tcp-socket连接
     2.json和protocolbuffer编码协议，以及其他自定义扩展协议
     3.超高性能和超简易的特性
-   
+    
+#### 快速启动
+    @SpringBootApplication
+    @EnableWebsocket
+    public class RunApp {
+    
+        public static void main(String[] args) {
+            new SpringApplicationBuilder(RunApp.class)
+                    .web(WebApplicationType.NONE)
+                    .bannerMode(Banner.Mode.OFF)
+                    .run(args);
+        }
+    }
+    
+    @Socket
+    public class SimpleSocketMsgHandler implements SocketMsgHandler<String> {
+        @Override
+        public void onConnect(ChannelHandlerContext ctx, HttpRequest req) {
+            System.out.println(ctx.channel().toString());
+        }
+    
+        @Override
+        public void onMessage(ChannelHandlerContext ctx, String msg) {
+            System.out.println("收到消息=" + msg);
+            ctx.writeAndFlush(msg);
+        }
+    
+        @Override
+        public void disConnect(ChannelHandlerContext ctx) {
+            System.out.println("断开连接=" + ctx.channel().toString());
+        }
+    }
