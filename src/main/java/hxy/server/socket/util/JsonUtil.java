@@ -1,7 +1,6 @@
 package hxy.server.socket.util;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
@@ -19,46 +18,27 @@ public class JsonUtil {
 
     private static final ObjectMapper objectMapper;
 
-    private static final ObjectMapper objectMapperNotNull;
-
     private static final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     static {
-        // 初始化jackson版本的json
-        objectMapper = new ObjectMapper();
-        objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        // objectMapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true) ;
-        // jackson对日期格式的处理
-        objectMapper.setDateFormat(fmt);
-
-        // 不序列化为null的属性
-        // 只对实体对象起作用，Map List不起作用
-        // 通过该方法对mapper对象进行设置，所有序列化的对象都将按该规则进行系列化
-        // Include.Include.ALWAYS 默认
-        // Include.NON_DEFAULT 属性为默认值不序列化
-        // Include.NON_EMPTY 属性为 空（“”） 或者为 NULL 都不序列化
-        // Include.NON_NULL 属性为NULL 不序列化
-        objectMapperNotNull = new ObjectMapper();
-        objectMapperNotNull.setSerializationInclusion(Include.NON_NULL);
-        objectMapperNotNull.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-        objectMapperNotNull.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        objectMapperNotNull.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapperNotNull.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        // jackson对日期格式的处理
-        objectMapperNotNull.setDateFormat(fmt);
-
+        if(SpringApplicationContextHolder.containsBean("objectMapper")){
+            objectMapper = SpringApplicationContextHolder.getBean("objectMapper");
+        }else{
+            objectMapper = new ObjectMapper();
+            objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+            // objectMapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true) ;
+            // jackson对日期格式的处理
+            objectMapper.setDateFormat(fmt);
+        }
     }
 
     public static ObjectMapper getObjectMapper() {
         return objectMapper;
     }
 
-    public static ObjectMapper getObjectMapperNotNull() {
-        return objectMapperNotNull;
-    }
 
     /**
      * JSON串转换为Java泛型对象，可以是各种类型，此方法最为强大。用法看测试用例。
@@ -70,7 +50,6 @@ public class JsonUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T> T json2GenericObject(String jsonString, TypeReference<T> tr) {
-
         if (jsonString == null || "".equals(jsonString)) {
             return null;
         } else {
@@ -144,38 +123,12 @@ public class JsonUtil {
 
     }
 
-    /**
-     * 将Java对象转换成Json字符串 如果对象中的属性值为null 则不在字符串中显示该属性，只对实体对象起作用，Map List不起作用
-     *
-     * @param object
-     * @return
-     * @author HXY
-     * @date 2017年8月21日下午1:49:47
-     */
-    public static String toJsonIsNotNull(Object object) {
-        String jsonString = "";
-        try {
-            // 只对实体对象起作用，Map List不起作用
-            // 通过该方法对mapper对象进行设置，所有序列化的对象都将按该规则进行系列化
-            // Include.Include.ALWAYS 默认
-            // Include.NON_DEFAULT 属性为默认值不序列化
-            // Include.NON_EMPTY 属性为 空（“”） 或者为 NULL 都不序列化
-            // Include.NON_NULL 属性为NULL 不序列化
-            // ObjectMapper mapper = new ObjectMapper();
-            jsonString = objectMapperNotNull.writeValueAsString(object);
-        } catch (Exception e) {
-            log.warn("json error- {}", object.toString());
-        }
-        return jsonString;
-    }
 
-    /**
-     * 将json字符串转换成列表
-     *
-     * @param json
-     * @return
-     * @author HXY
-     * @date 2017年8月21日下午1:49:15
+
+    /***
+     * @Description: 将json字符串转换成列表
+     * @author hxy
+     * @date 2020/4/17 15:26
      */
     public static List<?> jsonToList(String json) {
         try {
@@ -186,13 +139,10 @@ public class JsonUtil {
         return null;
     }
 
-    /**
-     * 将json字符串转换成Map
-     *
-     * @param json
-     * @return
-     * @author HXY
-     * @date 2017年8月21日下午1:49:33
+    /***
+     * @Description: 将json字符串转换成Map
+     * @author hxy
+     * @date 2020/4/17 15:25
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> jsonToMap(String json) {

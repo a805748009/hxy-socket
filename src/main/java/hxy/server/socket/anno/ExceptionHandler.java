@@ -19,5 +19,5 @@ public @interface ExceptionHandler {
      * Please do not modify
      * This is used to mark exception handling
      */
-    String value() default  "ExceptionHandler";
+    String value() default  "exceptionHandler";
 }

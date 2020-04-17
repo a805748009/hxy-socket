@@ -13,17 +13,9 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class AbstractSocketServerHandler<T> extends SimpleChannelInboundHandler<T> {
 
-    private static HandlerExceptionAdvice handlerExceptionAdvice;
+    private static HandlerExceptionAdvice handlerExceptionAdvice = SpringApplicationContextHolder.getBean("exceptionHandler");
 
     protected static SocketMsgHandler socketMsgHandler = SpringApplicationContextHolder.getBean("socketMsgHandler");
-
-    static{
-        if(SpringApplicationContextHolder.containsBean("ExceptionHandler")){
-            handlerExceptionAdvice = SpringApplicationContextHolder.getBean("ExceptionHandler");
-        }else {
-            handlerExceptionAdvice = null;
-        }
-    }
 
     void doHandler(Runnable runnable, ChannelHandlerContext ctx) {
         CompletableFuture.runAsync(runnable, ctx.executor())
@@ -35,10 +27,6 @@ public abstract class AbstractSocketServerHandler<T> extends SimpleChannelInboun
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        if (handlerExceptionAdvice != null) {
-            handlerExceptionAdvice.doException(ctx, cause);
-        } else {
-            cause.printStackTrace();
-        }
+        handlerExceptionAdvice.doException(ctx, cause);
     }
 }

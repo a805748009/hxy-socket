@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import hxy.server.socket.anno.ExceptionHandler;
 import hxy.server.socket.anno.Socket;
 import hxy.server.socket.configuration.SocketConfiguration;
 import hxy.server.socket.engine.factory.CodeHandlerRouteFactory;
@@ -63,6 +64,12 @@ public class EngineConfiguration {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         objectMapper.setDateFormat(fmt);
         return objectMapper;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(annotation= ExceptionHandler.class)
+    public HandlerExceptionAdvice exceptionHandler(){
+        return (ctx, e) -> e.printStackTrace();
     }
 
 
