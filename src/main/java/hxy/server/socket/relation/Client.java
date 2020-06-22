@@ -81,7 +81,7 @@ public class Client implements AttributeMap {
     }
 
     public boolean leaveRoom(@NotNull String roomId){
-        Room room = rooms.get(roomId);
+        Room room = rooms.remove(roomId);
         if(room == null){
             return false;
         }
@@ -105,7 +105,7 @@ public class Client implements AttributeMap {
     }
 
     public boolean leaveNamespace(@NotNull String namespaceId) {
-        Namespace namespace = namespaces.get(namespaceId);
+        Namespace namespace = namespaces.remove(namespaceId);
         if (namespace == null){
             return false;
         }
