@@ -6,6 +6,8 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @Description
@@ -19,12 +21,12 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
-        System.out.println("open----");
+//        System.out.println("open----");
     }
 
     @Override
     public void onMessage(String s) {
-        System.out.println("text message-" + s);
+//        System.out.println("text message-" + s);
     }
 
     public void onMessage(ByteBuffer bytes) {
@@ -42,7 +44,7 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onClose(int i, String s, boolean b) {
-        System.out.println("close----");
+//        System.out.println("close----");
     }
 
     @Override
@@ -51,17 +53,42 @@ public class MyWebSocketClient extends WebSocketClient {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        URI uri = URI.create("ws://127.0.0.1:9090");
+        List<MyWebSocketClient> list = new CopyOnWriteArrayList();
+        new Thread(() -> {
+            for (int i = 0; i < 3000; i++) {
 
-        MyWebSocketClient client = new MyWebSocketClient(uri);
-        client.connect();
-        while (!client.getReadyState().equals(READYSTATE.OPEN)) {
-            Thread.sleep(10);
+                URI uri = URI.create("ws://127.0.0.1:9090");
+                MyWebSocketClient client = new MyWebSocketClient(uri);
+                client.connect();
+                while (!client.getReadyState().equals(READYSTATE.OPEN)) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                String p ="1000|1000|{\"app_id\":\"GLOBAL\",\"user_id\":\"123\"}";
+                client.send(p);
+
+                list.add(client);
+            }
         }
-        System.out.println("=====");
-        for (;;){
-            Thread.sleep(1000);
-            client.send(ProtoUtil.serializeToByte(new Person("321321")));
-        }
+        ).start();
+
+        new Thread(() -> {
+            for (; ; ) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (MyWebSocketClient myWebSocketClient : list) {
+                    System.out.println("send"+list.size());
+                    myWebSocketClient.send("");
+                }
+            }
+        }).start();
+
+        Thread.sleep(500000);
     }
 }

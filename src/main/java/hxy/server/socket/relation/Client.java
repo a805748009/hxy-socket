@@ -89,6 +89,14 @@ public class Client implements AttributeMap {
         return true;
     }
 
+    public ConcurrentHashMap<String, Namespace> getNamespaces() {
+        return namespaces;
+    }
+
+    public ConcurrentHashMap<String, Room> getRooms() {
+        return rooms;
+    }
+
     public void joinNamespace(@NotNull Namespace namespace) {
         namespace.addClient(this);
         namespaces.put(namespace.id, namespace);

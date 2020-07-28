@@ -17,6 +17,12 @@ public abstract class AbstractWebSocketServerHandler<Object> extends AbstractSoc
         }
     }
 
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        doHandler(() -> socketMsgHandler.disConnect(ctx), ctx);
+        ctx.fireChannelInactive();
+    }
+
 
     private void handleHttpRequest(ChannelHandlerContext ctx, HttpRequest req) {
         if (isWebSocketRequest(req)) {
