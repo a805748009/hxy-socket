@@ -40,7 +40,6 @@ public abstract class AbstractWebSocketServerHandler<Object> extends AbstractSoc
     private void handleWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) {
         if (frame instanceof CloseWebSocketFrame) {
             this.handshaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
-            doHandler(() -> socketMsgHandler.disConnect(ctx), ctx);
             return;
         }
         if (frame instanceof PingWebSocketFrame) {
