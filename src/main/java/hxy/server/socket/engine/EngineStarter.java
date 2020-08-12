@@ -47,7 +47,7 @@ public class EngineStarter implements ApplicationRunner , DisposableBean {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        this.run();
+        new Thread(this::run).start();
     }
 
 
