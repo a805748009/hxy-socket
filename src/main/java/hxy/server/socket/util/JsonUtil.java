@@ -16,27 +16,28 @@ public class JsonUtil {
 
     private static final Logger log = LoggerFactory.getLogger(JsonUtil.class);
 
-    private static final ObjectMapper objectMapper;
+    private static ObjectMapper objectMapper;
 
     private static final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     static {
-        if(SpringApplicationContextHolder.containsBean("objectMapper")){
-            objectMapper = SpringApplicationContextHolder.getBean("objectMapper");
-        }else{
-            objectMapper = new ObjectMapper();
-            objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-            // objectMapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true) ;
-            // jackson对日期格式的处理
-            objectMapper.setDateFormat(fmt);
-        }
+        objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        // objectMapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true) ;
+        // jackson对日期格式的处理
+        objectMapper.setDateFormat(fmt);
+
     }
 
     public static ObjectMapper getObjectMapper() {
         return objectMapper;
+    }
+
+    public static void setObjectMapper(ObjectMapper objectMapper) {
+        JsonUtil.objectMapper = objectMapper;
     }
 
 
@@ -56,7 +57,7 @@ public class JsonUtil {
             try {
                 return (T) objectMapper.readValue(jsonString, tr);
             } catch (Exception e) {
-                log.warn("json error-jsonString:{}" ,jsonString);
+                log.warn("json error-jsonString:{}", jsonString);
             }
         }
         return null;
@@ -122,7 +123,6 @@ public class JsonUtil {
         return jsonString;
 
     }
-
 
 
     /***
