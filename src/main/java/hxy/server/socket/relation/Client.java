@@ -142,6 +142,13 @@ public class Client implements AttributeMap {
         return shieldContexts.remove(clientContext);
     }
 
+    public void clearShields(){
+        shieldContexts.clear();
+    }
+
+    public CopyOnWriteArraySet<ClientContext> getShieldContexts() {
+        return shieldContexts;
+    }
 
     @Override
     public <T> Attribute<T> attr(AttributeKey<T> attributeKey) {
