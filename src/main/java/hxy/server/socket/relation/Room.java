@@ -1,7 +1,6 @@
 package hxy.server.socket.relation;
 
 
-
 /**
  * @ClassName Room
  * @Description 房间操作
@@ -10,8 +9,9 @@ package hxy.server.socket.relation;
  */
 public class Room extends ClientContext {
 
-    public Room(String namespace,String id) {
+    public Room(String namespace, String id) {
         super(id);
         Global.INSTANCE.getNamespace(namespace).addRoom(this);
     }
+
 }

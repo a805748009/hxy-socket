@@ -37,6 +37,21 @@ public class ClientContext extends Context {
     }
 
     public void broadcast(String url, @NotNull Object obj) {
-        clients.forEach((key, value) -> value.send(url, obj));
+        clients.forEach((key, value) -> {
+                    if (!value.isShield(this)) {
+                        value.send(url, obj);
+                    }
+                }
+        );
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

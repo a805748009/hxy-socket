@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @ClassName Client
@@ -26,6 +27,9 @@ public class Client implements AttributeMap {
     private final ConcurrentHashMap<String, Namespace> namespaces = new ConcurrentHashMap<>();
 
     private final ConcurrentHashMap<String, Room> rooms = new ConcurrentHashMap<>();
+
+    private final CopyOnWriteArraySet<ClientContext> shieldContexts = new CopyOnWriteArraySet();
+
 
     public Client(String id, Channel channel) {
         this.id = id;
@@ -120,6 +124,20 @@ public class Client implements AttributeMap {
         namespace.removeClient(this);
         return true;
     }
+
+    /***
+     * @description: 频闭某个房间
+     * @author hxy
+     * @date 2020/11/13 14:13
+     */
+    public void shieldContext(@NotNull ClientContext clientContext){
+        this.shieldContexts.add(clientContext);
+    }
+
+    public boolean isShield(@NotNull ClientContext clientContext){
+        return shieldContexts.contains(clientContext);
+    }
+
 
     @Override
     public <T> Attribute<T> attr(AttributeKey<T> attributeKey) {
