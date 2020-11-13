@@ -138,6 +138,10 @@ public class Client implements AttributeMap {
         return shieldContexts.contains(clientContext);
     }
 
+    public boolean removeShield(@NotNull ClientContext clientContext){
+        return shieldContexts.remove(clientContext);
+    }
+
 
     @Override
     public <T> Attribute<T> attr(AttributeKey<T> attributeKey) {
