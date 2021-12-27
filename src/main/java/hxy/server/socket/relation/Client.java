@@ -80,6 +80,21 @@ public class Client implements AttributeMap {
         joinRoom(room);
     }
 
+    public void joinRoomAutoCreate(@NotNull String namespaceId, @NotNull String roomId) {
+        if (!namespaces.containsKey(namespaceId)) {
+            joinNamespace(Global.INSTANCE.getNamespace(namespaceId));
+        }
+        Room room = namespaces.get(namespaceId).getRoom(roomId);
+        if(room == null){
+            synchronized (Client.class){
+                if((room = namespaces.get(namespaceId).getRoom(roomId)) == null){
+                    room = new Room(namespaceId,roomId);
+                }
+            }
+        }
+        joinRoom(room);
+    }
+
     public Room getRoom(@NotNull String roomId) {
         return rooms.get(roomId);
     }
@@ -109,6 +124,18 @@ public class Client implements AttributeMap {
     public void joinNamespace(@NotNull String namespaceId) {
         Namespace namespace = Global.INSTANCE.getNamespace(namespaceId);
         Objects.requireNonNull(namespace, "namespace not exists :" + namespaceId);
+        joinNamespace(namespace);
+    }
+
+    public void joinNamespaceAutoCreate(@NotNull String namespaceId) {
+        Namespace namespace = Global.INSTANCE.getNamespace(namespaceId);
+        if(namespace == null){
+            synchronized (Client.class){
+                if((namespace = Global.INSTANCE.getNamespace(namespaceId)) == null){
+                    namespace = new Namespace(namespaceId);
+                }
+            }
+        }
         joinNamespace(namespace);
     }
 
