@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientContext extends Context {
-    private final ConcurrentHashMap<String, Client> clients = new ConcurrentHashMap<>(1024);
+    protected final ConcurrentHashMap<String, Client> clients = new ConcurrentHashMap<>(1024);
 
     public ClientContext(String id) {
         super(id);

@@ -31,4 +31,24 @@ public class Global extends ClientContext {
         return namespaces.size();
     }
 
+    @Override
+    public void addClient(@NotNull Client client) {
+        clients.put(client.getChannel().id().asLongText(), client);
+    }
+
+    @Override
+    public void removeClient(@NotNull Client client) {
+        clients.remove(client.getChannel().id().asLongText());
+    }
+
+    @Override
+    public Client getClient(String id) {
+        throw new UnsupportedOperationException("global unsupported this method");
+    }
+
+    @Override
+    public boolean containsClient(String id) {
+        throw new UnsupportedOperationException("global unsupported this method");
+    }
+
 }

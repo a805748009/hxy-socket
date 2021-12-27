@@ -86,7 +86,7 @@ public class Client implements AttributeMap {
         }
         Room room = namespaces.get(namespaceId).getRoom(roomId);
         if(room == null){
-            synchronized (Client.class){
+            synchronized (Room.class){
                 if((room = namespaces.get(namespaceId).getRoom(roomId)) == null){
                     room = new Room(namespaceId,roomId);
                 }
@@ -130,7 +130,7 @@ public class Client implements AttributeMap {
     public void joinNamespaceAutoCreate(@NotNull String namespaceId) {
         Namespace namespace = Global.INSTANCE.getNamespace(namespaceId);
         if(namespace == null){
-            synchronized (Client.class){
+            synchronized (Namespace.class){
                 if((namespace = Global.INSTANCE.getNamespace(namespaceId)) == null){
                     namespace = new Namespace(namespaceId);
                 }
