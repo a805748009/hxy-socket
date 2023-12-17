@@ -91,14 +91,14 @@
             <id>release-nexus</id>
             <name>release</name>
             <!--正式版本仓库地址-->
-            <url>http://192.168.1.10:8081/repository/maven-releases/</url>
+            <url>https://192.168.1.10:8081/repository/maven-releases/</url>
         </repository>
         <!--快照版本-->
         <snapshotRepository>
             <id>snapshot-nexus</id>
             <name>snapshots</name>
             <!--快照版本仓库地址-->
-            <url>http://192.168.1.10:8081/repository/maven-snapshots/</url>
+            <url>https://192.168.1.10:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     <build>
